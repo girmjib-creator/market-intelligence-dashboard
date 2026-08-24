@@ -1,6 +1,6 @@
 {
- "generated": "2026-08-24T19:29:39.279446+09:00",
- "date": "2026-08-24",
+ "generated": "2026-08-25T07:30:05.071445+09:00",
+ "date": "2026-08-25",
  "signals": [
   {
    "name": "삼성전자",
@@ -30,9 +30,153 @@
    "name": "테슬라",
    "code": "TSLA",
    "market": "US",
-   "type": "급변",
-   "detail": "+5.1% 급등",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -3.8% 눌림(역발상 관심)",
    "strength": 2
+  },
+  {
+   "name": "GE베르노바",
+   "code": "GEV",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "LG전자",
+   "code": "066570",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "strength": 1
+  },
+  {
+   "name": "SK바이오사이언스",
+   "code": "302440",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 4건",
+   "strength": 1
+  },
+  {
+   "name": "네이버",
+   "code": "035420",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "strength": 1
+  },
+  {
+   "name": "두산에너빌리티",
+   "code": "034020",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "마이크로소프트",
+   "code": "MSFT",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "메타",
+   "code": "META",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "블룸에너지",
+   "code": "BE",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "삼성전자",
+   "code": "005930",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "strength": 1
+  },
+  {
+   "name": "스페이스X",
+   "code": "SPCX",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "아마존",
+   "code": "AMZN",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "알파벳",
+   "code": "GOOGL",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "strength": 1
+  },
+  {
+   "name": "애플",
+   "code": "AAPL",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "엔비디아",
+   "code": "NVDA",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "테슬라",
+   "code": "TSLA",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "팔란티어",
+   "code": "PLTR",
+   "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "한국전력",
+   "code": "015760",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
+  },
+  {
+   "name": "현대차",
+   "code": "005380",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "strength": 1
   }
  ]
 }
