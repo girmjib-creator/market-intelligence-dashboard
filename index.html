@@ -1,313 +1,93 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>아침 시장 인텔리전스</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
-  :root{
-    --ground:#0E1420; --surface:#161E2C; --surface-2:#1C2636;
-    --border:#28344A; --border-soft:#20293A;
-    --text:#E7ECF4; --muted:#8A96A9; --faint:#5C6A80;
-    --accent:#E3A94A; --accent-soft:rgba(227,169,74,.14);
-    --up:#F0616D; --down:#4D93F0; --flat:#8A96A9;
-    --up-soft:rgba(240,97,109,.13); --down-soft:rgba(77,147,240,.13);
-    --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px -12px rgba(0,0,0,.6);
-    --sans:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;
-    --mono:"IBM Plex Mono",ui-monospace,"SF Mono",Menlo,monospace;
-  }
-  :root:not([data-theme="dark"]){
-    --ground:#F3F5F9; --surface:#FFFFFF; --surface-2:#F7F9FC;
-    --border:#DDE3EC; --border-soft:#E8ECF3;
-    --text:#141C2A; --muted:#5D6B80; --faint:#9AA6B8;
-    --accent:#B57E1E; --accent-soft:rgba(181,126,30,.10);
-    --up:#D23948; --down:#2C6BD4; --flat:#5D6B80;
-    --up-soft:rgba(210,57,72,.09); --down-soft:rgba(44,107,212,.09);
-    --shadow:0 1px 2px rgba(20,28,42,.04), 0 10px 26px -16px rgba(20,28,42,.28);
-  }
-  @media (prefers-color-scheme:light){
-    :root:not([data-theme="dark"]){
-      --ground:#F3F5F9; --surface:#FFFFFF; --surface-2:#F7F9FC;
-      --border:#DDE3EC; --border-soft:#E8ECF3;
-      --text:#141C2A; --muted:#5D6B80; --faint:#9AA6B8;
-      --accent:#B57E1E; --accent-soft:rgba(181,126,30,.10);
-      --up:#D23948; --down:#2C6BD4; --flat:#5D6B80;
-      --up-soft:rgba(210,57,72,.09); --down-soft:rgba(44,107,212,.09);
-      --shadow:0 1px 2px rgba(20,28,42,.04), 0 10px 26px -16px rgba(20,28,42,.28);
-    }
-  }
-  :root[data-theme="dark"]{
-    --ground:#0E1420; --surface:#161E2C; --surface-2:#1C2636;
-    --border:#28344A; --border-soft:#20293A;
-    --text:#E7ECF4; --muted:#8A96A9; --faint:#5C6A80;
-    --accent:#E3A94A; --accent-soft:rgba(227,169,74,.14);
-    --up:#F0616D; --down:#4D93F0; --flat:#8A96A9;
-    --up-soft:rgba(240,97,109,.13); --down-soft:rgba(77,147,240,.13);
-    --shadow:0 1px 0 rgba(255,255,255,.03) inset, 0 8px 24px -12px rgba(0,0,0,.6);
-  }
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 20px 64px;font-size:15px}
-  .wrap{max-width:960px;margin:0 auto}
-  .num{font-family:var(--mono);font-variant-numeric:tabular-nums;font-feature-settings:"tnum"}
-  .up{color:var(--up)} .down{color:var(--down)} .flat{color:var(--flat)}
-  a{color:inherit}
-
-  header{position:sticky;top:0;z-index:5;background:var(--ground);padding:24px 0 16px;margin-bottom:6px;border-bottom:1px solid var(--border-soft)}
-  .kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:9px}
-  h1{font-size:clamp(23px,4.2vw,32px);font-weight:700;letter-spacing:-.01em;line-height:1.15}
-  .stamp{margin-top:11px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--muted)}
-  .stamp .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;vertical-align:middle;margin-right:7px}
-  .stamp b{color:var(--text);font-weight:600}
-
-  section{margin-top:28px}
-  .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:13px}
-  .sec-title{font-size:13px;font-weight:600;letter-spacing:.03em;color:var(--text);display:flex;align-items:center;gap:8px}
-  .sec-title::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px;display:inline-block}
-  .sec-note{font-size:11.5px;color:var(--muted)}
-
-  /* Headline + Action */
-  .headline{background:linear-gradient(180deg,var(--accent-soft),transparent);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-top:22px}
-  .headline .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
-  .headline p{font-size:16.5px;line-height:1.62;font-weight:500;margin-top:9px}
-  .headline p b{font-weight:700}
-
-  .actions{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-  @media(max-width:640px){.actions{grid-template-columns:1fr}}
-  .act{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 15px;box-shadow:var(--shadow);border-top:2px solid var(--flat)}
-  .act.pos{border-top-color:var(--up)} .act.neg{border-top-color:var(--down)} .act.warn{border-top-color:var(--accent)}
-  .act .t{font-size:13px;font-weight:700;margin-bottom:5px}
-  .act .d{font-size:13px;color:var(--muted);line-height:1.55}
-  .act .d b{color:var(--text);font-weight:600}
-
-  .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px 15px 14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
-  .card .label{font-size:12px;color:var(--muted);font-weight:500}
-  .card .val{font-size:22px;font-weight:600;margin-top:9px;letter-spacing:-.01em}
-  .card .chg{font-size:12.5px;font-weight:500;margin-top:3px}
-  .card .chg::before{content:"";display:inline-block;width:0;height:0;margin-right:5px;vertical-align:middle}
-  .card.u .chg::before{border-left:4px solid transparent;border-right:4px solid transparent;border-bottom:6px solid var(--up)}
-  .card.d .chg::before{border-left:4px solid transparent;border-right:4px solid transparent;border-top:6px solid var(--down)}
-  .card .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
-  .card.u .rail{background:var(--up)} .card.d .rail{background:var(--down)} .card.f .rail{background:var(--flat)}
-
-  .wrapbox{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow)}
-  .wrapbox .lead{font-size:15px;line-height:1.68}
-  .wrapbox .lead b{font-weight:600}
-  .events{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border-soft)}
-  .ev{font-size:12px;background:var(--accent-soft);color:var(--accent);border-radius:20px;padding:5px 12px;font-weight:600}
-
-  .macro{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
-  @media(max-width:720px){.macro{grid-template-columns:repeat(2,1fr)}}
-  .chip{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:11px;padding:12px 13px}
-  .chip .label{font-size:11.5px;color:var(--muted)}
-  .chip .val{font-size:17px;font-weight:600;margin-top:5px}
-  .chip .chg{font-size:11.5px;margin-top:2px;font-weight:500}
-
-  .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
-  .tbl-scroll{overflow-x:auto}
-  table{width:100%;border-collapse:collapse;min-width:460px}
-  thead th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
-  thead th:first-child{text-align:left}
-  tbody td{padding:12px 16px;border-bottom:1px solid var(--border-soft);text-align:right;font-size:14.5px}
-  tbody tr:last-child td{border-bottom:0}
-  tbody td:first-child{text-align:left}
-  .nm{font-weight:600}
-  .tick{font-size:11.5px;color:var(--faint);font-family:var(--mono);margin-left:7px;font-weight:400}
-  .grp td{background:var(--surface-2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;padding:9px 16px;text-align:left}
-  .pct{display:inline-block;min-width:62px;padding:2px 8px;border-radius:6px;font-weight:600;font-size:13px}
-  .pct.up{background:var(--up-soft)} .pct.down{background:var(--down-soft)} .pct.flat{background:var(--surface-2);color:var(--muted)}
-  .naq{color:var(--faint);font-size:12.5px}
-
-  /* per-stock today news */
-  .stk{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px}
-  .stk .sh{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border-soft)}
-  .stk .sh .snm{font-weight:700;font-size:14px}
-  .stk .sh .stk-tick{font-size:11px;color:var(--faint);font-family:var(--mono)}
-  .stk .sh .smv{margin-left:auto;font-family:var(--mono);font-weight:600;font-size:13px}
-  .stk ul{list-style:none;padding:6px 0}
-  .stk li{padding:0}
-  .stk li a{display:flex;gap:11px;padding:10px 16px;text-decoration:none;align-items:baseline;transition:background .12s}
-  .stk li a:hover{background:var(--surface-2)}
-  .stk li .tm{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--accent);font-weight:600;width:42px}
-  .stk li .ht{font-size:13.5px;line-height:1.5;color:var(--text)}
-  .stk li .so{font-size:11px;color:var(--muted);white-space:nowrap}
-  .stk .none{padding:14px 16px;font-size:13px;color:var(--faint)}
-  .badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px;vertical-align:middle}
-
-  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border-soft);font-size:11.5px;color:var(--faint);line-height:1.7}
-  .legend{display:flex;gap:16px;flex-wrap:wrap;margin-top:6px}
-  .legend span{display:flex;align-items:center;gap:6px}
-  .legend i{width:9px;height:9px;border-radius:2px;display:inline-block}
-</style>
-
-<div class="wrap">
-  <header>
-    <div class="kicker">Morning Market Intelligence</div>
-    <h1>아침 시장 인텔리전스</h1>
-    <div class="stamp">
-      <span><span class="dot"></span>마지막 업데이트 <b>2026. 08. 24 (월) 17:00 KST</b></span>
-      <span>미국장 · <b>직전 거래일 종가</b></span>
-      <span>국내 · <b>당일 종가</b></span>
-      <span>뉴스 · <b>오늘 발행분(KST)</b></span>
-      <span>🔄 <b>평일 07·14시 자동 갱신</b></span>
-    </div>
-  </header>
-
-  <div class="headline">
-    <span class="tag">오늘의 핵심</span>
-    <p>삼성전자가 <b>사상 최대 110조 주주환원</b>에도 <b class="down">−8.7% 폭락</b>하며 코스피 6,700선이 붕괴됐다(외인·기관 4조 순매도). 반도체엔 <b>목표주가 하향 보고서</b>가 쏟아진 반면, <b>원전·가스터빈·AI전력</b>(두산에너빌리티·블룸·GE베르노바) 테마는 수주·수요 모멘텀이 견조하다.</p>
+:root{--ground:#0E1420;--surface:#161E2C;--surface-2:#1C2636;--border:#28344A;--border-soft:#20293A;--text:#E7ECF4;--muted:#8A96A9;--faint:#5C6A80;--accent:#E3A94A;--accent-soft:rgba(227,169,74,.14);--up:#F0616D;--down:#4D93F0;--flat:#8A96A9;--up-soft:rgba(240,97,109,.13);--down-soft:rgba(77,147,240,.13);--shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px -12px rgba(0,0,0,.6);--sans:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
+:root:not([data-theme="dark"]){--ground:#F3F5F9;--surface:#FFFFFF;--surface-2:#F7F9FC;--border:#DDE3EC;--border-soft:#E8ECF3;--text:#141C2A;--muted:#5D6B80;--faint:#9AA6B8;--accent:#B57E1E;--accent-soft:rgba(181,126,30,.10);--up:#D23948;--down:#2C6BD4;--flat:#5D6B80;--up-soft:rgba(210,57,72,.09);--down-soft:rgba(44,107,212,.09);--shadow:0 1px 2px rgba(20,28,42,.04),0 10px 26px -16px rgba(20,28,42,.28)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--ground:#F3F5F9;--surface:#FFFFFF;--surface-2:#F7F9FC;--border:#DDE3EC;--border-soft:#E8ECF3;--text:#141C2A;--muted:#5D6B80;--faint:#9AA6B8;--accent:#B57E1E;--accent-soft:rgba(181,126,30,.10);--up:#D23948;--down:#2C6BD4;--flat:#5D6B80;--up-soft:rgba(210,57,72,.09);--down-soft:rgba(44,107,212,.09)}}
+:root[data-theme="dark"]{--ground:#0E1420;--surface:#161E2C;--surface-2:#1C2636;--border:#28344A;--border-soft:#20293A;--text:#E7ECF4;--muted:#8A96A9;--faint:#5C6A80;--accent:#E3A94A;--accent-soft:rgba(227,169,74,.14);--up:#F0616D;--down:#4D93F0;--flat:#8A96A9;--up-soft:rgba(240,97,109,.13);--down-soft:rgba(77,147,240,.13)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 20px 64px;font-size:15px}
+.wrap{max-width:960px;margin:0 auto}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--flat)}a{color:inherit}
+header{position:sticky;top:0;z-index:5;background:var(--ground);padding:24px 0 16px;margin-bottom:6px;border-bottom:1px solid var(--border-soft)}
+.kicker{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--accent);font-weight:600;margin-bottom:9px}
+h1{font-size:clamp(23px,4.2vw,32px);font-weight:700;letter-spacing:-.01em}
+.stamp{margin-top:11px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--muted)}
+.stamp .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:7px}
+.stamp b{color:var(--text);font-weight:600}
+section{margin-top:28px}
+.sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:13px}
+.sec-title{font-size:13px;font-weight:600;letter-spacing:.03em;color:var(--text);display:flex;align-items:center;gap:8px}
+.sec-title::before{content:"";width:3px;height:14px;background:var(--accent);border-radius:2px;display:inline-block}
+.sec-note{font-size:11.5px;color:var(--muted)}
+.headline{background:linear-gradient(180deg,var(--accent-soft),transparent);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:14px;padding:18px 20px;box-shadow:var(--shadow);margin-top:22px}
+.headline .tag{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.headline p{font-size:16px;line-height:1.6;font-weight:500;margin-top:9px}
+.points{display:flex;flex-wrap:wrap;gap:8px}
+.point{font-size:12.5px;background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:6px 13px;box-shadow:var(--shadow)}
+.point b{font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card .label{font-size:12px;color:var(--muted);font-weight:500}
+.card .val{font-size:22px;font-weight:600;margin-top:9px}
+.card .chg{font-size:12.5px;font-weight:500;margin-top:3px}
+.card .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
+.card.up .rail{background:var(--up)}.card.down .rail{background:var(--down)}.card.flat .rail{background:var(--flat)}
+.macro{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:720px){.macro{grid-template-columns:repeat(2,1fr)}}
+.chip{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:11px;padding:12px 13px}
+.chip .label{font-size:11.5px;color:var(--muted)}
+.chip .val{font-size:17px;font-weight:600;margin-top:5px}
+.chip .chg{font-size:11.5px;margin-top:2px;font-weight:500}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
+.tbl-scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;min-width:460px}
+thead th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
+thead th:first-child{text-align:left}
+tbody td{padding:12px 16px;border-bottom:1px solid var(--border-soft);text-align:right;font-size:14.5px}
+tbody tr:last-child td{border-bottom:0}
+tbody td:first-child{text-align:left}
+.nm{font-weight:600}
+.tick{font-size:11.5px;color:var(--faint);font-family:var(--mono);margin-left:7px}
+.grp td{background:var(--surface-2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;padding:9px 16px;text-align:left}
+.pct{display:inline-block;min-width:62px;padding:2px 8px;border-radius:6px;font-weight:600;font-size:13px}
+.pct.up{background:var(--up-soft)}.pct.down{background:var(--down-soft)}.pct.flat{background:var(--surface-2);color:var(--muted)}
+.stk{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px}
+.stk .sh{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border-soft)}
+.stk .sh .snm{font-weight:700;font-size:14px}
+.stk .sh .stk-tick{font-size:11px;color:var(--faint);font-family:var(--mono)}
+.stk .sh .smv{margin-left:auto;font-family:var(--mono);font-weight:600;font-size:13px}
+.stk ul{list-style:none;padding:6px 0}
+.stk li a{display:flex;gap:11px;padding:10px 16px;text-decoration:none;align-items:baseline}
+.stk li a:hover{background:var(--surface-2)}
+.stk li .tm{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--accent);font-weight:600;width:42px}
+.stk li .ht{font-size:13.5px;line-height:1.5;color:var(--text)}
+.stk li .so{font-size:11px;color:var(--muted);white-space:nowrap}
+.stk .none{padding:14px 16px;font-size:13px;color:var(--faint)}
+.badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
+footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border-soft);font-size:11.5px;color:var(--faint);line-height:1.7}
+</style></head><body><div class="wrap">
+<header>
+  <div class="kicker">Morning Market Intelligence</div>
+  <h1>아침 시장 인텔리전스</h1>
+  <div class="stamp">
+    <span><span class="dot"></span>마지막 업데이트 <b>2026. 08. 24 (Mon) 18:19 KST</b></span>
+    <span>뉴스 · <b>오늘 발행분(KST)</b></span>
+    <span>🔄 <b>평일 07·14시 자동 갱신</b></span>
   </div>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">오늘의 액션</div><div class="sec-note">매수의견 참고용 · 투자책임 본인</div></div>
-    <div class="actions">
-      <div class="act neg"><div class="t">반도체 · 삼성전자/SK하이닉스</div><div class="d">목표주가 <b>하향 보고서 다수</b>. 추세 훼손 여부 확인 전 신규매수 신중, 낙폭과대 단기반등은 <b>분할 대응</b> 영역.</div></div>
-      <div class="act pos"><div class="t">원전·전력 · 두산에너빌리티</div><div class="d">중동 <b>SMR·가스터빈 수주 연속</b>(오만 가스복합 등). 조정 시 분할 관심 유효, 26조 수주잔고 실적화 속도 체크.</div></div>
-      <div class="act warn"><div class="t">LG전자</div><div class="d">+2.7% 상승했으나 <b>공매도 잔고 동반 증가</b> 경고. 추격매수보다 눌림목 확인이 우선.</div></div>
-      <div class="act warn"><div class="t">한국전력</div><div class="d">기관 순매도 vs OCI 태양광 협력 <b>혼재</b>. 방향성 확인 필요, 저PBR(0.42) 밸류 관점 병행.</div></div>
-      <div class="act"><div class="t">엔알비 · 퓨쳐켐</div><div class="d">오늘자 <b>신규 뉴스 없음</b>. 이벤트 부재 — 시세·수급만 추적하며 재료 발생 대기.</div></div>
-      <div class="act pos"><div class="t">미국 · 블룸/GE베르노바</div><div class="d"><b>데이터센터 전력난 = 구조적 수요</b>. 단 GEV 풍력 −40% 리스크, 블룸 밸류에이션 부담 병행 점검.</div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div>
-    <div class="grid">
-      <div class="card u"><div class="rail"></div><div class="label">S&P 500</div><div class="val num">7,674.37</div><div class="chg up">+0.43%</div></div>
-      <div class="card u"><div class="rail"></div><div class="label">나스닥</div><div class="val num">26,180.46</div><div class="chg up">+0.43%</div></div>
-      <div class="card u"><div class="rail"></div><div class="label">다우</div><div class="val num">53,277.01</div><div class="chg up">+0.98%</div></div>
-      <div class="card d"><div class="rail"></div><div class="label">코스피</div><div class="val num">6,696.96</div><div class="chg down">−3.12%</div></div>
-      <div class="card u"><div class="rail"></div><div class="label">코스닥</div><div class="val num">813.33</div><div class="chg up">+1.42%</div></div>
-      <div class="card d"><div class="rail"></div><div class="label">VIX 변동성</div><div class="val num">15.13</div><div class="chg down">−5.50%</div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">미국장 마감 시황</div><div class="sec-note">8/21(금) 뉴욕 마감</div></div>
-    <div class="wrapbox">
-      <p class="lead">지난 <b>8월 21일(금)</b> 뉴욕증시 3대 지수는 <b class="up">반등 마감</b>(S&amp;P·나스닥 +0.43%, 다우 +0.98%)했고 특히 <b>러셀2000 소형주</b>가 강세였다. 다만 한 주 내내 <b>국채 금리 변동성</b>(10년물 4.74%)이 시장을 흔들며 주간 기준으로는 3대 지수 모두 <b class="down">하락</b>했고 비트코인은 급등했다. 이번 주 최대 변수는 <b>엔비디아 실적</b>과 <b>미국 PCE 물가</b>다.</p>
-      <div class="events">
-        <span class="ev">엔비디아 실적</span><span class="ev">PCE 물가</span><span class="ev">잭슨홀 후속</span><span class="ev">반도체 투심 분수령</span>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div>
-    <div class="macro">
-      <div class="chip"><div class="label">USD / KRW</div><div class="val num">1,382.78</div><div class="chg down">원화 강세 −0.58%</div></div>
-      <div class="chip"><div class="label">WTI 유가</div><div class="val num">85.28</div><div class="chg down">−2.04%</div></div>
-      <div class="chip"><div class="label">금 (Gold)</div><div class="val num">4,707.0</div><div class="chg up">+1.79%</div></div>
-      <div class="chip"><div class="label">美 10년물</div><div class="val num">4.738%</div><div class="chg up">+0.042%p</div></div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">관심종목 9종</div></div>
-    <div class="panel">
-      <div class="tbl-scroll">
-        <table>
-          <thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead>
-          <tbody>
-            <tr class="grp"><td colspan="3">해외 · 에너지 · 전력</td></tr>
-            <tr><td class="nm">GE베르노바<span class="tick">GEV</span></td><td class="num">$956.85</td><td><span class="pct down num">−0.95%</span></td></tr>
-            <tr><td class="nm">블룸에너지<span class="tick">BE</span></td><td class="num">$201.45</td><td><span class="pct down num">−0.51%</span></td></tr>
-            <tr><td class="nm">두산에너빌리티<span class="tick">034020</span></td><td class="num">73,000</td><td><span class="pct down num">−0.41%</span></td></tr>
-            <tr><td class="nm">한국전력<span class="tick">015760</span></td><td class="num">31,500</td><td><span class="pct down num">−0.79%</span></td></tr>
-            <tr class="grp"><td colspan="3">반도체 · 기타</td></tr>
-            <tr><td class="nm">삼성전자<span class="tick">005930</span></td><td class="num">257,000</td><td><span class="pct down num">−8.70%</span></td></tr>
-            <tr><td class="nm">SK하이닉스<span class="tick">000660</span></td><td class="num">1,671,000</td><td><span class="pct down num">−3.41%</span></td></tr>
-            <tr><td class="nm">LG전자<span class="tick">066570</span></td><td class="num">199,800</td><td><span class="pct up num">+2.72%</span></td></tr>
-            <tr><td class="nm">엔알비<span class="tick">475230</span></td><td class="num">8,950</td><td><span class="pct down num">−1.76%</span></td></tr>
-            <tr><td class="nm">퓨쳐켐<span class="tick">220100</span></td><td class="num">8,130</td><td><span class="pct up num">+0.37%</span></td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 종목당 최대 3건 · 클릭 시 원문</div></div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">삼성전자</span><span class="stk-tick">005930</span><span class="smv down">−8.70%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE55Ukl5dnM4enV1cnFNbXhXZ05rR1lSdnBTbTFJR2lkN1ZwUl91Z1FkV28za0FfcXJ0RUF2ZHdjZ0l5SmZkOVJjUF9vaXNHMFo4WUlQd0ltR1dEbDdhdEhaWlNHR0hGS3RGNzF5d2ZUMDA?oc=5" target="_blank" rel="noopener"><span class="tm">10:13</span><span><span class="ht">사상 최대 110조 환원에도 6%대 급락…왜?</span> <span class="so">· 연합인포맥스</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE1UZVJPcFNCMDc0N2ZTeXg1dEtPWjQxbXNHYW5Mb2YzcGdpQUVSZzhBQ0NpcGJkbUVxaEhjdkJvLXMtZlEyaC1JR0l4OTd6YkNqSllRZG5xM1hvQQ?oc=5" target="_blank" rel="noopener"><span class="tm">14:12</span><span><span class="ht">8% 폭락…110조 역대급 돈잔치에도 주가 무너진 이유</span> <span class="so">· 한국경제</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5sd0g3LVAxcVd1YkdVY3I2aldIc3ZaZlRkb2Z1MXJBdUNlSHNuUXFtNnd4dlVMaS05eWN3TFRBRVZtLWdITzFzWm8wdi14LW13bEdhbHV1Ui1ib0tJRHEwZ1Z1aklvZ2M?oc=5" target="_blank" rel="noopener"><span class="tm">14:49</span><span><span class="ht">'110조 주주환원'에도 5%대 급락, 왜?</span> <span class="so">· 한겨레</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">SK하이닉스</span><span class="stk-tick">000660</span><span class="smv down">−3.41%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQaXd2X2NUcm5JVzVDUnAtOVJSWnUtMFpVRkFMVVZGQXR1MnBhdGZ2SC1OemRRdWRWMy00bWNEOWp2LURUbmN6dzgtb2lkWlhvNHJOWkUtTnEzdlJCYUV5TkV6aUdfR1NrM3hqZjc1TVl5OEtfaWNyTDFpYjdWM2FhWg?oc=5" target="_blank" rel="noopener"><span class="tm">16:45</span><span><span class="ht">쏟아지는 주가 '하향' 보고서… 삼전닉스 목표주가도 3배 차이</span> <span class="so">· 조선일보</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9JQUdYZzlwamFJOTNYZkdickF1YnR6dmxSNW5uSFQ2WFVZVWxVanBRMmVCN0tnNEF6YnNFa2l3MHhDbndxYmc0WHlFSmNhT0E?oc=5" target="_blank" rel="noopener"><span class="tm">14:40</span><span><span class="ht">잘나가던 하이닉스는 왜…주식은 '롱'과 '숏'의 전쟁터</span> <span class="so">· 다음</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMiW0FVX3lxTE05dUkyZ2NIbnZNUm90T0Vmb2VnNUZCMS15Mkd6aHVNTFZFUzZhanFwWmJweWtIX28yVnBwelFTZmhvanNuaDQzb1BHRjAzVklIaFpBSUtEYzAtWVE?oc=5" target="_blank" rel="noopener"><span class="tm">13:40</span><span><span class="ht">역대급 주주환원에도 하닉보다 못한 삼전?…주가 희비 갈린 까닭</span> <span class="so">· 에너지경제</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">두산에너빌리티</span><span class="stk-tick">034020</span><span class="smv down">−0.41%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1RMFRtVm02SnA3bmZsV1JtcHY1bndnZ0JjQVJ6MFd2NjI1YVN5T1hiMEtGNzJLTUFCM3lFeXF3NWNtNXMtN25TVW1kUkVtOUVZQTZIWEVLcHA3QUZoZmprNlljcXNpbHdNYjl2UldNdw?oc=5" target="_blank" rel="noopener"><span class="tm">16:31</span><span><span class="ht">중동서 대형 프로젝트 잇달아 수주…SMR 생산 능력 확대</span> <span class="so">· 이코리아</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE5NaTdSMHN4QVJUYkliSDYtNV9PN3h4U3U0bXl5Q2pHQ1BPTEtyelFpVlc0MVEzbmVHbzVSTFRHb0x6ZWtLcVBsbE5qWUQ4U01JQTR2dWNDNDU?oc=5" target="_blank" rel="noopener"><span class="tm">16:56</span><span><span class="ht">가스터빈·원전 수주 확대…26조 수주잔고 실적화 속도</span> <span class="so">· 더트래커</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE5Vb2h4THZVMDhtWFYzMjVveEljTVVUSWJzSDBfRW45dGRaVWpFSkdnNVFLX2xyUWsxcm9xYzZERV9xZFhKOE43dVdqOGh4ZVlEZXYxbWxzV2xLVDk2QUc2U2EyUFZHNHlMVW5STFhEMThKRElSTmc?oc=5" target="_blank" rel="noopener"><span class="tm">11:47</span><span><span class="ht">오만 미스파 가스복합발전소 건설공사 수주</span> <span class="so">· 워터저널</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">한국전력</span><span class="stk-tick">015760</span><span class="smv down">−0.79%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMiXkFVX3lxTE43d2dZUmdGYjMxZmE4LVE4VS1INkl5ajQ3aGx6dEFoM2NNRVRFTDNkQ1ZRUXM1eFljZFlpWEZUZ0tUZEtJdm1MRk5HMzFZX3VkUnBiQUdSdVkxS0J0SlE?oc=5" target="_blank" rel="noopener"><span class="tm">16:10</span><span><span class="ht">전력거래소 에너지의 날…OCI파워, 한전·태양광 기업들과 협력 강화</span> <span class="so">· 기후에너지데이터뱅크</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTFBFaS05cE40SG5qVXR6TnpZaUxTX0JKb2NWb09nV1pGMVU3OTFaOHppUGpzZVJMVFdCNFM2bFRYbm9qMFBlWk0yWV80elBuR2tmdGM4WnY1YzRqTnhkWkpQSkFCRUY4NFlTQ0pIald3?oc=5" target="_blank" rel="noopener"><span class="tm">10:56</span><span><span class="ht">OCI파워, 한전과 국내 태양광 인버터 산업 경쟁력 강화 '맞손'</span> <span class="so">· 에너지플랫폼뉴스</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMickFVX3lxTFBfLXlkVGY4MnZJYWJFLVBneFFGQ1pFNzk4XzNiUjdvNDZiTTFrQWEzM2lyRnJPM1E3dXNWZW1mLWMtcEFaUUpSYXhZbUZxQzZZWVNjSm1TYUV6dk1NT1cycko1WlNWYXRpN2ZoOHhXNC1tUQ?oc=5" target="_blank" rel="noopener"><span class="tm">10:34</span><span><span class="ht">주가, 장중 31,400원 −1.10% 하락</span> <span class="so">· 톱스타뉴스</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">LG전자</span><span class="stk-tick">066570</span><span class="smv up">+2.72%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTFBTZlRyRE5zTGV2LXpMSzZFdEE5ZmloeENoZkxFaDYyR2FzeTl2SVNKQWVNQks5aGdPVXJfSzRFUXlQcnlOMnE0UGRMSEJXc2EwM1Itbk94Vi0?oc=5" target="_blank" rel="noopener"><span class="tm">14:54</span><span><span class="ht">주가 오르는데 공매도 잔고도 늘었다…급등주 둘러싼 동상이몽</span> <span class="so">· 아주경제</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMickFVX3lxTE9XakF4SjJMMUlhcWl2VzM3V1RKaU1RdmZzVTBsUl9OT3A5aWtZQzhnVW80ZmJhdmN1T09YT043Y3p0Y25aMTBTcERxa2VQbDhQZ0VMMjRJWmo1SzlnWGZqSkhJekxvXzBSU2NHY0s0MExEdw?oc=5" target="_blank" rel="noopener"><span class="tm">09:58</span><span><span class="ht">주가, 장중 200,500원 +3.08% 상승</span> <span class="so">· 톱스타뉴스</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">엔알비</span><span class="stk-tick">475230</span><span class="smv down">−1.76%</span></div>
-      <div class="none">— 오늘(KST) 발행된 관련 기사 없음</div>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">퓨쳐켐</span><span class="stk-tick">220100</span><span class="smv up">+0.37%</span></div>
-      <div class="none">— 오늘(KST) 발행된 관련 기사 없음</div>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">GE베르노바</span><span class="stk-tick">GEV</span><span class="badge-en">번역</span><span class="smv down">−0.95%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFBfWXREZUhqUHBYdVRvX2FiU3c0ZlgxSmFud3VQRFZXdUh1WkVwZWN4N2p5ZmhabzVuOTFNZHVFQVI3a1JfMDhvZ1FSQjBpd3FvM0VVcGo2TDJ0Q1g3VzlfSDE2RTNvUHE3WWQydHJSY3Etdy1OUFJ4TDBZZGJvRFU?oc=5" target="_blank" rel="noopener"><span class="tm">02:21</span><span><span class="ht">풍력 사업 40% 급감 — 가스터빈 호황에 가려 주목 못 받아</span> <span class="so">· AOL</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQbHVxVkZoMWw4bVZHOXNOclFqaFVxeTJVUXBNcV9HajBRTlpXYi1YQ0JuakR6VnBQY2VlYl8tWWU2b3JGY0lxT01UcWxxMXdLOTdsTWVFcWZTT3g3bHNCaXZjXzV4bU5QQlp3OGNLUXpTMVZScE1xUGNqZEtyNndTR0JXeS1vLTVBZldMOVZCVHhxS2RYNWFLVA?oc=5" target="_blank" rel="noopener"><span class="tm">04:35</span><span><span class="ht">데이터센터 전력난 수혜 에너지주 2선</span> <span class="so">· Motley Fool</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxNSWM5emZSbTJ5LWdXWTFieVJFb1gtMVlnQ3FUWjN1R3dSSlowSTNGYjB5MWFzYm04WjlHQlRJUUJWRWpMZExnQVk0VFpNNUlpVnpvZ2JfczByMDR6QkRsVDdMYzZGTHNtUENPNEVkVlZMdkFUVWpCSEFtSWJfbnZ6aWNZMDdrODhNMjhEOHNHZXRkRmVWTEF4dzhybHJvRXJGQXoyeE5uOHBTN3c0S2VMUmM2bVV6ODJqNFl6MnE5QzAyd0kzcVVQeUowRW9BcFF0TE9jcFhsdEhYenZOMUlXdW5DUlRhamdORDJzNlhQdnBjUQ?oc=5" target="_blank" rel="noopener"><span class="tm">01:38</span><span><span class="ht">가스터빈 가격 3배 급등 전망 — 수혜주는 이들</span> <span class="so">· Globe and Mail</span></span></a></li>
-      </ul>
-    </div>
-
-    <div class="stk">
-      <div class="sh"><span class="snm">블룸에너지</span><span class="stk-tick">BE</span><span class="badge-en">번역</span><span class="smv down">−0.51%</span></div>
-      <ul>
-        <li><a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPNjVLLTNsU0UyTk5zZ2w2UUN0ODFGWk1SRjhTNlpQU2Y1N2tkRzhDX3VhTWFORlBrck13c0NUaEVQcG51RG5QUm5vT0ZyT1ZVVUNDMHhEVVNlTHZTOEg2VEZhcGprRWFxZnR5Q0piVURlb3hISXR4ejEzWjhDdTJPM1VuUHo3RF81d2sxakdabFQwTXZ5REs4eVFHTWRxMjd5Y2V6VTJGM0RHUi1EWHVjSkpzbVhhWXcyaU4yc0NZVmc2Z2hVN0o1UXBfa0xxV3BTTzh6ZGJtaVdYUQ?oc=5" target="_blank" rel="noopener"><span class="tm">07:00</span><span><span class="ht">하일리온 CEO "KARNO가 블룸 연료전지보다 나은 해법" 주장</span> <span class="so">· Stocktwits</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMie0FVX3lxTFB1ZUxuTTVFa19tdm5jazZPN01pNjh2LV94VW1NQXVzZW1lVWNGalVrUV94TUljaDVtUkx2TmlZQ3RBeXllYjdyQmJfaC1ZVGZLYnJzTEJqWnQtZlNqMGhqR3FXZGJ6YTh2Q0JXVmhjSEt5LWl5VUE0RGZBbw?oc=5" target="_blank" rel="noopener"><span class="tm">10:48</span><span><span class="ht">52주 저점에 2천달러 투자했다면 지금 얼마?</span> <span class="so">· AOL</span></span></a></li>
-        <li><a href="https://news.google.com/rss/articles/CBMimgFBVV95cUxNUmVnMDE5RDcyTWRBSXRzTnpkcFRZRVdDSnlyWkRYZ0sxU19wM2otYk1iU1cyR0txb1pIWkZuR1NRS0VXdGJnaDFCRC1pLTNZM2RZVUljTVJHUkFJdlNZaFV3YmZoTXh6M1ZwYWhZZGhfN1dMc2FBdURoYS1oanFIWXJXMHVJbkNHbGFrQnpFeHctcl9PSXhmWERR?oc=5" target="_blank" rel="noopener"><span class="tm">04:04</span><span><span class="ht">데이터센터 님비 반발이 블룸에너지엔 호재 — CEO</span> <span class="so">· EnergyNow</span></span></a></li>
-      </ul>
-    </div>
-  </section>
-
-  <footer>
-    이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다 — <b>고정 URL</b>이라 기존 링크를 다시 눌러도 최신 화면이 열리고, 갱신 이력은 GitHub 커밋으로 누적 보관됩니다.<br>
-    시세는 국내 당일·미국 8/21 종가 기준. 뉴스는 <b>Google News RSS 오늘(KST) 발행분</b>만 필터링했으며, 미국 헤드라인은 한글 번역본입니다. 오늘의 액션은 매수의견 참고용이며 최종 투자판단·손익은 본인 책임입니다.
-    <div class="legend">
-      <span><i style="background:var(--up)"></i>상승</span>
-      <span><i style="background:var(--down)"></i>하락</span>
-      <span><i style="background:var(--accent)"></i>강조</span>
-    </div>
-  </footer>
-</div>
+</header>
+<div class="headline"><span class="tag">오늘의 핵심</span><p>코스피 6,697(−3.12%) · 최대 상승 LG전자 +2.7% · 최대 하락 삼성전자 −8.7% · 오늘 관련 기사 21건 수집</p></div>
+<section><div class="sec-head"><div class="sec-title">오늘의 관찰 포인트</div><div class="sec-note">±3% 이상 변동·신규 뉴스 자동 감지</div></div><div class="points"><span class="point"><b>GE베르노바</b> 신규뉴스 3건</span><span class="point"><b>블룸에너지</b> 신규뉴스 3건</span><span class="point"><b>두산에너빌리티</b> 신규뉴스 3건</span><span class="point"><b>한국전력</b> 신규뉴스 3건</span><span class="point"><b>삼성전자</b> 급락 -8.7% · 신규뉴스 3건</span><span class="point"><b>SK하이닉스</b> 급락 -3.4% · 신규뉴스 3건</span><span class="point"><b>LG전자</b> 신규뉴스 3건</span></div></section>
+<section><div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div><div class="grid"><div class="card up"><div class="rail"></div><div class="label">S&amp;P 500</div><div class="val num">$7,674.37</div><div class="chg up">+0.43%</div></div><div class="card up"><div class="rail"></div><div class="label">나스닥</div><div class="val num">$26,180.46</div><div class="chg up">+0.43%</div></div><div class="card up"><div class="rail"></div><div class="label">다우</div><div class="val num">$53,277.01</div><div class="chg up">+0.98%</div></div><div class="card down"><div class="rail"></div><div class="label">코스피</div><div class="val num">6,697</div><div class="chg down">−3.12%</div></div><div class="card up"><div class="rail"></div><div class="label">코스닥</div><div class="val num">813</div><div class="chg up">+1.42%</div></div><div class="card up"><div class="rail"></div><div class="label">VIX</div><div class="val num">15.89</div><div class="chg up">+5.02%</div></div></div></section>
+<section><div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div><div class="macro"><div class="chip"><div class="label">USD/KRW</div><div class="val num">1,383.32</div><div class="chg down">−0.54%</div></div><div class="chip"><div class="label">WTI 유가</div><div class="val num">84.89</div><div class="chg down">−2.49%</div></div><div class="chip"><div class="label">금(Gold)</div><div class="val num">4,697.30</div><div class="chg up">+1.58%</div></div></div></section>
+<section><div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">관심종목 9종</div></div><div class="panel"><div class="tbl-scroll"><table><thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead><tbody><tr class="grp"><td colspan="3">해외 · 에너지 · 전력</td></tr><tr><td class="nm">GE베르노바<span class="tick">GEV</span></td><td class="num">$956.85</td><td><span class="pct down num">−0.95%</span></td></tr><tr><td class="nm">블룸에너지<span class="tick">BE</span></td><td class="num">$201.45</td><td><span class="pct down num">−0.51%</span></td></tr><tr><td class="nm">두산에너빌리티<span class="tick">034020</span></td><td class="num">73,000</td><td><span class="pct down num">−0.41%</span></td></tr><tr><td class="nm">한국전력<span class="tick">015760</span></td><td class="num">31,500</td><td><span class="pct down num">−0.79%</span></td></tr><tr class="grp"><td colspan="3">반도체 · 기타</td></tr><tr><td class="nm">삼성전자<span class="tick">005930</span></td><td class="num">257,000</td><td><span class="pct down num">−8.70%</span></td></tr><tr><td class="nm">SK하이닉스<span class="tick">000660</span></td><td class="num">1,671,000</td><td><span class="pct down num">−3.41%</span></td></tr><tr><td class="nm">LG전자<span class="tick">066570</span></td><td class="num">199,800</td><td><span class="pct up num">+2.72%</span></td></tr><tr><td class="nm">엔알비<span class="tick">475230</span></td><td class="num">8,950</td><td><span class="pct down num">−1.76%</span></td></tr><tr><td class="nm">퓨쳐켐<span class="tick">220100</span></td><td class="num">8,130</td><td><span class="pct up num">+0.37%</span></td></tr></tbody></table></div></div></section>
+<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 종목당 최대 3건 · 클릭 시 원문</div></div><div class="stk"><div class="sh"><span class="snm">GE베르노바</span><span class="stk-tick">GEV</span><span class="badge-en">번역</span><span class="smv down">−0.95%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMimAFBVV95cUxQbHVxVkZoMWw4bVZHOXNOclFqaFVxeTJVUXBNcV9HajBRTlpXYi1YQ0JuakR6VnBQY2VlYl8tWWU2b3JGY0lxT01UcWxxMXdLOTdsTWVFcWZTT3g3bHNCaXZjXzV4bU5QQlp3OGNLUXpTMVZScE1xUGNqZEtyNndTR0JXeS1vLTVBZldMOVZCVHhxS2RYNWFLVA?oc=5" target="_blank" rel="noopener"><span class="tm">04:35</span><span><span class="ht">데이터 센터 전력 위기를 타고 있는 2가지 에너지 주식</span> <span class="so">· The Motley Fool</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMif0FVX3lxTFBfWXREZUhqUHBYdVRvX2FiU3c0ZlgxSmFud3VQRFZXdUh1WkVwZWN4N2p5ZmhabzVuOTFNZHVFQVI3a1JfMDhvZ1FSQjBpd3FvM0VVcGo2TDJ0Q1g3VzlfSDE2RTNvUHE3WWQydHJSY3Etdy1OUFJ4TDBZZGJvRFU?oc=5" target="_blank" rel="noopener"><span class="tm">02:21</span><span><span class="ht">GE Vernova의 풍력 사업은 40% 하락했습니다. 가스 터빈 붐 때문에 아무도 그것에 대해 이야기하지 않습니다.</span> <span class="so">· AOL.com</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMi8gFBVV95cUxNSWM5emZSbTJ5LWdXWTFieVJFb1gtMVlnQ3FUWjN1R3dSSlowSTNGYjB5MWFzYm04WjlHQlRJUUJWRWpMZExnQVk0VFpNNUlpVnpvZ2JfczByMDR6QkRsVDdMYzZGTHNtUENPNEVkVlZMdkFUVWpCSEFtSWJfbnZ6aWNZMDdrODhNMjhEOHNHZXRkRmVWTEF4dzhybHJvRXJGQXoyeE5uOHBTN3c0S2VMUmM2bVV6ODJqNFl6MnE5QzAyd0kzcVVQeUowRW9BcFF0TE9jcFhsdEhYenZOMUlXdW5DUlRhamdORDJzNlhQdnBjUQ?oc=5" target="_blank" rel="noopener"><span class="tm">01:38</span><span><span class="ht">가스 터빈 가격은 거의 3배 가까이 오르고 있습니다. 이 주식은 현금화되고 있습니다</span> <span class="so">· The Globe and Mail</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">블룸에너지</span><span class="stk-tick">BE</span><span class="badge-en">번역</span><span class="smv down">−0.51%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMiogFBVV95cUxPVXFFc2s0UUZEN2ViNll1bFVJM2s1WlNtMG1XWi05NVVrQUlQVFZwVGtPZ1Vua1hVVEVsWjEwc3YyeVBtZmdTNnpiYWZ0ajhjSUxiRmhsb0VZVDV5cWI0VVBZMkxQZFBlQ3JtOW1jNVpWemEzQUpZQXBadjJtb0NvLXJweGhfWmJaeThILTRDMkZEOGd0MkxWZzl6SW85STZ4dnc?oc=5" target="_blank" rel="noopener"><span class="tm">16:32</span><span><span class="ht">오늘 Bloom Energy 주가가 급등하는 이유는 무엇입니까? 작성자: Investing.com</span> <span class="so">· Investing.com Nigeria</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMie0FVX3lxTFB1ZUxuTTVFa19tdm5jazZPN01pNjh2LV94VW1NQXVzZW1lVWNGalVrUV94TUljaDVtUkx2TmlZQ3RBeXllYjdyQmJfaC1ZVGZLYnJzTEJqWnQtZlNqMGhqR3FXZGJ6YTh2Q0JXVmhjSEt5LWl5VUE0RGZBbw?oc=5" target="_blank" rel="noopener"><span class="tm">10:48</span><span><span class="ht">Bloom Energy가 52주 최저치로 2,000달러를 투자했다면 현재 얼마를 얻게 될까요?</span> <span class="so">· AOL.com</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMi2gFBVV95cUxPNjVLLTNsU0UyTk5zZ2w2UUN0ODFGWk1SRjhTNlpQU2Y1N2tkRzhDX3VhTWFORlBrck13c0NUaEVQcG51RG5QUm5vT0ZyT1ZVVUNDMHhEVVNlTHZTOEg2VEZhcGprRWFxZnR5Q0piVURlb3hISXR4ejEzWjhDdTJPM1VuUHo3RF81d2sxakdabFQwTXZ5REs4eVFHTWRxMjd5Y2V6VTJGM0RHUi1EWHVjSkpzbVhhWXcyaU4yc0NZVmc2Z2hVN0o1UXBfa0xxV3BTTzh6ZGJtaVdYUQ?oc=5" target="_blank" rel="noopener"><span class="tm">07:00</span><span><span class="ht">독점: Hyliion CEO가 KARNO가 Bloom Energy의 연료 전지보다 더 나은 &#x27;쥐덫&#x27;이라고 생각하는 이유를 밝힙니다.</span> <span class="so">· Stocktwits</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">두산에너빌리티</span><span class="stk-tick">034020</span><span class="smv down">−0.41%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTE5NaTdSMHN4QVJUYkliSDYtNV9PN3h4U3U0bXl5Q2pHQ1BPTEtyelFpVlc0MVEzbmVHbzVSTFRHb0x6ZWtLcVBsbE5qWUQ4U01JQTR2dWNDNDU?oc=5" target="_blank" rel="noopener"><span class="tm">16:56</span><span><span class="ht">[더트래커 2026 상반기 제조업 리포트⑤] 두산에너빌리티, 가스터빈·원전 수주 확대…26조 수주잔고 실적화 속도</span> <span class="so">· 더트래커</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMib0FVX3lxTE1RMFRtVm02SnA3bmZsV1JtcHY1bndnZ0JjQVJ6MFd2NjI1YVN5T1hiMEtGNzJLTUFCM3lFeXF3NWNtNXMtN25TVW1kUkVtOUVZQTZIWEVLcHA3QUZoZmprNlljcXNpbHdNYjl2UldNdw?oc=5" target="_blank" rel="noopener"><span class="tm">16:31</span><span><span class="ht">두산에너빌리티, 중동서 대형 프로젝트 잇달아 수주...SMR 생산 능력 확대</span> <span class="so">· 이코리아</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMidkFVX3lxTE5Vb2h4THZVMDhtWFYzMjVveEljTVVUSWJzSDBfRW45dGRaVWpFSkdnNVFLX2xyUWsxcm9xYzZERV9xZFhKOE43dVdqOGh4ZVlEZXYxbWxzV2xLVDk2QUc2U2EyUFZHNHlMVW5STFhEMThKRElSTmfSAXZBVV95cUxOVW9oeEx2VTA4bVhWMzI1b3hJY01VVElic0gwX0VuOXRkWlVqRUpHZzVRS19sclFrMXJvcWM2REVfcWRYSjhON3VXajhoeGVZRGV2MW1sc1dsS1Q5NkFHNlNhMlBWRzR5TFVuUkxYRDE4SkRJUk5n?oc=5" target="_blank" rel="noopener"><span class="tm">11:47</span><span><span class="ht">[두산에너빌리티] 오만 미스파 가스복합발전소 건설공사 수주</span> <span class="so">· 워터저널</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">한국전력</span><span class="stk-tick">015760</span><span class="smv down">−0.79%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMibkFVX3lxTE41VXlpM1ZDSGV1ZHczUDlJbVpsV2lza0xUeFFfRHpPbjhCU1RNTW9ydHl1SmliMDFZcl9ybnk3VVBhLWJERG4tOUhTSFc1RGc0R1BaTjFRaEM2ZU5zaWhUMmhBakh6RXVBNTlpNjB3?oc=5" target="_blank" rel="noopener"><span class="tm">18:08</span><span><span class="ht">노후 도서발전소 고장·화재 부담 커지자…한전, 재산보험 첫 도입</span> <span class="so">· 아시아투데이</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMibEFVX3lxTE9yaTN2MmpMNlVudXlOelpxZXlYRnEySFlkT3Z0amZnUFJxSVVXeTB4Q3M4YkFhc3E0NzBfendlVFM3MTJkZ3JIVTZkUVFxemVFZ3VxbXEycTlINDZDQzZOZEtSMU8zcVBKcjdjVQ?oc=5" target="_blank" rel="noopener"><span class="tm">17:54</span><span><span class="ht">[기자수첩] 한국전력 산하 발전 5사 통합, ‘전북 유치’보다 먼저 답해야 할 것</span> <span class="so">· 공뉴스</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMiXkFVX3lxTE43d2dZUmdGYjMxZmE4LVE4VS1INkl5ajQ3aGx6dEFoM2NNRVRFTDNkQ1ZRUXM1eFljZFlpWEZUZ0tUZEtJdm1MRk5HMzFZX3VkUnBiQUdSdVkxS0J0SlE?oc=5" target="_blank" rel="noopener"><span class="tm">16:10</span><span><span class="ht">[에너지소식] 전력거래소, 에너지의 날 행사…OCI파워, 한전·태양광 기업들과 협력 강화</span> <span class="so">· 기후에너지데이터뱅크</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">삼성전자</span><span class="stk-tick">005930</span><span class="smv down">−8.70%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE1UZVJPcFNCMDc0N2ZTeXg1dEtPWjQxbXNHYW5Mb2YzcGdpQUVSZzhBQ0NpcGJkbUVxaEhjdkJvLXMtZlEyaC1JR0l4OTd6YkNqSllRZG5xM1hvQQ?oc=5" target="_blank" rel="noopener"><span class="tm">14:12</span><span><span class="ht">삼성전자 8% 폭락…110조 역대급 돈잔치에도 주가 무너진 이유 [종목+]</span> <span class="so">· 한국경제</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMiUkFVX3lxTFA3VUJFa3ZWTWM3dnFHUWR6TnhaNjRCT0I3TzVuZFNvQ1J6U05aaXA5cEM4dDJWSFRET1ZfbmJGdnBTa1I0eWV3cFFQQlpCYUZXbFE?oc=5" target="_blank" rel="noopener"><span class="tm">14:12</span><span><span class="ht">“돈 더 푸는데 주가는 왜 더 빠지죠?”…삼성전자 주가 8% 급락 이유는</span> <span class="so">· 매일경제</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMicEFVX3lxTE55Ukl5dnM4enV1cnFNbXhXZ05rR1lSdnBTbTFJR2lkN1ZwUl91Z1FkV28za0FfcXJ0RUF2ZHdjZ0l5SmZkOVJjUF9vaXNHMFo4WUlQd0ltR1dEbDdhdEhaWlNHR0hGS3RGNzF5d2ZUMDA?oc=5" target="_blank" rel="noopener"><span class="tm">10:13</span><span><span class="ht">삼성전자, 사상 최대 110조 환원에도 6%대 급락…왜?</span> <span class="so">· 연합인포맥스</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">SK하이닉스</span><span class="stk-tick">000660</span><span class="smv down">−3.41%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMiWkFVX3lxTE5XZWU5VHFabjlEMU5FQUIxSmhOa3kzYWN5QWhJU2NWcS1rRmZmQldOalNLY1NPUDAtM1paYUlfVW5DelQ2M1NqMjkzR2pNd1R0Vk1PbzJneExFUQ?oc=5" target="_blank" rel="noopener"><span class="tm">17:52</span><span><span class="ht">삼성전자·SK하이닉스, 주주환원 경쟁 불붙었다…&quot;연말까지 주가 버팀목&quot;</span> <span class="so">· 파이낸셜뉴스</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMigAFBVV95cUxQaXd2X2NUcm5JVzVDUnAtOVJSWnUtMFpVRkFMVVZGQXR1MnBhdGZ2SC1OemRRdWRWMy00bWNEOWp2LURUbmN6dzgtb2lkWlhvNHJOWkUtTnEzdlJCYUV5TkV6aUdfR1NrM3hqZjc1TVl5OEtfaWNyTDFpYjdWM2FhWg?oc=5" target="_blank" rel="noopener"><span class="tm">16:45</span><span><span class="ht">쏟아지는 주가 ‘하향’ 보고서... 삼전닉스 목표주가도 3배 차이</span> <span class="so">· 조선일보</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMiT0FVX3lxTE9JQUdYZzlwamFJOTNYZkdickF1YnR6dmxSNW5uSFQ2WFVZVWxVanBRMmVCN0tnNEF6YnNFa2l3MHhDbndxYmc0WHlFSmNhT0E?oc=5" target="_blank" rel="noopener"><span class="tm">14:40</span><span><span class="ht">잘나가던 하이닉스는 왜…주식은 ‘롱’과 ‘숏’의 전쟁터</span> <span class="so">· v.daum.net</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">LG전자</span><span class="stk-tick">066570</span><span class="smv up">+2.72%</span></div><ul><li><a href="https://news.google.com/rss/articles/CBMiWEFVX3lxTFBTZlRyRE5zTGV2LXpMSzZFdEE5ZmloeENoZkxFaDYyR2FzeTl2SVNKQWVNQks5aGdPVXJfSzRFUXlQcnlOMnE0UGRMSEJXc2EwM1Itbk94Vi3SAVhBVV95cUxQU2ZUckROc0xldi16TEs2RXRBOWZpaHhDaGZMRWg2Mkdhc3k5dklTSkFlTUJLOWhnT1VyX0s0RVF5UHJ5TjJxNFBkTEhCV3NhMDNSLW5PeFYt?oc=5" target="_blank" rel="noopener"><span class="tm">14:54</span><span><span class="ht">주가 오르는데 공매도 잔고도 늘었다…급등주 둘러싼 동상이몽</span> <span class="so">· 아주경제</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMickFVX3lxTE9XakF4SjJMMUlhcWl2VzM3V1RKaU1RdmZzVTBsUl9OT3A5aWtZQzhnVW80ZmJhdmN1T09YT043Y3p0Y25aMTBTcERxa2VQbDhQZ0VMMjRJWmo1SzlnWGZqSkhJekxvXzBSU2NHY0s0MExEdw?oc=5" target="_blank" rel="noopener"><span class="tm">09:58</span><span><span class="ht">LG전자 주가, 8월 24일 장중 200,500원 3.08% 상승</span> <span class="so">· 톱스타뉴스</span></span></a></li><li><a href="https://news.google.com/rss/articles/CBMidEFVX3lxTE5PMkhSQmNOT0dPX0M3ZXp3OUp5RDUwRkRpZjYwMWdPc2NQNUpPWXR0UXpRd2lPcG5xV1NsU201TFdBRDZxUmlIRU5FZzUyYWlPVjF0M2ZLcUNEczNLblFER0tST21RRWE3YWhKb0NiQ05xN2ts?oc=5" target="_blank" rel="noopener"><span class="tm">09:10</span><span><span class="ht">LG전자 주가 상승 중</span> <span class="so">· 아시아뉴스통신</span></span></a></li></ul></div><div class="stk"><div class="sh"><span class="snm">엔알비</span><span class="stk-tick">475230</span><span class="smv down">−1.76%</span></div><div class="none">— 오늘(KST) 발행된 관련 기사 없음</div></div><div class="stk"><div class="sh"><span class="snm">퓨쳐켐</span><span class="stk-tick">220100</span><span class="smv up">+0.37%</span></div><div class="none">— 오늘(KST) 발행된 관련 기사 없음</div></div></section>
+<footer>이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다. 고정 URL이라 기존 링크로 항상 최신 화면이 열리고, 갱신 이력은 GitHub 커밋으로 누적 보관됩니다.<br>
+시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 헤드라인은 자동 번역본입니다. 데이터·번역 오류 가능성이 있으므로 투자판단 전 원문·원자료를 반드시 재확인하십시오. 본 페이지는 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
+</div></body></html>
