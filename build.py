@@ -1,49 +1,63 @@
 # -*- coding: utf-8 -*-
 """
-관심종목 시장 인텔리전스 대시보드 자동 빌드 스크립트.
-GitHub Actions에서 실행되어 index.html을 생성한다.
-- 시세: FinanceDataReader (한국/미국), 보조로 yfinance (지수/원자재/VIX)
-- 뉴스: Google News RSS (when:1d, KST 오늘 발행분, 종목당 3건, 없으면 '없음')
-- 번역: deep-translator (미국 헤드라인 → 한글)
-모든 외부 호출은 try/except로 감싸 실패해도 '—'로 표기하고 계속 진행한다.
+관심종목 시장 인텔리전스 대시보드 + 누적 추적 빌드 스크립트 (GitHub Actions용).
+생성물:
+  - index.html   : 오늘 스냅샷 (시세/뉴스/핵심/관찰포인트)
+  - trends.html  : 누적 추세(주가 스파크라인) + 종목별 이슈 타임라인
+  - data/history.csv    : 실행마다 종목별 시세 1행씩 append (시계열 축적)
+  - data/news_log.jsonl : 새로 등장한 뉴스만 append (링크 기준 dedup, 이슈 로그)
+데이터: 시세 FinanceDataReader/yfinance · 뉴스 Google News RSS(when:1d) · 번역 deep-translator
+모든 외부호출은 try/except로 감싸 실패해도 '—' 처리 후 계속 진행한다.
 """
-import datetime, urllib.parse, html, sys
+import datetime, urllib.parse, html, os, csv, json
 
 KST = datetime.timezone(datetime.timedelta(hours=9))
 NOW = datetime.datetime.now(KST)
 TODAY = NOW.date()
+DATA = "data"
+HIST = os.path.join(DATA, "history.csv")
+NEWSLOG = os.path.join(DATA, "news_log.jsonl")
 
-# ------------------------------------------------------------------ 관심종목 설정
-# (name, code_or_ticker, market)  market: 'KR' | 'US'
+# ------------------------------------------------------------------ 관심종목
+# (표시명, 코드/티커, market)  market: 'KR' | 'US' | 'PRIVATE'(비상장·뉴스만)
 GROUPS = [
-    ("해외 · 에너지 · 전력", [
-        ("GE베르노바", "GEV", "US"),
-        ("블룸에너지", "BE", "US"),
-        ("두산에너빌리티", "034020", "KR"),
-        ("한국전력", "015760", "KR"),
+    ("빅테크 · AI · 우주 (미국)", [
+        ("애플", "AAPL", "US"), ("마이크로소프트", "MSFT", "US"),
+        ("알파벳", "GOOGL", "US"), ("아마존", "AMZN", "US"),
+        ("메타", "META", "US"), ("엔비디아", "NVDA", "US"),
+        ("테슬라", "TSLA", "US"), ("팔란티어", "PLTR", "US"),
+        ("스페이스X", "SPCX", "US"),
     ]),
-    ("반도체 · 기타", [
-        ("삼성전자", "005930", "KR"),
-        ("SK하이닉스", "000660", "KR"),
-        ("LG전자", "066570", "KR"),
-        ("엔알비", "475230", "KR"),
-        ("퓨쳐켐", "220100", "KR"),
+    ("에너지 · 전력", [
+        ("GE베르노바", "GEV", "US"), ("블룸에너지", "BE", "US"),
+        ("두산에너빌리티", "034020", "KR"), ("한국전력", "015760", "KR"),
+    ]),
+    ("반도체 · 전자 (한국)", [
+        ("삼성전자", "005930", "KR"), ("SK하이닉스", "000660", "KR"),
+        ("LG전자", "066570", "KR"), ("삼성전기", "009150", "KR"),
+    ]),
+    ("자동차 · 플랫폼 · 바이오 · 기타 (한국)", [
+        ("현대차", "005380", "KR"), ("네이버", "035420", "KR"),
+        ("SK바이오사이언스", "302440", "KR"),
+        ("엔알비", "475230", "KR"), ("퓨쳐켐", "220100", "KR"),
     ]),
 ]
-# 뉴스 검색어 (종목명 → 쿼리, 언어, 지역)
 NEWS_Q = {
-    "삼성전자": ("삼성전자 주가", "ko", "KR"),
-    "SK하이닉스": ("SK하이닉스 주가", "ko", "KR"),
-    "두산에너빌리티": ("두산에너빌리티", "ko", "KR"),
-    "한국전력": ("한국전력", "ko", "KR"),
-    "LG전자": ("LG전자 주가", "ko", "KR"),
-    "엔알비": ("엔알비 NRB 모듈러", "ko", "KR"),
-    "퓨쳐켐": ("퓨쳐켐", "ko", "KR"),
-    "GE베르노바": ("GE Vernova stock", "en", "US"),
-    "블룸에너지": ("Bloom Energy stock", "en", "US"),
+    "애플": ("Apple stock", "en", "US"), "마이크로소프트": ("Microsoft stock", "en", "US"),
+    "알파벳": ("Alphabet Google stock", "en", "US"), "아마존": ("Amazon stock", "en", "US"),
+    "메타": ("Meta Platforms stock", "en", "US"), "엔비디아": ("Nvidia stock", "en", "US"),
+    "테슬라": ("Tesla stock", "en", "US"), "팔란티어": ("Palantir stock", "en", "US"),
+    "GE베르노바": ("GE Vernova stock", "en", "US"), "블룸에너지": ("Bloom Energy stock", "en", "US"),
+    "스페이스X": ("SpaceX", "en", "US"),
+    "두산에너빌리티": ("두산에너빌리티", "ko", "KR"), "한국전력": ("한국전력", "ko", "KR"),
+    "삼성전자": ("삼성전자 주가", "ko", "KR"), "SK하이닉스": ("SK하이닉스 주가", "ko", "KR"),
+    "LG전자": ("LG전자 주가", "ko", "KR"), "삼성전기": ("삼성전기 주가", "ko", "KR"),
+    "현대차": ("현대차 주가", "ko", "KR"), "네이버": ("네이버 NAVER 주가", "ko", "KR"),
+    "SK바이오사이언스": ("SK바이오사이언스", "ko", "KR"),
+    "엔알비": ("엔알비 NRB 모듈러", "ko", "KR"), "퓨쳐켐": ("퓨쳐켐", "ko", "KR"),
 }
 
-# ------------------------------------------------------------------ 데이터 수집
+# ------------------------------------------------------------------ 수집 함수
 def pct_from_closes(df):
     try:
         c = df["Close"].dropna()
@@ -54,21 +68,18 @@ def pct_from_closes(df):
         return None, None
 
 def get_quote(code, market):
-    """(price, pct) 반환. 실패 시 (None, None)."""
-    # 1) FinanceDataReader
+    if market == "PRIVATE" or os.environ.get("DASH_OFFLINE"):
+        return None, None
     try:
         import FinanceDataReader as fdr
-        df = fdr.DataReader(code)
-        p, r = pct_from_closes(df)
+        p, r = pct_from_closes(fdr.DataReader(code))
         if p is not None:
             return p, r
     except Exception:
         pass
-    # 2) yfinance (미국/지수 백업)
     try:
         import yfinance as yf
-        t = yf.Ticker(code if market == "US" else code)
-        h = t.history(period="5d")
+        h = yf.Ticker(code).history(period="5d")
         if len(h):
             last = float(h["Close"].iloc[-1])
             prev = float(h["Close"].iloc[-2]) if len(h) > 1 else last
@@ -77,16 +88,16 @@ def get_quote(code, market):
         pass
     return None, None
 
-def get_index(candidates):
-    """여러 심볼 후보를 순서대로 시도."""
-    for sym in candidates:
-        p, r = get_quote(sym, "US")
+def get_index(cands):
+    for s in cands:
+        p, r = get_quote(s, "US")
         if p is not None:
             return p, r
     return None, None
 
 def fetch_news(query, lang, gl, limit=3):
-    """Google News RSS, KST 오늘 발행분만."""
+    if os.environ.get("DASH_OFFLINE"):
+        return []
     try:
         import feedparser
         url = ("https://news.google.com/rss/search?q="
@@ -104,8 +115,7 @@ def fetch_news(query, lang, gl, limit=3):
             continue
         if pub.date() != TODAY:
             continue
-        title = e.title
-        src = ""
+        title = e.title; src = ""
         if " - " in title:
             title, src = title.rsplit(" - ", 1)
         out.append({"time": pub.strftime("%H:%M"), "title": title.strip(),
@@ -115,24 +125,22 @@ def fetch_news(query, lang, gl, limit=3):
     out.sort(key=lambda x: x["time"], reverse=True)
     return out
 
-_translator = None
+_tr = None
 def to_ko(text):
-    global _translator
+    global _tr
     try:
         from deep_translator import GoogleTranslator
-        if _translator is None:
-            _translator = GoogleTranslator(source="auto", target="ko")
-        return _translator.translate(text)
+        if _tr is None:
+            _tr = GoogleTranslator(source="auto", target="ko")
+        return _tr.translate(text)
     except Exception:
-        return text  # 실패 시 원문 유지
+        return text
 
-# ------------------------------------------------------------------ 포맷 헬퍼
+# ------------------------------------------------------------------ 포맷
 def fmt_price(p, market):
     if p is None:
         return "—"
-    if market == "US":
-        return "$" + format(p, ",.2f")
-    return format(int(round(p)), ",")
+    return ("$" + format(p, ",.2f")) if market == "US" else format(int(round(p)), ",")
 
 def fmt_pct(r):
     if r is None:
@@ -142,7 +150,7 @@ def fmt_pct(r):
     return (cls, f"{sign}{abs(r):.2f}%")
 
 def esc(s):
-    return html.escape(s or "")
+    return html.escape(str(s) if s is not None else "")
 
 # ------------------------------------------------------------------ 수집 실행
 quotes = {}
@@ -151,29 +159,145 @@ for _, items in GROUPS:
         quotes[name] = (get_quote(code, market), market, code)
 
 idx = {
-    "코스피": get_index(["KS11"]),
-    "코스닥": get_index(["KQ11"]),
-    "S&P 500": get_index(["US500", "^GSPC"]),
-    "나스닥": get_index(["IXIC", "^IXIC"]),
-    "다우": get_index(["DJI", "^DJI"]),
-    "VIX": get_index(["^VIX", "VIX"]),
+    "코스피": get_index(["KS11"]), "코스닥": get_index(["KQ11"]),
+    "S&P 500": get_index(["US500", "^GSPC"]), "나스닥": get_index(["IXIC", "^IXIC"]),
+    "다우": get_index(["DJI", "^DJI"]), "VIX": get_index(["^VIX", "VIX"]),
 }
 macro = {
-    "USD/KRW": (get_index(["USD/KRW", "KRW=X"]), ""),
-    "WTI 유가": (get_index(["CL=F"]), ""),
-    "금(Gold)": (get_index(["GC=F"]), ""),
+    "USD/KRW": get_index(["USD/KRW", "KRW=X"]),
+    "WTI 유가": get_index(["CL=F"]), "금(Gold)": get_index(["GC=F"]),
 }
-
 news = {}
-for name in quotes:
-    q, lang, gl = NEWS_Q.get(name, (name, "ko", "KR"))
-    arts = fetch_news(q, lang, gl)
-    if gl == "US":
-        for a in arts:
-            a["title"] = to_ko(a["title"])
-    news[name] = arts
+for gname, items in GROUPS:
+    for name, code, market in items:
+        q, lang, gl = NEWS_Q.get(name, (name, "ko", "KR"))
+        arts = fetch_news(q, lang, gl)
+        if gl == "US":
+            for a in arts:
+                a["title"] = to_ko(a["title"])
+        news[name] = arts
 
-# 데이터 기반 핵심/포인트
+# ------------------------------------------------------------------ 누적 저장
+os.makedirs(DATA, exist_ok=True)
+# 1) history.csv append
+newfile = not os.path.exists(HIST)
+with open(HIST, "a", newline="", encoding="utf-8") as f:
+    w = csv.writer(f)
+    if newfile:
+        w.writerow(["ts", "date", "time", "symbol", "name", "market", "price", "pct"])
+    for gname, items in GROUPS:
+        for name, code, market in items:
+            (p, r), mkt, _ = quotes[name]
+            if p is None:
+                continue
+            w.writerow([NOW.isoformat(), str(TODAY), NOW.strftime("%H:%M"),
+                        code, name, market, f"{p:.4f}", "" if r is None else f"{r:.4f}"])
+
+# 2) news_log.jsonl append (링크 기준 dedup)
+seen = set()
+if os.path.exists(NEWSLOG):
+    with open(NEWSLOG, encoding="utf-8") as f:
+        for line in f:
+            try:
+                seen.add(json.loads(line)["link"])
+            except Exception:
+                pass
+with open(NEWSLOG, "a", encoding="utf-8") as f:
+    for name, arts in news.items():
+        for a in arts:
+            if a["link"] in seen:
+                continue
+            seen.add(a["link"])
+            f.write(json.dumps({"logged": NOW.isoformat(), "date": str(TODAY),
+                                "symbol": name, "time": a["time"], "title": a["title"],
+                                "src": a["src"], "link": a["link"]}, ensure_ascii=False) + "\n")
+
+# ------------------------------------------------------------------ 축적 데이터 로드(추세용)
+def load_history():
+    series = {}
+    if not os.path.exists(HIST):
+        return series
+    with open(HIST, encoding="utf-8") as f:
+        for row in csv.DictReader(f):
+            try:
+                series.setdefault(row["symbol"], []).append(
+                    (row["ts"], float(row["price"]), row.get("pct", ""), row["name"], row["market"]))
+            except Exception:
+                pass
+    for k in series:
+        series[k].sort(key=lambda x: x[0])
+    return series
+
+def load_newslog():
+    log = {}
+    if not os.path.exists(NEWSLOG):
+        return log
+    with open(NEWSLOG, encoding="utf-8") as f:
+        for line in f:
+            try:
+                o = json.loads(line)
+                log.setdefault(o["symbol"], []).append(o)
+            except Exception:
+                pass
+    for k in log:
+        log[k].sort(key=lambda x: (x["date"], x["time"]), reverse=True)
+    return log
+
+HISTORY = load_history()
+NEWSLOG_D = load_newslog()
+
+# ------------------------------------------------------------------ 신호 감지 엔진
+def daysago(dstr):
+    try:
+        return (TODAY - datetime.date.fromisoformat(dstr)).days
+    except Exception:
+        return 999
+
+SIGNALS = []
+for gname, items in GROUPS:
+    for name, code, market in items:
+        (p, r), mkt, _ = quotes[name]
+        logs = NEWSLOG_D.get(name, [])
+        prices = [x[1] for x in HISTORY.get(code, [])]
+        n3 = sum(1 for o in logs if daysago(o["date"]) <= 2)          # 최근 3일 기사 수
+        days_active = len({o["date"] for o in logs if daysago(o["date"]) <= 6})  # 최근 7일 뉴스발생 일수
+        wchg = ((prices[-1] - prices[0]) / prices[0] * 100) if len(prices) >= 2 and prices[0] else None
+        fl = []
+        # 1) 급변
+        if r is not None and abs(r) >= (5 if market == "US" else 3):
+            fl.append((3 if abs(r) >= 7 else 2, "급변", f"{r:+.1f}% 급{'등' if r > 0 else '락'}"))
+        # 2) 이슈 누적·연속성
+        if days_active >= 3 or n3 >= 4:
+            fl.append((2 if days_active >= 4 else 1, "이슈가열", f"최근 뉴스 {days_active}일 활발·3일 {n3}건"))
+        # 3) 주가-뉴스 괴리
+        if n3 >= 3 and wchg is not None:
+            if wchg <= -3:
+                fl.append((2, "괴리", f"뉴스 활발한데 주가 {wchg:+.1f}% 눌림(역발상 관심)"))
+            elif wchg >= 8:
+                fl.append((2, "괴리", f"뉴스+주가 {wchg:+.1f}% 동반(과열 경계)"))
+        # 4) 모멘텀 전환 / 신고·신저
+        if len(prices) >= 6:
+            if prices[-1] >= max(prices):
+                fl.append((2, "모멘텀", "누적구간 신고가 경신"))
+            elif prices[-1] <= min(prices):
+                fl.append((2, "모멘텀", "누적구간 신저가"))
+            else:
+                sma_s = sum(prices[-3:]) / 3
+                sma_l = sum(prices[-10:]) / len(prices[-10:])
+                psma_s = sum(prices[-4:-1]) / 3
+                if psma_s <= sma_l < sma_s:
+                    fl.append((1, "모멘텀", "단기 이평 상향 돌파(상승 전환 조짐)"))
+                elif psma_s >= sma_l > sma_s:
+                    fl.append((1, "모멘텀", "단기 이평 하향 이탈(하락 전환 조짐)"))
+        for st, typ, detail in fl:
+            SIGNALS.append({"name": name, "code": code, "market": market,
+                            "type": typ, "detail": detail, "strength": st})
+SIGNALS.sort(key=lambda x: (-x["strength"], x["name"]))
+with open(os.path.join(DATA, "signals.json"), "w", encoding="utf-8") as f:
+    json.dump({"generated": NOW.isoformat(), "date": str(TODAY), "signals": SIGNALS},
+              f, ensure_ascii=False, indent=1)
+
+# ------------------------------------------------------------------ 데이터기반 핵심/포인트
 def biggest(direction):
     best = None
     for name, ((p, r), mkt, code) in quotes.items():
@@ -182,33 +306,30 @@ def biggest(direction):
         if best is None or (r > best[1] if direction == "up" else r < best[1]):
             best = (name, r)
     return best
-
-top_up = biggest("up")
-top_dn = biggest("down")
+top_up, top_dn = biggest("up"), biggest("down")
 news_cnt = sum(len(v) for v in news.values())
 kospi = idx["코스피"]
-kospi_txt = ""
+headline = ""
 if kospi and kospi[0] is not None:
-    kc, kt = fmt_pct(kospi[1])
-    kospi_txt = f"코스피 {format(int(round(kospi[0])),',')}({kt}) · "
-headline = kospi_txt
+    _, kt = fmt_pct(kospi[1])
+    headline += f"코스피 {format(int(round(kospi[0])),',')}({kt}) · "
 if top_up:
-    headline += f"최대 상승 {esc(top_up[0])} +{abs(top_up[1]):.1f}% · "
+    headline += f"최대 상승 {top_up[0]} +{abs(top_up[1]):.1f}% · "
 if top_dn:
-    headline += f"최대 하락 {esc(top_dn[0])} −{abs(top_dn[1]):.1f}% · "
+    headline += f"최대 하락 {top_dn[0]} −{abs(top_dn[1]):.1f}% · "
 headline += f"오늘 관련 기사 {news_cnt}건 수집"
 
 points = []
 for name, ((p, r), mkt, code) in quotes.items():
-    flags = []
+    fl = []
     if r is not None and abs(r) >= 3:
-        flags.append(f"{'급등' if r>0 else '급락'} {r:+.1f}%")
+        fl.append(f"{'급등' if r>0 else '급락'} {r:+.1f}%")
     if news.get(name):
-        flags.append(f"신규뉴스 {len(news[name])}건")
-    if flags:
-        points.append((name, " · ".join(flags)))
+        fl.append(f"신규뉴스 {len(news[name])}건")
+    if fl:
+        points.append((name, " · ".join(fl)))
 
-# ------------------------------------------------------------------ HTML 렌더
+# ------------------------------------------------------------------ CSS
 CSS = """
 :root{--ground:#0E1420;--surface:#161E2C;--surface-2:#1C2636;--border:#28344A;--border-soft:#20293A;--text:#E7ECF4;--muted:#8A96A9;--faint:#5C6A80;--accent:#E3A94A;--accent-soft:rgba(227,169,74,.14);--up:#F0616D;--down:#4D93F0;--flat:#8A96A9;--up-soft:rgba(240,97,109,.13);--down-soft:rgba(77,147,240,.13);--shadow:0 1px 0 rgba(255,255,255,.03) inset,0 8px 24px -12px rgba(0,0,0,.6);--sans:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;--mono:"IBM Plex Mono",ui-monospace,Menlo,monospace}
 :root:not([data-theme="dark"]){--ground:#F3F5F9;--surface:#FFFFFF;--surface-2:#F7F9FC;--border:#DDE3EC;--border-soft:#E8ECF3;--text:#141C2A;--muted:#5D6B80;--faint:#9AA6B8;--accent:#B57E1E;--accent-soft:rgba(181,126,30,.10);--up:#D23948;--down:#2C6BD4;--flat:#5D6B80;--up-soft:rgba(210,57,72,.09);--down-soft:rgba(44,107,212,.09);--shadow:0 1px 2px rgba(20,28,42,.04),0 10px 26px -16px rgba(20,28,42,.28)}
@@ -216,7 +337,7 @@ CSS = """
 :root[data-theme="dark"]{--ground:#0E1420;--surface:#161E2C;--surface-2:#1C2636;--border:#28344A;--border-soft:#20293A;--text:#E7ECF4;--muted:#8A96A9;--faint:#5C6A80;--accent:#E3A94A;--accent-soft:rgba(227,169,74,.14);--up:#F0616D;--down:#4D93F0;--flat:#8A96A9;--up-soft:rgba(240,97,109,.13);--down-soft:rgba(77,147,240,.13)}
 *{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--ground);color:var(--text);font-family:var(--sans);line-height:1.5;-webkit-font-smoothing:antialiased;padding:0 20px 64px;font-size:15px}
-.wrap{max-width:960px;margin:0 auto}
+.wrap{max-width:980px;margin:0 auto}
 .num{font-family:var(--mono);font-variant-numeric:tabular-nums}
 .up{color:var(--up)}.down{color:var(--down)}.flat{color:var(--flat)}a{color:inherit}
 header{position:sticky;top:0;z-index:5;background:var(--ground);padding:24px 0 16px;margin-bottom:6px;border-bottom:1px solid var(--border-soft)}
@@ -225,6 +346,7 @@ h1{font-size:clamp(23px,4.2vw,32px);font-weight:700;letter-spacing:-.01em}
 .stamp{margin-top:11px;display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center;font-size:12.5px;color:var(--muted)}
 .stamp .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);display:inline-block;margin-right:7px}
 .stamp b{color:var(--text);font-weight:600}
+.navlink{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:var(--accent);background:var(--accent-soft);border:1px solid var(--border);border-radius:20px;padding:6px 14px;text-decoration:none}
 section{margin-top:28px}
 .sec-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:13px}
 .sec-title{font-size:13px;font-weight:600;letter-spacing:.03em;color:var(--text);display:flex;align-items:center;gap:8px}
@@ -240,7 +362,7 @@ section{margin-top:28px}
 @media(max-width:720px){.grid{grid-template-columns:repeat(2,1fr)}}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:15px;box-shadow:var(--shadow);position:relative;overflow:hidden}
 .card .label{font-size:12px;color:var(--muted);font-weight:500}
-.card .val{font-size:22px;font-weight:600;margin-top:9px}
+.card .val{font-size:21px;font-weight:600;margin-top:9px}
 .card .chg{font-size:12.5px;font-weight:500;margin-top:3px}
 .card .rail{position:absolute;left:0;top:0;bottom:0;width:3px}
 .card.up .rail{background:var(--up)}.card.down .rail{background:var(--down)}.card.flat .rail{background:var(--flat)}
@@ -252,10 +374,10 @@ section{margin-top:28px}
 .chip .chg{font-size:11.5px;margin-top:2px;font-weight:500}
 .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:var(--shadow);overflow:hidden}
 .tbl-scroll{overflow-x:auto}
-table{width:100%;border-collapse:collapse;min-width:460px}
+table{width:100%;border-collapse:collapse;min-width:480px}
 thead th{font-size:11px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);font-weight:600;text-align:right;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface-2)}
 thead th:first-child{text-align:left}
-tbody td{padding:12px 16px;border-bottom:1px solid var(--border-soft);text-align:right;font-size:14.5px}
+tbody td{padding:11px 16px;border-bottom:1px solid var(--border-soft);text-align:right;font-size:14.5px}
 tbody tr:last-child td{border-bottom:0}
 tbody td:first-child{text-align:left}
 .nm{font-weight:600}
@@ -263,6 +385,7 @@ tbody td:first-child{text-align:left}
 .grp td{background:var(--surface-2);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);font-weight:600;padding:9px 16px;text-align:left}
 .pct{display:inline-block;min-width:62px;padding:2px 8px;border-radius:6px;font-weight:600;font-size:13px}
 .pct.up{background:var(--up-soft)}.pct.down{background:var(--down-soft)}.pct.flat{background:var(--surface-2);color:var(--muted)}
+.naq{color:var(--faint);font-size:12.5px}
 .stk{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px}
 .stk .sh{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--surface-2);border-bottom:1px solid var(--border-soft)}
 .stk .sh .snm{font-weight:700;font-size:14px}
@@ -276,42 +399,88 @@ tbody td:first-child{text-align:left}
 .stk li .so{font-size:11px;color:var(--muted);white-space:nowrap}
 .stk .none{padding:14px 16px;font-size:13px;color:var(--faint)}
 .badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
+.badge-pv{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
+/* signals */
+.siggrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(max-width:640px){.siggrid{grid-template-columns:1fr}}
+.sig{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--accent);border-radius:12px;padding:13px 15px;box-shadow:var(--shadow)}
+.sig.s3{border-left-color:var(--up)}.sig.s2{border-left-color:var(--accent)}.sig.s1{border-left-color:var(--muted)}
+.sig-h{display:flex;align-items:center;gap:8px;margin-bottom:5px}
+.sig-nm{font-weight:700;font-size:14px}
+.sig-t{font-size:10.5px;font-weight:700;letter-spacing:.04em;color:var(--accent);background:var(--accent-soft);border-radius:5px;padding:2px 7px}
+.sig-str{margin-left:auto;font-size:10px;color:var(--accent);letter-spacing:1px}
+.sig-d{font-size:13px;color:var(--muted);line-height:1.5}
+/* trends */
+.trow{display:grid;grid-template-columns:180px 1fr auto;gap:14px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--border-soft)}
+.trow:last-child{border-bottom:0}
+@media(max-width:640px){.trow{grid-template-columns:1fr auto}.trow .spark{grid-column:1/-1;order:3}}
+.trow .tnm{font-weight:600;font-size:14px}
+.trow .tnm .tk{font-size:11px;color:var(--faint);font-family:var(--mono);margin-left:6px}
+.trow .tp{text-align:right;font-family:var(--mono);font-size:14px}
+.trow .tp .d{font-size:11.5px;margin-top:2px}
+.spark{width:100%;height:38px}
+.tl{background:var(--surface);border:1px solid var(--border);border-radius:13px;box-shadow:var(--shadow);overflow:hidden;margin-bottom:10px}
+.tl .sh{padding:11px 16px;background:var(--surface-2);border-bottom:1px solid var(--border-soft);font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.tl .day{padding:9px 16px 3px;font-size:11px;font-weight:700;color:var(--accent);letter-spacing:.03em}
+.tl a{display:flex;gap:10px;padding:6px 16px;text-decoration:none;align-items:baseline}
+.tl a:hover{background:var(--surface-2)}
+.tl .tm{flex:none;font-family:var(--mono);font-size:11px;color:var(--muted);width:38px}
+.tl .ht{font-size:13px;line-height:1.5}
+.tl .none{padding:12px 16px;color:var(--faint);font-size:13px}
 footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--border-soft);font-size:11.5px;color:var(--faint);line-height:1.7}
 """
 
-def card(label, pair, market="US"):
+# ------------------------------------------------------------------ 스파크라인 SVG
+def sparkline(points, market):
+    vals = [p[1] for p in points][-40:]
+    if len(vals) < 2:
+        return '<div class="spark" style="color:var(--faint);font-size:11px;display:flex;align-items:center">데이터 축적 중…</div>'
+    lo, hi = min(vals), max(vals)
+    rng = (hi - lo) or 1
+    W, H, pad = 240, 38, 3
+    n = len(vals)
+    pts = []
+    for i, v in enumerate(vals):
+        x = pad + (W - 2 * pad) * i / (n - 1)
+        y = pad + (H - 2 * pad) * (1 - (v - lo) / rng)
+        pts.append(f"{x:.1f},{y:.1f}")
+    up = vals[-1] >= vals[0]
+    col = "var(--up)" if up else "var(--down)"
+    return (f'<svg class="spark" viewBox="0 0 {W} {H}" preserveAspectRatio="none">'
+            f'<polyline fill="none" stroke="{col}" stroke-width="1.6" '
+            f'stroke-linejoin="round" stroke-linecap="round" points="{" ".join(pts)}"/>'
+            f'<circle cx="{pts[-1].split(",")[0]}" cy="{pts[-1].split(",")[1]}" r="2.2" fill="{col}"/></svg>')
+
+# ------------------------------------------------------------------ index.html 조립
+def card(label, pair):
     (p, r) = pair if pair else (None, None)
     cls, txt = fmt_pct(r)
-    val = fmt_price(p, market) if label in ("VIX",) or market == "US" else fmt_price(p, "KR")
-    if label in ("코스피", "코스닥"):
-        val = fmt_price(p, "KR")
     if label == "VIX":
+        val = format(p, ",.2f") if p is not None else "—"
+    elif label in ("코스피", "코스닥"):
+        val = format(int(round(p)), ",") if p is not None else "—"
+    else:
         val = format(p, ",.2f") if p is not None else "—"
     return f'<div class="card {cls}"><div class="rail"></div><div class="label">{esc(label)}</div><div class="val num">{val}</div><div class="chg {cls}">{txt}</div></div>'
 
-indices_html = "".join([
-    card("S&P 500", idx["S&P 500"]), card("나스닥", idx["나스닥"]), card("다우", idx["다우"]),
-    card("코스피", idx["코스피"]), card("코스닥", idx["코스닥"]), card("VIX", idx["VIX"]),
-])
+indices_html = "".join([card("S&P 500", idx["S&P 500"]), card("나스닥", idx["나스닥"]), card("다우", idx["다우"]),
+                        card("코스피", idx["코스피"]), card("코스닥", idx["코스닥"]), card("VIX", idx["VIX"])])
 
 def chip(label, pair):
     (p, r) = pair if pair else (None, None)
     cls, txt = fmt_pct(r)
-    if p is None:
-        val = "—"
-    elif label == "USD/KRW":
-        val = format(p, ",.2f")
-    else:
-        val = format(p, ",.2f")
+    val = "—" if p is None else format(p, ",.2f")
     return f'<div class="chip"><div class="label">{esc(label)}</div><div class="val num">{val}</div><div class="chg {cls}">{txt}</div></div>'
-
-macro_html = "".join([chip(k, v[0]) for k, v in macro.items()])
+macro_html = "".join([chip(k, v) for k, v in macro.items()])
 
 rows = []
 for gname, items in GROUPS:
     rows.append(f'<tr class="grp"><td colspan="3">{esc(gname)}</td></tr>')
     for name, code, market in items:
         (p, r), mkt, _ = quotes[name]
+        if market == "PRIVATE":
+            rows.append(f'<tr><td class="nm">{esc(name)}<span class="tick">{esc(code)}</span></td><td class="naq" colspan="2">비상장 · 뉴스만</td></tr>')
+            continue
         cls, txt = fmt_pct(r)
         rows.append(f'<tr><td class="nm">{esc(name)}<span class="tick">{esc(code)}</span></td>'
                     f'<td class="num">{fmt_price(p, market)}</td>'
@@ -323,55 +492,119 @@ for gname, items in GROUPS:
     for name, code, market in items:
         (p, r), mkt, _ = quotes[name]
         cls, txt = fmt_pct(r)
-        en = '<span class="badge-en">번역</span>' if market == "US" else ""
+        badge = '<span class="badge-en">번역</span>' if market == "US" else ('<span class="badge-pv">비상장</span>' if market == "PRIVATE" else "")
+        mv = txt if market != "PRIVATE" else ""
         head = (f'<div class="sh"><span class="snm">{esc(name)}</span>'
-                f'<span class="stk-tick">{esc(code)}</span>{en}'
-                f'<span class="smv {cls}">{txt}</span></div>')
+                f'<span class="stk-tick">{esc(code)}</span>{badge}'
+                f'<span class="smv {cls}">{mv}</span></div>')
         arts = news.get(name, [])
         if arts:
-            lis = "".join([
-                f'<li><a href="{esc(a["link"])}" target="_blank" rel="noopener">'
-                f'<span class="tm">{esc(a["time"])}</span>'
-                f'<span><span class="ht">{esc(a["title"])}</span> '
-                f'<span class="so">· {esc(a["src"])}</span></span></a></li>'
-                for a in arts])
+            lis = "".join([f'<li><a href="{esc(a["link"])}" target="_blank" rel="noopener">'
+                           f'<span class="tm">{esc(a["time"])}</span>'
+                           f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a></li>' for a in arts])
             body = f"<ul>{lis}</ul>"
         else:
             body = '<div class="none">— 오늘(KST) 발행된 관련 기사 없음</div>'
         news_blocks.append(f'<div class="stk">{head}{body}</div>')
 news_html = "".join(news_blocks)
-
-points_html = "".join([f'<span class="point"><b>{esc(n)}</b> {esc(d)}</span>' for n, d in points]) \
-    or '<span class="point">특이 변동·신규 뉴스 없음</span>'
-
+points_html = "".join([f'<span class="point"><b>{esc(n)}</b> {esc(d)}</span>' for n, d in points]) or '<span class="point">특이 변동·신규 뉴스 없음</span>'
 stamp = NOW.strftime("%Y. %m. %d (%a) %H:%M KST")
+n_stocks = sum(1 for _, its in GROUPS for _ in its)
+n_priv = sum(1 for _, its in GROUPS for (_, _, m) in its if m == "PRIVATE")
+n_trade = n_stocks - n_priv
+wl_note = f"시세 {n_trade}종" + (f" · 비상장 {n_priv}(뉴스만)" if n_priv else "")
 
-PAGE = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>아침 시장 인텔리전스</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
-<style>{CSS}</style></head><body><div class="wrap">
-<header>
-  <div class="kicker">Morning Market Intelligence</div>
-  <h1>아침 시장 인텔리전스</h1>
-  <div class="stamp">
-    <span><span class="dot"></span>마지막 업데이트 <b>{esc(stamp)}</b></span>
-    <span>뉴스 · <b>오늘 발행분(KST)</b></span>
-    <span>🔄 <b>평일 07·14시 자동 갱신</b></span>
-  </div>
-</header>
+HEAD = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">'
+        f'<style>{CSS}</style>')
+
+INDEX = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>아침 시장 인텔리전스</title>{HEAD}</head><body><div class="wrap">
+<header><div class="kicker">Morning Market Intelligence</div><h1>아침 시장 인텔리전스</h1>
+<div class="stamp"><span><span class="dot"></span>마지막 업데이트 <b>{esc(stamp)}</b></span>
+<span>뉴스 · <b>오늘 발행분(KST)</b></span><span>🔄 <b>평일 07·14시 자동 갱신</b></span>
+<a class="navlink" href="trends.html">📈 추세 · 이슈 타임라인 →</a></div></header>
 <div class="headline"><span class="tag">오늘의 핵심</span><p>{esc(headline)}</p></div>
 <section><div class="sec-head"><div class="sec-title">오늘의 관찰 포인트</div><div class="sec-note">±3% 이상 변동·신규 뉴스 자동 감지</div></div><div class="points">{points_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div><div class="grid">{indices_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div><div class="macro">{macro_html}</div></section>
-<section><div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">관심종목 {sum(len(i) for _,i in GROUPS)}종</div></div><div class="panel"><div class="tbl-scroll"><table><thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead><tbody>{watchlist_html}</tbody></table></div></div></section>
-<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 종목당 최대 3건 · 클릭 시 원문</div></div>{news_html}</section>
-<footer>이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다. 고정 URL이라 기존 링크로 항상 최신 화면이 열리고, 갱신 이력은 GitHub 커밋으로 누적 보관됩니다.<br>
-시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 헤드라인은 자동 번역본입니다. 데이터·번역 오류 가능성이 있으므로 투자판단 전 원문·원자료를 반드시 재확인하십시오. 본 페이지는 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
+<section><div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">{wl_note}</div></div><div class="panel"><div class="tbl-scroll"><table><thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead><tbody>{watchlist_html}</tbody></table></div></div></section>
+<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 최대 3건 · 클릭 시 원문</div></div>{news_html}</section>
+<footer>이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다. 매 실행마다 시세·뉴스가 <b>data/</b>에 누적 저장되어 <a href="trends.html">추세·이슈 타임라인</a>으로 축적 관찰됩니다.<br>
+시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 헤드라인은 자동 번역본입니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
 </div></body></html>"""
-
 with open("index.html", "w", encoding="utf-8") as f:
-    f.write(PAGE)
-print(f"built index.html  ({len(PAGE)} bytes)  news={news_cnt}  points={len(points)}")
+    f.write(INDEX)
+
+# ------------------------------------------------------------------ trends.html 조립
+trend_rows = []
+for gname, items in GROUPS:
+    inner = []
+    for name, code, market in items:
+        if market == "PRIVATE":
+            continue
+        ser = HISTORY.get(code, [])
+        latest = ser[-1][1] if ser else None
+        if len(ser) >= 2:
+            wchg = (ser[-1][1] - ser[0][1]) / ser[0][1] * 100 if ser[0][1] else None
+        else:
+            wchg = None
+        wcls, wtxt = fmt_pct(wchg)
+        price_txt = fmt_price(latest, market) if latest is not None else "—"
+        npts = len(ser)
+        inner.append(f'<div class="trow"><div class="tnm">{esc(name)}<span class="tk">{esc(code)}</span></div>'
+                     f'<div class="spark">{sparkline(ser, market)}</div>'
+                     f'<div class="tp">{price_txt}<div class="d {wcls}">{wtxt} · {npts}p</div></div></div>')
+    if inner:
+        trend_rows.append(f'<div class="sec-head" style="margin-top:22px"><div class="sec-title">{esc(gname)}</div><div class="sec-note">누적 구간 등락 · 데이터포인트</div></div><div class="panel">{"".join(inner)}</div>')
+trends_price_html = "".join(trend_rows)
+
+# 이슈 타임라인
+tl_blocks = []
+for gname, items in GROUPS:
+    for name, code, market in items:
+        all_logs = NEWSLOG_D.get(name, [])
+        da = len({o["date"] for o in all_logs if daysago(o["date"]) <= 6})
+        badge = f'<span class="badge-pv" style="margin-left:auto">최근7일 {da}일 뉴스</span>' if da else ''
+        logs = all_logs[:8]
+        head = f'<div class="sh">{esc(name)} <span class="tick" style="color:var(--faint);font-family:var(--mono);font-size:11px">{esc(code)}</span>{badge}</div>'
+        if not logs:
+            tl_blocks.append(f'<div class="tl">{head}<div class="none">— 축적된 이슈 없음(수집 시작 후 누적)</div></div>')
+            continue
+        body = []
+        cur = None
+        for o in logs:
+            if o["date"] != cur:
+                cur = o["date"]
+                body.append(f'<div class="day">{esc(cur)}</div>')
+            body.append(f'<a href="{esc(o["link"])}" target="_blank" rel="noopener"><span class="tm">{esc(o["time"])}</span><span class="ht">{esc(o["title"])} <span style="color:var(--muted);font-size:11px">· {esc(o["src"])}</span></span></a>')
+        tl_blocks.append(f'<div class="tl">{head}{"".join(body)}</div>')
+timeline_html = "".join(tl_blocks)
+
+if SIGNALS:
+    sig_cards = "".join([
+        f'<div class="sig s{s["strength"]}"><div class="sig-h"><span class="sig-nm">{esc(s["name"])}</span>'
+        f'<span class="sig-t">{esc(s["type"])}</span><span class="sig-str">{"●"*s["strength"]}</span></div>'
+        f'<div class="sig-d">{esc(s["detail"])}</div></div>' for s in SIGNALS])
+    signals_html = f'<div class="siggrid">{sig_cards}</div>'
+    sig_note = f"{len(SIGNALS)}건 감지 · 참고용(투자책임 본인)"
+else:
+    signals_html = '<div class="panel"><div style="padding:16px;color:var(--faint)">현재 감지된 신호 없음 — 데이터가 쌓일수록 정확해집니다.</div></div>'
+    sig_note = "누적 데이터 기반 자동 감지"
+
+TRENDS = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>추세 · 이슈 타임라인</title>{HEAD}</head><body><div class="wrap">
+<header><div class="kicker">Trend & Issue Tracking</div><h1>추세 · 이슈 타임라인</h1>
+<div class="stamp"><span><span class="dot"></span>마지막 업데이트 <b>{esc(stamp)}</b></span>
+<span>📈 <b>실행마다 시세·뉴스 누적</b></span>
+<a class="navlink" href="index.html">← 오늘 대시보드</a></div></header>
+<section><div class="sec-head"><div class="sec-title">🎯 주목 신호</div><div class="sec-note">{esc(sig_note)}</div></div>{signals_html}</section>
+<section><div class="sec-head"><div class="sec-title">종목별 주가 추세</div><div class="sec-note">누적된 데이터포인트 기반 스파크라인(최근 40개)</div></div>{trends_price_html or '<div class="panel"><div style="padding:16px;color:var(--faint)">데이터 축적 중 — 며칠 실행되면 추세가 그려집니다.</div></div>'}</section>
+<section><div class="sec-head"><div class="sec-title">종목별 이슈 타임라인</div><div class="sec-note">날짜순 누적 헤드라인(종목당 최근 8건)</div></div>{timeline_html}</section>
+<footer>이 페이지는 <b>data/history.csv</b>(시세 시계열)와 <b>data/news_log.jsonl</b>(뉴스 누적 로그)을 읽어 매 실행마다 다시 그립니다. 실행이 쌓일수록 추세선과 이슈 흐름이 길어집니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
+</div></body></html>"""
+with open("trends.html", "w", encoding="utf-8") as f:
+    f.write(TRENDS)
+
+print(f"built index.html + trends.html | stocks={n_stocks} news={news_cnt} "
+      f"hist_symbols={len(HISTORY)} log_symbols={len(NEWSLOG_D)}")
