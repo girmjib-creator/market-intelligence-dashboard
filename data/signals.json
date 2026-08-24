@@ -1,0 +1,38 @@
+{
+ "generated": "2026-08-24T19:29:39.279446+09:00",
+ "date": "2026-08-24",
+ "signals": [
+  {
+   "name": "삼성전자",
+   "code": "005930",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-8.7% 급락",
+   "strength": 3
+  },
+  {
+   "name": "SK바이오사이언스",
+   "code": "302440",
+   "market": "KR",
+   "type": "급변",
+   "detail": "+4.9% 급등",
+   "strength": 2
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-3.4% 급락",
+   "strength": 2
+  },
+  {
+   "name": "테슬라",
+   "code": "TSLA",
+   "market": "US",
+   "type": "급변",
+   "detail": "+5.1% 급등",
+   "strength": 2
+  }
+ ]
+}
