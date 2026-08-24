@@ -1,0 +1,5 @@
+finance-datareader
+yfinance
+feedparser
+deep-translator
+pandas
