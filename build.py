@@ -20,7 +20,7 @@ NEWSLOG = os.path.join(DATA, "news_log.jsonl")
 
 # 번역·본문추출 총 시간 예산(초). 초과 시 번역 생략하고 빌드를 마쳐 무한정 지연 방지.
 _START = time.time()
-BUDGET_SEC = 300
+BUDGET_SEC = 480
 def over_budget():
     return (time.time() - _START) > BUDGET_SEC
 
@@ -28,8 +28,47 @@ def over_budget():
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 GEMINI_DIAG = []          # 진단 로그(원인 파악용) → data/gemini_debug.json 로 커밋
-GEMINI_DIAG_MAX = 10      # 앞쪽 몇 건의 상세만 기록(용량 절약)
+GEMINI_DIAG_MAX = 12      # 앞쪽 몇 건의 상세만 기록(용량 절약)
 HL_MARK = "※ 제목 기반 추정(본문 미확인)"   # 제목기반 보조요약 식별 표시
+GEM_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
+# ── 무료 한도(≈15 RPM / 1,500 RPD) 준수용 전역 속도제한 ─────────────
+GEMINI_MIN_INTERVAL = 4.5   # 호출 간 최소 간격(초) → 분당 ≈13회(15 미만 안전)
+GEMINI_MAX_CALLS = 60       # 한 실행당 총 호출 상한(RPD·시간예산 보호)
+_GEM_LAST = [0.0]           # 마지막 호출 시각
+_GEM_CALLS = [0]            # 누적 호출 수
+_GEM_DEAD = [False]         # 지속 429(할당량 소진) 감지 시 이후 호출 중단
+
+def gem_ready():
+    return (bool(GEMINI_KEY) and not os.environ.get("DASH_OFFLINE")
+            and not over_budget() and not _GEM_DEAD[0] and _GEM_CALLS[0] < GEMINI_MAX_CALLS)
+
+def _gem_throttle():
+    dt = time.time() - _GEM_LAST[0]
+    if dt < GEMINI_MIN_INTERVAL:
+        time.sleep(GEMINI_MIN_INTERVAL - dt)
+    _GEM_LAST[0] = time.time()
+    _GEM_CALLS[0] += 1
+
+def gem_post(payload, timeout=45):
+    """throttle + 429 1회 재시도 후 (status, json_dict) 반환. 지속 429면 _GEM_DEAD 세팅."""
+    import requests
+    for attempt in range(2):
+        _gem_throttle()
+        try:
+            r = requests.post(GEM_URL, params={"key": GEMINI_KEY}, json=payload, timeout=timeout)
+        except Exception as e:
+            return None, {"_err": repr(e)[:200]}
+        try:
+            body = r.json()
+        except Exception:
+            body = {"_body": (r.text or "")[:300]}
+        if r.status_code == 429:
+            if attempt == 0 and not over_budget():
+                time.sleep(25)      # 분당 한도 창 회복 대기 후 1회 재시도
+                continue
+            _GEM_DEAD[0] = True      # 재시도에도 429 → 할당량 소진으로 보고 이후 전부 중단
+            return 429, body
+        return r.status_code, body
 
 # ------------------------------------------------------------------ 관심종목
 # (표시명, 코드/티커, market)  market: 'KR' | 'US' | 'PRIVATE'(비상장·뉴스만)
@@ -267,7 +306,7 @@ def relevance_score(a, aliases, gl):
 def gemini_triage(name, ticker, cands):
     """후보 제목들 중 '주가에 실제 영향 있는 가치 기사'만 최대 3개 선별.
     반환: [{"i":idx,"tag":"실적"}...] (빈 배열 가능) 또는 실패 시 None(→휴리스틱 폴백)."""
-    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget() or not cands:
+    if not cands or not gem_ready():
         return None
     lst = "\n".join(f"{i}. {a.get('title','')} ({a.get('src','')})" for i, a in enumerate(cands))
     prompt = (f"당신은 주식 애널리스트다. 아래는 {name}({ticker}) 관련 후보 뉴스 제목 목록이다. "
@@ -282,15 +321,11 @@ def gemini_triage(name, ticker, cands):
     payload = {"contents": [{"parts": [{"text": prompt}]}],
                "generationConfig": {"temperature": 0.1, "maxOutputTokens": 300}}
     try:
-        import requests, re as _re
-        r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
-            params={"key": GEMINI_KEY}, json=payload, timeout=30)
-        time.sleep(2)
-        if r.status_code != 200:
-            _diag("triage_http_error", status=r.status_code, name=name)
+        import re as _re
+        status, d = gem_post(payload, timeout=30)
+        if status != 200:
+            _diag("triage_http_error", status=status, name=name)
             return None
-        d = r.json()
         cand = (d.get("candidates") or [{}])[0]
         text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
         m = _re.search(r"\{.*\}", text, _re.S)
@@ -348,7 +383,7 @@ def _diag(branch, **kw):
 def gemini_headline_note(title):
     """기사 본문을 못 열 때, 번역된 제목만으로 한국어 배경·맥락 2~3문장(보조요약).
     앞줄에 HL_MARK 표시. 실패 시 None."""
-    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget():
+    if not gem_ready():
         return None
     prompt = ("다음은 미국 경제뉴스 기사의 한국어 번역 제목이다. 기사 본문은 접근하지 못했다. "
               "이 제목이 다루는 사안의 배경·맥락을 '일반적으로 알려진 사실'에 근거해 한국어 2~3문장으로 설명해줘. "
@@ -359,15 +394,10 @@ def gemini_headline_note(title):
         "generationConfig": {"temperature": 0.2, "maxOutputTokens": 300},
     }
     try:
-        import requests
-        r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
-            params={"key": GEMINI_KEY}, json=payload, timeout=30)
-        time.sleep(2)
-        if r.status_code != 200:
-            _diag("hl_http_error", status=r.status_code)
+        status, d = gem_post(payload, timeout=30)
+        if status != 200:
+            _diag("hl_http_error", status=status)
             return None
-        d = r.json()
         cand = (d.get("candidates") or [{}])[0]
         text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
         if not text or not has_hangul(text) or is_garbage(text):
@@ -387,7 +417,7 @@ def gemini_summary_ko(title, link, allow_fallback=True):
     if not GEMINI_KEY:
         _diag("no_key", key_len=len(GEMINI_KEY))
         return None
-    if os.environ.get("DASH_OFFLINE") or over_budget():
+    if os.environ.get("DASH_OFFLINE") or over_budget() or _GEM_DEAD[0] or _GEM_CALLS[0] >= GEMINI_MAX_CALLS:
         _diag("offline_or_budget")
         return None
     real = resolve_gnews(link)
@@ -401,26 +431,16 @@ def gemini_summary_ko(title, link, allow_fallback=True):
         "generationConfig": {"temperature": 0.3, "maxOutputTokens": 700},
     }
     try:
-        import requests
-        r = requests.post(
-            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
-            params={"key": GEMINI_KEY}, json=payload, timeout=45)
-        status = r.status_code
-        try:
-            d = r.json()
-        except Exception:
-            _diag("bad_json", status=status, body=r.text[:400], key_prefix=GEMINI_KEY[:4])
-            return None
+        status, d = gem_post(payload, timeout=45)
         if status != 200:
-            err = d.get("error", {})
+            err = (d or {}).get("error", {})
             _diag("http_error", status=status,
                   msg=str(err.get("message", ""))[:300], code=err.get("code"),
                   estatus=err.get("status"), key_prefix=GEMINI_KEY[:4])
-            return None
+            return gemini_headline_note(title) if allow_fallback else None
         cand = (d.get("candidates") or [{}])[0]
         parts = cand.get("content", {}).get("parts", [])
         text = "".join(p.get("text", "") for p in parts).strip()
-        time.sleep(3)  # 무료 RPM 한도 준수용 스로틀
         if not text:
             _diag("empty_text", status=status,
                   finish=cand.get("finishReason"),
@@ -524,7 +544,10 @@ try:
             "key_present": bool(GEMINI_KEY),
             "key_len": len(GEMINI_KEY),
             "key_prefix": GEMINI_KEY[:4] if GEMINI_KEY else "",
-            "approx_us_calls": _summary_calls,
+            "gem_calls_made": _GEM_CALLS[0],
+            "gem_call_cap": GEMINI_MAX_CALLS,
+            "gem_quota_exhausted": _GEM_DEAD[0],
+            "elapsed_sec": round(time.time() - _START, 1),
             "branch_counts": _counts,
             "samples": GEMINI_DIAG,
         }, f, ensure_ascii=False, indent=2)
