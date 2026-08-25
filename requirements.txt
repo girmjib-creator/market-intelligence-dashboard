@@ -4,5 +4,4 @@ feedparser
 deep-translator
 pandas
 requests
-trafilatura
-lxml
+googlenewsdecoder
