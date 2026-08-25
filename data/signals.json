@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-25T14:23:40.954287+09:00",
+ "generated": "2026-08-25T15:15:37.988273+09:00",
  "date": "2026-08-25",
  "signals": [
   {
@@ -7,7 +7,7 @@
    "code": "034020",
    "market": "KR",
    "type": "급변",
-   "detail": "+10.2% 급등",
+   "detail": "+10.7% 급등",
    "strength": 3
   },
   {
@@ -19,11 +19,27 @@
    "strength": 2
   },
   {
+   "name": "LG전자",
+   "code": "066570",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "누적구간 신고가 경신",
+   "strength": 2
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "누적구간 신고가 경신",
+   "strength": 2
+  },
+  {
    "name": "두산에너빌리티",
    "code": "034020",
    "market": "KR",
    "type": "괴리",
-   "detail": "뉴스+주가 +10.2% 동반(과열 경계)",
+   "detail": "뉴스+주가 +10.7% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -142,6 +158,14 @@
    "name": "퓨쳐켐",
    "code": "220100",
    "market": "KR",
+   "type": "급변",
+   "detail": "+3.3% 급등",
+   "strength": 2
+  },
+  {
+   "name": "퓨쳐켐",
+   "code": "220100",
+   "market": "KR",
    "type": "모멘텀",
    "detail": "누적구간 신고가 경신",
    "strength": 2
@@ -151,15 +175,7 @@
    "code": "015760",
    "market": "KR",
    "type": "급변",
-   "detail": "+4.3% 급등",
-   "strength": 2
-  },
-  {
-   "name": "한국전력",
-   "code": "015760",
-   "market": "KR",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "detail": "+3.8% 급등",
    "strength": 2
   },
   {
@@ -183,7 +199,7 @@
    "code": "066570",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 8건",
+   "detail": "최근 뉴스 2일 활발·3일 9건",
    "strength": 1
   },
   {
@@ -215,7 +231,7 @@
    "code": "034020",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 10건",
+   "detail": "최근 뉴스 2일 활발·3일 11건",
    "strength": 1
   },
   {
@@ -223,7 +239,7 @@
    "code": "MSFT",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 7건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -256,6 +272,14 @@
    "market": "KR",
    "type": "이슈가열",
    "detail": "최근 뉴스 2일 활발·3일 9건",
+   "strength": 1
+  },
+  {
+   "name": "삼성전자",
+   "code": "005930",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
    "strength": 1
   },
   {
@@ -311,7 +335,7 @@
    "code": "PLTR",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 8건",
+   "detail": "최근 뉴스 2일 활발·3일 9건",
    "strength": 1
   },
   {
@@ -327,7 +351,7 @@
    "code": "005380",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 11건",
+   "detail": "최근 뉴스 2일 활발·3일 12건",
    "strength": 1
   }
  ]
