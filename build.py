@@ -71,6 +71,48 @@ NEWS_Q = {
 }
 NAME_MARKET = {name: market for _, its in GROUPS for (name, code, market) in its}
 
+# 제목에서 '이 종목을 실제로 다루는지' 판정용 별칭(관련도 점수). 짧고 오탐 잦은 티커(BE·GEV)는 제외.
+NEWS_ALIAS = {
+    "애플": ["apple", "aapl", "iphone", "ipad", "tim cook", "vision pro"],
+    "마이크로소프트": ["microsoft", "msft", "azure", "copilot", "satya nadella"],
+    "알파벳": ["alphabet", "google", "googl", "goog", "gemini", "youtube", "waymo"],
+    "아마존": ["amazon", "amzn", "aws", "jassy", "bezos"],
+    "메타": ["meta platforms", "meta", "facebook", "instagram", "whatsapp", "zuckerberg"],
+    "엔비디아": ["nvidia", "nvda", "jensen huang", "blackwell"],
+    "테슬라": ["tesla", "tsla", "musk", "cybertruck", "robotaxi", "optimus"],
+    "팔란티어": ["palantir", "pltr", "karp"],
+    "GE베르노바": ["ge vernova", "vernova"], "블룸에너지": ["bloom energy"],
+    "스페이스X": ["spacex", "space x", "starlink", "starship"],
+    "두산에너빌리티": ["두산에너빌리티", "두산에너", "두산"], "한국전력": ["한국전력", "한전"],
+    "삼성전자": ["삼성전자", "삼전"], "SK하이닉스": ["sk하이닉스", "하이닉스"],
+    "LG전자": ["lg전자"], "삼성전기": ["삼성전기"],
+    "현대차": ["현대차", "현대자동차", "아이오닉", "제네시스"], "네이버": ["네이버", "naver", "라인"],
+    "SK바이오사이언스": ["sk바이오사이언스", "sk바이오"], "엔알비": ["엔알비", "nrb"],
+    "퓨쳐켐": ["퓨쳐켐", "futurechem"],
+}
+# 주가에 영향 주는 '가치 이슈' 키워드(가점) / 클릭베이트·나열형 잡음(감점)
+IMPACT_EN = ["earnings", "revenue", "profit", "guidance", "forecast", "outlook", "upgrade",
+    "downgrade", "price target", "analyst", "rating", "acquisition", "merger", "acquire",
+    "deal", "lawsuit", "sues", "sued", "regulat", "antitrust", "fine", "penalt", "layoff",
+    "job cut", "ceo", "resign", "steps down", "launch", "unveil", "contract", "order",
+    "partnership", "invest", "buyback", "dividend", "results", "beats", "miss", "surge",
+    "plunge", "soar", "tumble", "halt", "recall", " ban", "subpoena", "probe", "chip",
+    "data center", "capacity", "factory", "plant", "backlog", "stake", "raises", "cuts"]
+NOISE_EN = ["how to buy", "should you buy", "is it too late", "reasons to buy", "stocks to buy",
+    "best stock", "top 3", "top 5", "top 10", "3 stock", "5 stock", "7 stock", "10 stock",
+    "stocks to watch", "prediction", "could make you", "millionaire", "here's why you",
+    "zacks rank", "better buy", " vs ", " vs.", "motley", "if you invested", "would be worth",
+    "dividend stocks", "wall street bets", "reddit", "undervalued stock", "growth stocks to",
+    "stocks that", "magnificent seven stock", "3 reasons", "these stocks"]
+IMPACT_KO = ["실적", "영업이익", "매출", "순이익", "어닝", "가이던스", "목표주가", "상향", "하향",
+    "인수", "합병", "지분", "계약", "수주", "규제", "소송", "과징금", "리콜", "신제품", "출시",
+    "배당", "자사주", "증설", "감산", "급등", "급락", "신고가", "신저가", "공시", "유상증자",
+    "무상증자", "특허", "임상", "승인", "적자", "흑자", "실적발표", "투자의견"]
+NOISE_KO = ["사는 법", "매수 타이밍", "지금 사도", "추천주", "유망주", "관심주", "총정리", "이 종목",
+    "테마주", "급등락 주의", "놓치면", "주목할 종목", "오늘의 종목", "급등 종목", "종목 정리"]
+AUTH_US = ["Reuters", "Bloomberg", "Wall Street Journal", "WSJ", "Financial Times",
+           "CNBC", "AP", "Associated Press", "Barron"]
+
 # ------------------------------------------------------------------ 수집 함수
 def pct_from_closes(df):
     try:
@@ -200,6 +242,72 @@ def src_rank(src):
     """접근 잘 되는 매체=0(우선), 그 외=1. 안정정렬로 관련도 순서 유지."""
     s = (src or "").lower()
     return 0 if any(w.lower() in s for w in ACCESSIBLE_US) else 1
+
+def relevance_score(a, aliases, gl):
+    """제목 기반 영향력·관련도 점수. (score, why리스트, 회사명포함여부) 반환."""
+    t = (a.get("title", "") or "")
+    tl = t.lower()
+    src = a.get("src", "") or ""
+    hit_name = any(al.lower() in tl for al in aliases)
+    score = 3 if hit_name else 0
+    imp = IMPACT_EN if gl == "US" else IMPACT_KO
+    noise = NOISE_EN if gl == "US" else NOISE_KO
+    base = tl if gl == "US" else t
+    ih = [k.strip() for k in imp if k in base]
+    if ih:
+        score += min(6, 2 * len(ih))
+    if any(k in base for k in noise):
+        score -= 6
+    if source_ok(src, AUTH_US):
+        score += 2
+    elif source_ok(src, ACCESSIBLE_US):
+        score += 1
+    return score, ih[:2], hit_name
+
+def gemini_triage(name, ticker, cands):
+    """후보 제목들 중 '주가에 실제 영향 있는 가치 기사'만 최대 3개 선별.
+    반환: [{"i":idx,"tag":"실적"}...] (빈 배열 가능) 또는 실패 시 None(→휴리스틱 폴백)."""
+    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget() or not cands:
+        return None
+    lst = "\n".join(f"{i}. {a.get('title','')} ({a.get('src','')})" for i, a in enumerate(cands))
+    prompt = (f"당신은 주식 애널리스트다. 아래는 {name}({ticker}) 관련 후보 뉴스 제목 목록이다. "
+              "각 제목이 이 종목의 '주가에 실제로 영향을 줄 수 있는 가치 있는 기사'인지 평가하라. "
+              "실적·가이던스·목표주가/투자의견·M&A·수주/계약·규제/소송·경영진·신제품·주가 급변 등 "
+              "주가 영향 이슈를 우선한다. 단순 '주식 사는 법', 여러 종목 나열 클릭베이트, "
+              "무관하거나 일반론적 기사는 제외한다. 영향력이 큰 순서로 최대 3개만 골라 "
+              "아래 JSON만 출력하라(설명·코드펜스 금지):\n"
+              '{"keep":[{"i":0,"tag":"실적"},{"i":2,"tag":"목표주가"}]}\n'
+              "tag는 실적/가이던스/목표주가/M&A/수주/규제/소송/경영/제품/주가/기타 중 하나. "
+              "가치 있는 기사가 없으면 keep을 빈 배열로 하라.\n목록:\n" + lst)
+    payload = {"contents": [{"parts": [{"text": prompt}]}],
+               "generationConfig": {"temperature": 0.1, "maxOutputTokens": 300}}
+    try:
+        import requests, re as _re
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
+            params={"key": GEMINI_KEY}, json=payload, timeout=30)
+        time.sleep(2)
+        if r.status_code != 200:
+            _diag("triage_http_error", status=r.status_code, name=name)
+            return None
+        d = r.json()
+        cand = (d.get("candidates") or [{}])[0]
+        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
+        m = _re.search(r"\{.*\}", text, _re.S)
+        if not m:
+            _diag("triage_nojson", name=name, snippet=text[:120])
+            return None
+        obj = json.loads(m.group(0))
+        keep = obj.get("keep", [])
+        out = []
+        for it in keep:
+            if isinstance(it, dict) and isinstance(it.get("i"), int):
+                out.append({"i": it["i"], "tag": str(it.get("tag", ""))[:8]})
+        _diag("triage_ok", name=name, kept=len(out))
+        return out[:3]
+    except Exception as e:
+        _diag("triage_exception", name=name, err=repr(e)[:200])
+        return None
 
 def chunk_translate(text, limit=4000):
     """긴 본문을 조각내어 한글 번역 후 결합."""
@@ -367,17 +475,38 @@ for gname, items in GROUPS:
         q, lang, gl = NEWS_Q.get(name, (name, "ko", "KR"))
         pool = fetch_news(q, lang, gl, limit=25)
         wl = KR_SOURCES if gl == "KR" else US_SOURCES
+        aliases = NEWS_ALIAS.get(name, [name])
         cands = [a for a in pool if source_ok(a["src"], wl)]
-        if gl == "US":  # 접근 잘 되는 매체를 앞으로(안정정렬 → 같은 등급 내 관련도 유지)
-            cands = sorted(cands, key=lambda a: src_rank(a["src"]))
-        picked = cands[:3]
-        if gl == "US" and len(picked) < 3:  # 미국은 본문 번역이 목적 → 부족분 채움
-            picked += [a for a in pool if a not in picked][:3 - len(picked)]
-        for a in picked:
-            if gl == "US":
+        # 1) 휴리스틱 관련도·영향력 점수 → 명백한 잡음 제거 + 점수순 정렬
+        scored = []
+        for a in cands:
+            s, why, hitn = relevance_score(a, aliases, gl)
+            if s >= 2:                    # 잡음(클릭베이트·나열형)·무관 기사 컷
+                a["_s"], a["_why"] = s, why
+                scored.append(a)
+        scored.sort(key=lambda a: (-a["_s"], src_rank(a["src"])))
+        # 2) 미국: 상위 후보를 Gemini 트리아지로 '가치 기사'만 선별(실패 시 휴리스틱)
+        if gl == "US":
+            top = scored[:8]
+            tri = gemini_triage(name, code, top)
+            if tri is not None:
+                picked = []
+                for it in tri[:3]:
+                    if 0 <= it["i"] < len(top):
+                        art = top[it["i"]]
+                        art["impact"] = it.get("tag") or (art.get("_why") or [""])[0]
+                        picked.append(art)
+            else:
+                picked = scored[:3]
+                for a in picked:
+                    a["impact"] = (a.get("_why") or [""])[0]
+            for a in picked:            # 선별된 기사만 번역·요약(비용 절약)
                 a["title"] = to_ko(a["title"])
                 a["summary_ko"] = gemini_summary_ko(a["title"], a["link"])
-            else:
+        else:
+            picked = scored[:3]
+            for a in picked:
+                a["impact"] = (a.get("_why") or [""])[0]
                 a["summary_ko"] = None
         news[name] = picked
 
@@ -437,7 +566,7 @@ with open(NEWSLOG, "a", encoding="utf-8") as f:
             seen.add(a["link"])
             f.write(json.dumps({"logged": NOW.isoformat(), "date": str(TODAY),
                                 "symbol": name, "time": a["time"], "title": a["title"],
-                                "src": a["src"], "link": a["link"],
+                                "src": a["src"], "link": a["link"], "impact": a.get("impact", ""),
                                 "summary_ko": a.get("summary_ko")}, ensure_ascii=False) + "\n")
 
 # ------------------------------------------------------------------ 축적 데이터 로드(추세용)
@@ -662,6 +791,7 @@ tbody td:first-child{text-align:left}
 .stk li .tm{flex:none;font-family:var(--mono);font-size:11.5px;color:var(--accent);font-weight:600;width:42px}
 .stk li .ht{font-size:13.5px;line-height:1.5;color:var(--text)}
 .stk li .so{font-size:11px;color:var(--muted);white-space:nowrap}
+.stk li .itag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;font-size:10.5px;font-weight:700;color:#fff;background:var(--accent);vertical-align:middle;white-space:nowrap}
 .stk .none{padding:14px 16px;font-size:13px;color:var(--faint)}
 .trx{margin:2px 16px 8px 53px}
 .trx summary{cursor:pointer;font-size:11.5px;font-weight:600;color:var(--accent);list-style:none;padding:4px 0}
@@ -776,9 +906,10 @@ for gname, items in GROUPS:
         if arts:
             lis = []
             for a in arts:
+                itag = f'<span class="itag">{esc(a["impact"])}</span>' if a.get("impact") else ""
                 link = (f'<a href="{esc(a["link"])}" target="_blank" rel="noopener">'
                         f'<span class="tm">{esc(a["time"])}</span>'
-                        f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a>')
+                        f'<span><span class="ht">{esc(a["title"])}</span>{itag} <span class="so">· {esc(a["src"])}</span></span></a>')
                 extra = ""
                 if market == "US":
                     sk = a.get("summary_ko")
@@ -799,7 +930,7 @@ for gname, items in GROUPS:
             body = f'<ul>{"".join(lis)}</ul>'
         else:
             src_label = "주요 신문사" if market == "KR" else "주요 매체"
-            body = f'<div class="none">— 오늘(KST) {src_label} 발행 기사 없음</div>'
+            body = f'<div class="none">— 오늘(KST) {src_label}에서 주가 영향 있는 주목 기사 없음</div>'
         news_blocks.append(f'<div class="stk">{head}{body}</div>')
 news_html = "".join(news_blocks)
 points_html = "".join([f'<span class="point"><b>{esc(n)}</b> {esc(d)}</span>' for n, d in points]) or '<span class="point">특이 변동·신규 뉴스 없음</span>'
