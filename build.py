@@ -9,7 +9,7 @@
 데이터: 시세 FinanceDataReader/yfinance · 뉴스 Google News RSS(when:1d) · 번역 deep-translator
 모든 외부호출은 try/except로 감싸 실패해도 '—' 처리 후 계속 진행한다.
 """
-import datetime, urllib.parse, html, os, csv, json
+import datetime, urllib.parse, html, os, csv, json, time
 
 KST = datetime.timezone(datetime.timedelta(hours=9))
 NOW = datetime.datetime.now(KST)
@@ -56,6 +56,7 @@ NEWS_Q = {
     "SK바이오사이언스": ("SK바이오사이언스", "ko", "KR"),
     "엔알비": ("엔알비 NRB 모듈러", "ko", "KR"), "퓨쳐켐": ("퓨쳐켐", "ko", "KR"),
 }
+NAME_MARKET = {name: market for _, its in GROUPS for (name, code, market) in its}
 
 # ------------------------------------------------------------------ 수집 함수
 def pct_from_closes(df):
@@ -125,16 +126,92 @@ def fetch_news(query, lang, gl, limit=3):
     out.sort(key=lambda x: x["time"], reverse=True)
     return out
 
+def has_hangul(s):
+    return any('가' <= ch <= '힣' for ch in (s or ""))
+
+def has_latin(s):
+    return any('a' <= ch.lower() <= 'z' for ch in (s or ""))
+
+# 번역 API가 반환하는 에러 페이지(쓰레기) 탐지
+ERROR_MARKERS = ["error 500", "server error", "that's an error", "that’s an error",
+                 "please try again later", "that's all we know", "that’s all we know",
+                 "1500.", "too many requests", "service unavailable"]
+def is_garbage(t):
+    t = (t or "").lower()
+    return any(m in t for m in ERROR_MARKERS)
+
 _tr = None
 def to_ko(text):
+    """영문 → 한글. 실패 시 재시도(간격 둠), 한글 포함·비쓰레기 결과만 채택."""
     global _tr
-    try:
-        from deep_translator import GoogleTranslator
-        if _tr is None:
-            _tr = GoogleTranslator(source="auto", target="ko")
-        return _tr.translate(text)
-    except Exception:
+    if not text or not has_latin(text):
         return text
+    for attempt in range(3):
+        try:
+            from deep_translator import GoogleTranslator
+            if _tr is None:
+                _tr = GoogleTranslator(source="auto", target="ko")
+            out = _tr.translate(text)
+            if out and has_hangul(out) and not is_garbage(out):
+                time.sleep(0.4)  # 레이트리밋 회피용 스로틀
+                return out
+        except Exception:
+            _tr = None  # 실패 시 번역기 재생성
+        time.sleep(1.2 + attempt)  # 재시도 전 백오프
+    return text
+
+# ------------------------------------------------------------------ 신뢰 매체 + 본문번역
+# 국내 16개 신문사(종합 10 + 경제 6). 별칭 포함.
+KR_SOURCES = ["조선일보", "중앙일보", "동아일보", "한겨레", "경향신문", "한국일보",
+              "서울신문", "국민일보", "세계일보", "문화일보",
+              "매일경제", "매경", "한국경제", "한경", "서울경제",
+              "파이낸셜뉴스", "헤럴드경제", "아시아경제"]
+# 미국 주요 경제·통신 매체(선호).
+US_SOURCES = ["Reuters", "Bloomberg", "CNBC", "Wall Street Journal", "WSJ",
+              "Financial Times", "MarketWatch", "Barron", "Forbes",
+              "Yahoo Finance", "Business Insider", "Motley Fool",
+              "Investing.com", "Investor's Business Daily", "Seeking Alpha", "Nasdaq", "AP"]
+
+def source_ok(src, whitelist):
+    s = (src or "").lower()
+    return any(w.lower() in s for w in whitelist)
+
+def chunk_translate(text, limit=4000):
+    """긴 본문을 조각내어 한글 번역 후 결합."""
+    text = (text or "").strip()
+    if not text:
+        return ""
+    parts, cur = [], ""
+    for seg in text.replace("\r", "").split("\n"):
+        while len(seg) > limit:
+            if cur:
+                parts.append(cur); cur = ""
+            parts.append(seg[:limit]); seg = seg[limit:]
+        if len(cur) + len(seg) + 1 > limit and cur:
+            parts.append(cur); cur = ""
+        cur += (("\n" if cur else "") + seg)
+    if cur:
+        parts.append(cur)
+    return "\n".join(to_ko(p) if has_latin(p) else p for p in parts)
+
+def fetch_article_ko(link):
+    """구글뉴스 링크 → 원문 추출 → 한글 본문 번역. 실패 시 None."""
+    if os.environ.get("DASH_OFFLINE"):
+        return None
+    try:
+        import requests, trafilatura
+        r = requests.get(link, timeout=15, allow_redirects=True,
+                         headers={"User-Agent": "Mozilla/5.0"})
+        body = trafilatura.extract(r.text, include_comments=False, include_tables=False)
+        if not body or len(body) < 200:
+            dl = trafilatura.fetch_url(r.url)
+            if dl:
+                body = trafilatura.extract(dl, include_comments=False, include_tables=False)
+        if not body or len(body) < 120:
+            return None
+        return chunk_translate(body[:6000])
+    except Exception:
+        return None
 
 # ------------------------------------------------------------------ 포맷
 def fmt_price(p, market):
@@ -171,11 +248,18 @@ news = {}
 for gname, items in GROUPS:
     for name, code, market in items:
         q, lang, gl = NEWS_Q.get(name, (name, "ko", "KR"))
-        arts = fetch_news(q, lang, gl)
-        if gl == "US":
-            for a in arts:
+        pool = fetch_news(q, lang, gl, limit=25)
+        wl = KR_SOURCES if gl == "KR" else US_SOURCES
+        picked = [a for a in pool if source_ok(a["src"], wl)][:3]
+        if gl == "US" and len(picked) < 3:  # 미국은 본문 번역이 목적 → 부족분 채움
+            picked += [a for a in pool if a not in picked][:3 - len(picked)]
+        for a in picked:
+            if gl == "US":
                 a["title"] = to_ko(a["title"])
-        news[name] = arts
+                a["body_ko"] = fetch_article_ko(a["link"])
+            else:
+                a["body_ko"] = None
+        news[name] = picked
 
 # ------------------------------------------------------------------ 누적 저장
 os.makedirs(DATA, exist_ok=True)
@@ -199,7 +283,10 @@ if os.path.exists(NEWSLOG):
     with open(NEWSLOG, encoding="utf-8") as f:
         for line in f:
             try:
-                seen.add(json.loads(line)["link"])
+                o = json.loads(line)
+                if is_garbage(o.get("title", "")) or is_garbage(o.get("body_ko", "")):
+                    continue  # 쓰레기는 dedup 제외 → 정상본 재수집 허용(heal이 쓰레기 삭제)
+                seen.add(o["link"])
             except Exception:
                 pass
 with open(NEWSLOG, "a", encoding="utf-8") as f:
@@ -210,7 +297,8 @@ with open(NEWSLOG, "a", encoding="utf-8") as f:
             seen.add(a["link"])
             f.write(json.dumps({"logged": NOW.isoformat(), "date": str(TODAY),
                                 "symbol": name, "time": a["time"], "title": a["title"],
-                                "src": a["src"], "link": a["link"]}, ensure_ascii=False) + "\n")
+                                "src": a["src"], "link": a["link"],
+                                "body_ko": a.get("body_ko")}, ensure_ascii=False) + "\n")
 
 # ------------------------------------------------------------------ 축적 데이터 로드(추세용)
 def load_history():
@@ -243,6 +331,43 @@ def load_newslog():
         log[k].sort(key=lambda x: (x["date"], x["time"]), reverse=True)
     return log
 
+def heal_newslog(max_body=6):
+    """저장된 미국 뉴스의 (1) 영어 제목 재번역, (2) 누락된 본문번역 backfill(실행당 최대 max_body건)."""
+    if not os.path.exists(NEWSLOG):
+        return
+    rows, changed, filled = [], False, 0
+    with open(NEWSLOG, encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                o = json.loads(line)
+            except Exception:
+                continue
+            # 번역 에러페이지(Error 500 등) 쓰레기 제목/본문은 삭제
+            if is_garbage(o.get("title", "")) or is_garbage(o.get("body_ko", "")):
+                changed = True
+                continue
+            if NAME_MARKET.get(o.get("symbol")) == "US":
+                if not has_hangul(o.get("title", "")):
+                    ko = to_ko(o["title"])
+                    if ko != o["title"] and has_hangul(ko):
+                        o["title"] = ko
+                        changed = True
+                if not o.get("body_ko") and filled < max_body and o.get("link"):
+                    b = fetch_article_ko(o["link"])
+                    if b:
+                        o["body_ko"] = b
+                        changed = True
+                        filled += 1
+            rows.append(o)
+    if changed:
+        with open(NEWSLOG, "w", encoding="utf-8") as f:
+            for o in rows:
+                f.write(json.dumps(o, ensure_ascii=False) + "\n")
+
+heal_newslog()
 HISTORY = load_history()
 NEWSLOG_D = load_newslog()
 
@@ -398,6 +523,13 @@ tbody td:first-child{text-align:left}
 .stk li .ht{font-size:13.5px;line-height:1.5;color:var(--text)}
 .stk li .so{font-size:11px;color:var(--muted);white-space:nowrap}
 .stk .none{padding:14px 16px;font-size:13px;color:var(--faint)}
+.trx{margin:2px 16px 8px 53px}
+.trx summary{cursor:pointer;font-size:11.5px;font-weight:600;color:var(--accent);list-style:none;padding:4px 0}
+.trx summary::-webkit-details-marker{display:none}
+.trx-body{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:9px;padding:12px 14px;margin-top:4px}
+.trx-body p{font-size:13px;line-height:1.65;color:var(--text);margin:0 0 8px}
+.trx-body p:last-child{margin-bottom:0}
+.trx-fail{margin:2px 16px 8px 53px;font-size:11.5px;color:var(--faint)}
 .badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
 .badge-pv{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
 /* signals */
@@ -499,12 +631,23 @@ for gname, items in GROUPS:
                 f'<span class="smv {cls}">{mv}</span></div>')
         arts = news.get(name, [])
         if arts:
-            lis = "".join([f'<li><a href="{esc(a["link"])}" target="_blank" rel="noopener">'
-                           f'<span class="tm">{esc(a["time"])}</span>'
-                           f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a></li>' for a in arts])
-            body = f"<ul>{lis}</ul>"
+            lis = []
+            for a in arts:
+                link = (f'<a href="{esc(a["link"])}" target="_blank" rel="noopener">'
+                        f'<span class="tm">{esc(a["time"])}</span>'
+                        f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a>')
+                extra = ""
+                if market == "US":
+                    if a.get("body_ko"):
+                        paras = "".join(f"<p>{esc(x)}</p>" for x in a["body_ko"].split("\n") if x.strip())
+                        extra = f'<details class="trx"><summary>▼ 번역 전문</summary><div class="trx-body">{paras}</div></details>'
+                    else:
+                        extra = '<div class="trx-fail">본문 추출 실패 — 원문 링크로 확인</div>'
+                lis.append(f'<li>{link}{extra}</li>')
+            body = f'<ul>{"".join(lis)}</ul>'
         else:
-            body = '<div class="none">— 오늘(KST) 발행된 관련 기사 없음</div>'
+            src_label = "주요 신문사" if market == "KR" else "주요 매체"
+            body = f'<div class="none">— 오늘(KST) {src_label} 발행 기사 없음</div>'
         news_blocks.append(f'<div class="stk">{head}{body}</div>')
 news_html = "".join(news_blocks)
 points_html = "".join([f'<span class="point"><b>{esc(n)}</b> {esc(d)}</span>' for n, d in points]) or '<span class="point">특이 변동·신규 뉴스 없음</span>'
@@ -545,6 +688,7 @@ for gname, items in GROUPS:
             continue
         ser = HISTORY.get(code, [])
         latest = ser[-1][1] if ser else None
+        # window change
         if len(ser) >= 2:
             wchg = (ser[-1][1] - ser[0][1]) / ser[0][1] * 100 if ser[0][1] else None
         else:
