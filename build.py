@@ -26,7 +26,9 @@ def over_budget():
 
 # Gemini(무료) 요약용 키·모델
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = "gemini-2.0-flash"
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+GEMINI_DIAG = []          # 진단 로그(원인 파악용) → data/gemini_debug.json 로 커밋
+GEMINI_DIAG_MAX = 6       # 앞쪽 몇 건의 상세만 기록(용량 절약)
 
 # ------------------------------------------------------------------ 관심종목
 # (표시명, 코드/티커, market)  market: 'KR' | 'US' | 'PRIVATE'(비상장·뉴스만)
@@ -215,9 +217,21 @@ def resolve_gnews(link):
         pass
     return link
 
+def _diag(branch, **kw):
+    """진단 기록(앞쪽 GEMINI_DIAG_MAX 건만 상세 저장)."""
+    if len(GEMINI_DIAG) < GEMINI_DIAG_MAX:
+        rec = {"branch": branch}
+        rec.update(kw)
+        GEMINI_DIAG.append(rec)
+
 def gemini_summary_ko(title, link):
-    """Gemini가 실제 기사 URL을 읽어 한국어로 요약. 실패/키없음/예산초과 시 None."""
-    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget():
+    """Gemini가 실제 기사 URL을 읽어 한국어로 요약. 실패/키없음/예산초과 시 None.
+    실패 원인은 GEMINI_DIAG 에 남겨 data/gemini_debug.json 으로 커밋한다."""
+    if not GEMINI_KEY:
+        _diag("no_key", key_len=len(GEMINI_KEY))
+        return None
+    if os.environ.get("DASH_OFFLINE") or over_budget():
+        _diag("offline_or_budget")
         return None
     real = resolve_gnews(link)
     prompt = ("아래 영어 뉴스 기사를 한국어로 4~6문장으로 요약해줘. 투자 판단에 도움되는 핵심 사실·수치·전망 위주로 "
@@ -234,14 +248,37 @@ def gemini_summary_ko(title, link):
         r = requests.post(
             f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
             params={"key": GEMINI_KEY}, json=payload, timeout=45)
-        d = r.json()
-        parts = d.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+        status = r.status_code
+        try:
+            d = r.json()
+        except Exception:
+            _diag("bad_json", status=status, body=r.text[:400], key_prefix=GEMINI_KEY[:4])
+            return None
+        if status != 200:
+            err = d.get("error", {})
+            _diag("http_error", status=status,
+                  msg=str(err.get("message", ""))[:300], code=err.get("code"),
+                  estatus=err.get("status"), key_prefix=GEMINI_KEY[:4])
+            return None
+        cand = (d.get("candidates") or [{}])[0]
+        parts = cand.get("content", {}).get("parts", [])
         text = "".join(p.get("text", "") for p in parts).strip()
         time.sleep(4)  # 무료 RPM 한도(분당 15) 준수용 스로틀
-        if not text or not has_hangul(text) or "요약불가" in text or is_garbage(text):
+        if not text:
+            _diag("empty_text", status=status,
+                  finish=cand.get("finishReason"),
+                  urlmeta=str(cand.get("url_context_metadata", ""))[:300])
             return None
+        if "요약불가" in text:
+            _diag("summary_refused", snippet=text[:150])
+            return None
+        if not has_hangul(text) or is_garbage(text):
+            _diag("no_hangul_or_garbage", snippet=text[:200])
+            return None
+        _diag("ok", snippet=text[:60])
         return text
-    except Exception:
+    except Exception as e:
+        _diag("exception", err=repr(e)[:300])
         return None
 
 # ------------------------------------------------------------------ 포맷
@@ -292,8 +329,28 @@ for gname, items in GROUPS:
                 a["summary_ko"] = None
         news[name] = picked
 
-# ------------------------------------------------------------------ 누적 저장
+# ------------------------------------------------------------------ Gemini 진단 덤프
 os.makedirs(DATA, exist_ok=True)
+try:
+    _counts = {}
+    for _r in GEMINI_DIAG:
+        _counts[_r["branch"]] = _counts.get(_r["branch"], 0) + 1
+    _summary_calls = sum(1 for gn, its in GROUPS for n, c, m in its if m == "US") * 3
+    with open(os.path.join(DATA, "gemini_debug.json"), "w", encoding="utf-8") as f:
+        json.dump({
+            "generated": NOW.isoformat(timespec="seconds"),
+            "model": GEMINI_MODEL,
+            "key_present": bool(GEMINI_KEY),
+            "key_len": len(GEMINI_KEY),
+            "key_prefix": GEMINI_KEY[:4] if GEMINI_KEY else "",
+            "approx_us_calls": _summary_calls,
+            "branch_counts": _counts,
+            "samples": GEMINI_DIAG,
+        }, f, ensure_ascii=False, indent=2)
+except Exception:
+    pass
+
+# ------------------------------------------------------------------ 누적 저장
 # 1) history.csv append
 newfile = not os.path.exists(HIST)
 with open(HIST, "a", newline="", encoding="utf-8") as f:
@@ -363,7 +420,7 @@ def load_newslog():
     return log
 
 def heal_newslog(max_body=3):
-    """저장된 미국 뉴스의 (1) 영어 제목 재번역, (2) 누락된 요약 backfill(실행당 최대 max_body건)."""
+    """저장된 미국 뉴스의 (1) 영어 제목 재번역, (2) 누락된 본문번역 backfill(실행당 최대 max_body건)."""
     if not os.path.exists(NEWSLOG):
         return
     rows, changed, filled = [], False, 0
@@ -703,9 +760,9 @@ INDEX = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta nam
 <section><div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div><div class="grid">{indices_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div><div class="macro">{macro_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">{wl_note}</div></div><div class="panel"><div class="tbl-scroll"><table><thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead><tbody>{watchlist_html}</tbody></table></div></div></section>
-<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 최대 3건 · 미국은 ▼한글요약</div></div>{news_html}</section>
+<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 최대 3건 · 클릭 시 원문</div></div>{news_html}</section>
 <footer>이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다. 매 실행마다 시세·뉴스가 <b>data/</b>에 누적 저장되어 <a href="trends.html">추세·이슈 타임라인</a>으로 축적 관찰됩니다.<br>
-시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 뉴스는 Gemini AI 한글 요약입니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
+시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 헤드라인은 자동 번역본입니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
 </div></body></html>"""
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(INDEX)
@@ -719,6 +776,7 @@ for gname, items in GROUPS:
             continue
         ser = HISTORY.get(code, [])
         latest = ser[-1][1] if ser else None
+        # window change
         if len(ser) >= 2:
             wchg = (ser[-1][1] - ser[0][1]) / ser[0][1] * 100 if ser[0][1] else None
         else:
@@ -733,6 +791,7 @@ for gname, items in GROUPS:
         trend_rows.append(f'<div class="sec-head" style="margin-top:22px"><div class="sec-title">{esc(gname)}</div><div class="sec-note">누적 구간 등락 · 데이터포인트</div></div><div class="panel">{"".join(inner)}</div>')
 trends_price_html = "".join(trend_rows)
 
+# 이슈 타임라인
 tl_blocks = []
 for gname, items in GROUPS:
     for name, code, market in items:
