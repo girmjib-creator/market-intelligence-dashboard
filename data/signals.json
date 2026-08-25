@@ -1,21 +1,21 @@
 {
- "generated": "2026-08-25T07:30:05.071445+09:00",
+ "generated": "2026-08-25T11:23:36.813897+09:00",
  "date": "2026-08-25",
  "signals": [
-  {
-   "name": "삼성전자",
-   "code": "005930",
-   "market": "KR",
-   "type": "급변",
-   "detail": "-8.7% 급락",
-   "strength": 3
-  },
   {
    "name": "SK바이오사이언스",
    "code": "302440",
    "market": "KR",
    "type": "급변",
-   "detail": "+4.9% 급등",
+   "detail": "-3.1% 급락",
+   "strength": 2
+  },
+  {
+   "name": "SK바이오사이언스",
+   "code": "302440",
+   "market": "KR",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -3.1% 눌림(역발상 관심)",
    "strength": 2
   },
   {
@@ -23,7 +23,39 @@
    "code": "000660",
    "market": "KR",
    "type": "급변",
-   "detail": "-3.4% 급락",
+   "detail": "-4.6% 급락",
+   "strength": 2
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -4.6% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
+   "name": "네이버",
+   "code": "035420",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-3.6% 급락",
+   "strength": 2
+  },
+  {
+   "name": "네이버",
+   "code": "035420",
+   "market": "KR",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -3.6% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
+   "name": "두산에너빌리티",
+   "code": "034020",
+   "market": "KR",
+   "type": "급변",
+   "detail": "+5.8% 급등",
    "strength": 2
   },
   {
@@ -47,7 +79,7 @@
    "code": "066570",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -56,6 +88,14 @@
    "market": "KR",
    "type": "이슈가열",
    "detail": "최근 뉴스 2일 활발·3일 4건",
+   "strength": 1
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
    "strength": 1
   },
   {
@@ -71,7 +111,7 @@
    "code": "034020",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 9건",
    "strength": 1
   },
   {
@@ -99,11 +139,19 @@
    "strength": 1
   },
   {
+   "name": "삼성전기",
+   "code": "009150",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "strength": 1
+  },
+  {
    "name": "삼성전자",
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -111,7 +159,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
    "strength": 1
   },
   {
@@ -119,7 +167,7 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 5건",
    "strength": 1
   },
   {
@@ -127,7 +175,7 @@
    "code": "GOOGL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
    "strength": 1
   },
   {
@@ -167,7 +215,7 @@
    "code": "015760",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -175,7 +223,7 @@
    "code": "005380",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 9건",
    "strength": 1
   }
  ]
