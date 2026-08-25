@@ -18,6 +18,16 @@ DATA = "data"
 HIST = os.path.join(DATA, "history.csv")
 NEWSLOG = os.path.join(DATA, "news_log.jsonl")
 
+# 번역·본문추출 총 시간 예산(초). 초과 시 번역 생략하고 빌드를 마쳐 무한정 지연 방지.
+_START = time.time()
+BUDGET_SEC = 210
+def over_budget():
+    return (time.time() - _START) > BUDGET_SEC
+
+# Gemini(무료) 요약용 키·모델
+GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
+GEMINI_MODEL = "gemini-2.0-flash"
+
 # ------------------------------------------------------------------ 관심종목
 # (표시명, 코드/티커, market)  market: 'KR' | 'US' | 'PRIVATE'(비상장·뉴스만)
 GROUPS = [
@@ -144,20 +154,20 @@ _tr = None
 def to_ko(text):
     """영문 → 한글. 실패 시 재시도(간격 둠), 한글 포함·비쓰레기 결과만 채택."""
     global _tr
-    if not text or not has_latin(text):
+    if not text or not has_latin(text) or over_budget():
         return text
-    for attempt in range(3):
+    for attempt in range(2):
         try:
             from deep_translator import GoogleTranslator
             if _tr is None:
                 _tr = GoogleTranslator(source="auto", target="ko")
             out = _tr.translate(text)
             if out and has_hangul(out) and not is_garbage(out):
-                time.sleep(0.4)  # 레이트리밋 회피용 스로틀
+                time.sleep(0.2)  # 레이트리밋 회피용 스로틀
                 return out
         except Exception:
             _tr = None  # 실패 시 번역기 재생성
-        time.sleep(1.2 + attempt)  # 재시도 전 백오프
+        time.sleep(0.8)  # 재시도 전 백오프
     return text
 
 # ------------------------------------------------------------------ 신뢰 매체 + 본문번역
@@ -194,22 +204,43 @@ def chunk_translate(text, limit=4000):
         parts.append(cur)
     return "\n".join(to_ko(p) if has_latin(p) else p for p in parts)
 
-def fetch_article_ko(link):
-    """구글뉴스 링크 → 원문 추출 → 한글 본문 번역. 실패 시 None."""
-    if os.environ.get("DASH_OFFLINE"):
-        return None
+def resolve_gnews(link):
+    """구글뉴스 리다이렉트 링크 → 실제 기사 URL. 실패 시 원링크."""
     try:
-        import requests, trafilatura
-        r = requests.get(link, timeout=15, allow_redirects=True,
-                         headers={"User-Agent": "Mozilla/5.0"})
-        body = trafilatura.extract(r.text, include_comments=False, include_tables=False)
-        if not body or len(body) < 200:
-            dl = trafilatura.fetch_url(r.url)
-            if dl:
-                body = trafilatura.extract(dl, include_comments=False, include_tables=False)
-        if not body or len(body) < 120:
+        from googlenewsdecoder import gnewsdecoder
+        dec = gnewsdecoder(link, interval=0)
+        if isinstance(dec, dict) and dec.get("status") and dec.get("decoded_url"):
+            return dec["decoded_url"]
+    except Exception:
+        pass
+    return link
+
+def gemini_summary_ko(title, link):
+    """Gemini가 실제 기사 URL을 읽어 한국어로 요약. 실패/키없음/예산초과 시 None."""
+    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget():
+        return None
+    real = resolve_gnews(link)
+    prompt = ("아래 영어 뉴스 기사를 한국어로 4~6문장으로 요약해줘. 투자 판단에 도움되는 핵심 사실·수치·전망 위주로 "
+              "과장 없이 사실만 쓰고, 맨 끝 줄에 '▶ 투자 관점:' 으로 시작하는 한 줄 코멘트를 덧붙여줘. "
+              "기사에 접근이 안 되면 정확히 '요약불가' 라고만 답해.\n"
+              f"제목: {title}\n기사 URL: {real}")
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "tools": [{"url_context": {}}],
+        "generationConfig": {"temperature": 0.3, "maxOutputTokens": 700},
+    }
+    try:
+        import requests
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
+            params={"key": GEMINI_KEY}, json=payload, timeout=45)
+        d = r.json()
+        parts = d.get("candidates", [{}])[0].get("content", {}).get("parts", [])
+        text = "".join(p.get("text", "") for p in parts).strip()
+        time.sleep(4)  # 무료 RPM 한도(분당 15) 준수용 스로틀
+        if not text or not has_hangul(text) or "요약불가" in text or is_garbage(text):
             return None
-        return chunk_translate(body[:6000])
+        return text
     except Exception:
         return None
 
@@ -256,9 +287,9 @@ for gname, items in GROUPS:
         for a in picked:
             if gl == "US":
                 a["title"] = to_ko(a["title"])
-                a["body_ko"] = fetch_article_ko(a["link"])
+                a["summary_ko"] = gemini_summary_ko(a["title"], a["link"])
             else:
-                a["body_ko"] = None
+                a["summary_ko"] = None
         news[name] = picked
 
 # ------------------------------------------------------------------ 누적 저장
@@ -284,7 +315,7 @@ if os.path.exists(NEWSLOG):
         for line in f:
             try:
                 o = json.loads(line)
-                if is_garbage(o.get("title", "")) or is_garbage(o.get("body_ko", "")):
+                if is_garbage(o.get("title", "")) or is_garbage(o.get("summary_ko", "")):
                     continue  # 쓰레기는 dedup 제외 → 정상본 재수집 허용(heal이 쓰레기 삭제)
                 seen.add(o["link"])
             except Exception:
@@ -298,7 +329,7 @@ with open(NEWSLOG, "a", encoding="utf-8") as f:
             f.write(json.dumps({"logged": NOW.isoformat(), "date": str(TODAY),
                                 "symbol": name, "time": a["time"], "title": a["title"],
                                 "src": a["src"], "link": a["link"],
-                                "body_ko": a.get("body_ko")}, ensure_ascii=False) + "\n")
+                                "summary_ko": a.get("summary_ko")}, ensure_ascii=False) + "\n")
 
 # ------------------------------------------------------------------ 축적 데이터 로드(추세용)
 def load_history():
@@ -331,8 +362,8 @@ def load_newslog():
         log[k].sort(key=lambda x: (x["date"], x["time"]), reverse=True)
     return log
 
-def heal_newslog(max_body=6):
-    """저장된 미국 뉴스의 (1) 영어 제목 재번역, (2) 누락된 본문번역 backfill(실행당 최대 max_body건)."""
+def heal_newslog(max_body=3):
+    """저장된 미국 뉴스의 (1) 영어 제목 재번역, (2) 누락된 요약 backfill(실행당 최대 max_body건)."""
     if not os.path.exists(NEWSLOG):
         return
     rows, changed, filled = [], False, 0
@@ -345,8 +376,8 @@ def heal_newslog(max_body=6):
                 o = json.loads(line)
             except Exception:
                 continue
-            # 번역 에러페이지(Error 500 등) 쓰레기 제목/본문은 삭제
-            if is_garbage(o.get("title", "")) or is_garbage(o.get("body_ko", "")):
+            # 번역 에러페이지(Error 500 등) 쓰레기 제목/요약은 삭제
+            if is_garbage(o.get("title", "")) or is_garbage(o.get("summary_ko", "")):
                 changed = True
                 continue
             if NAME_MARKET.get(o.get("symbol")) == "US":
@@ -355,10 +386,10 @@ def heal_newslog(max_body=6):
                     if ko != o["title"] and has_hangul(ko):
                         o["title"] = ko
                         changed = True
-                if not o.get("body_ko") and filled < max_body and o.get("link"):
-                    b = fetch_article_ko(o["link"])
-                    if b:
-                        o["body_ko"] = b
+                if not o.get("summary_ko") and filled < max_body and o.get("link"):
+                    s = gemini_summary_ko(o.get("title", ""), o["link"])
+                    if s:
+                        o["summary_ko"] = s
                         changed = True
                         filled += 1
             rows.append(o)
@@ -638,11 +669,11 @@ for gname, items in GROUPS:
                         f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a>')
                 extra = ""
                 if market == "US":
-                    if a.get("body_ko"):
-                        paras = "".join(f"<p>{esc(x)}</p>" for x in a["body_ko"].split("\n") if x.strip())
-                        extra = f'<details class="trx"><summary>▼ 번역 전문</summary><div class="trx-body">{paras}</div></details>'
+                    if a.get("summary_ko"):
+                        paras = "".join(f"<p>{esc(x)}</p>" for x in a["summary_ko"].split("\n") if x.strip())
+                        extra = f'<details class="trx"><summary>▼ 한글 요약 (AI)</summary><div class="trx-body">{paras}</div></details>'
                     else:
-                        extra = '<div class="trx-fail">본문 추출 실패 — 원문 링크로 확인</div>'
+                        extra = '<div class="trx-fail">AI 요약 없음 — 원문 링크 참조</div>'
                 lis.append(f'<li>{link}{extra}</li>')
             body = f'<ul>{"".join(lis)}</ul>'
         else:
@@ -672,9 +703,9 @@ INDEX = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta nam
 <section><div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div><div class="grid">{indices_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div><div class="macro">{macro_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">관심종목 시세</div><div class="sec-note">{wl_note}</div></div><div class="panel"><div class="tbl-scroll"><table><thead><tr><th>종목</th><th>현재가</th><th>등락</th></tr></thead><tbody>{watchlist_html}</tbody></table></div></div></section>
-<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 최대 3건 · 클릭 시 원문</div></div>{news_html}</section>
+<section><div class="sec-head"><div class="sec-title">종목별 오늘자 뉴스</div><div class="sec-note">KST 오늘 발행분 · 최대 3건 · 미국은 ▼한글요약</div></div>{news_html}</section>
 <footer>이 페이지는 GitHub Actions가 평일 오전 7시·오후 2시(KST)에 <b>자동 갱신</b>합니다. 매 실행마다 시세·뉴스가 <b>data/</b>에 누적 저장되어 <a href="trends.html">추세·이슈 타임라인</a>으로 축적 관찰됩니다.<br>
-시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 헤드라인은 자동 번역본입니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
+시세는 조회 시점 값(한국 당일·미국 직전 거래일 종가), 뉴스는 Google News RSS 오늘(KST) 발행분, 미국 뉴스는 Gemini AI 한글 요약입니다. 정보 제공용이며 최종 투자판단·손익은 본인 책임입니다.</footer>
 </div></body></html>"""
 with open("index.html", "w", encoding="utf-8") as f:
     f.write(INDEX)
@@ -688,7 +719,6 @@ for gname, items in GROUPS:
             continue
         ser = HISTORY.get(code, [])
         latest = ser[-1][1] if ser else None
-        # window change
         if len(ser) >= 2:
             wchg = (ser[-1][1] - ser[0][1]) / ser[0][1] * 100 if ser[0][1] else None
         else:
@@ -703,7 +733,6 @@ for gname, items in GROUPS:
         trend_rows.append(f'<div class="sec-head" style="margin-top:22px"><div class="sec-title">{esc(gname)}</div><div class="sec-note">누적 구간 등락 · 데이터포인트</div></div><div class="panel">{"".join(inner)}</div>')
 trends_price_html = "".join(trend_rows)
 
-# 이슈 타임라인
 tl_blocks = []
 for gname, items in GROUPS:
     for name, code, market in items:
