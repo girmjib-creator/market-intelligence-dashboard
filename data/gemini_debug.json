@@ -1,0 +1,61 @@
+{
+  "generated": "2026-08-25T12:43:25+09:00",
+  "model": "gemini-2.0-flash",
+  "key_present": true,
+  "key_len": 53,
+  "key_prefix": "AQ.A",
+  "approx_us_calls": 33,
+  "branch_counts": {
+    "http_error": 6
+  },
+  "samples": [
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 404,
+      "msg": "This model models/gemini-2.0-flash is no longer available. Please update your code to use models/gemini-3.6-flash for the latest features and improvements.",
+      "code": 404,
+      "estatus": "NOT_FOUND",
+      "key_prefix": "AQ.A"
+    }
+  ]
+}
