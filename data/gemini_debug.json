@@ -1,53 +1,19 @@
 {
-  "generated": "2026-08-25T15:29:41+09:00",
+  "generated": "2026-08-25T15:54:39+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_len": 53,
   "key_prefix": "AQ.A",
   "approx_us_calls": 33,
   "branch_counts": {
-    "summary_refused": 3,
-    "hl_empty": 1,
-    "http_error": 2,
-    "ok": 2,
-    "hl_ok": 1,
-    "hl_http_error": 1
+    "triage_http_error": 3,
+    "http_error": 7
   },
   "samples": [
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "ok",
-      "snippet": "광학 모듈 제조업체 코웰이홀딩스(1415.HK)는 고급 제품 출하 증가"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n마이크로소프트(Microsoft)는 생성형"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_http_error",
-      "status": 429
+      "branch": "triage_http_error",
+      "status": 429,
+      "name": "애플"
     },
     {
       "branch": "http_error",
@@ -58,8 +24,62 @@
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "ok",
-      "snippet": "265억 달러를 기록할 것으로 전망됩니다.\n5. 월가 분석가의 97%가 매수"
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "triage_http_error",
+      "status": 429,
+      "name": "마이크로소프트"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "triage_http_error",
+      "status": 429,
+      "name": "알파벳"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
     }
   ]
 }
