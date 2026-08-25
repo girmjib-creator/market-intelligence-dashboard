@@ -20,7 +20,7 @@ NEWSLOG = os.path.join(DATA, "news_log.jsonl")
 
 # 번역·본문추출 총 시간 예산(초). 초과 시 번역 생략하고 빌드를 마쳐 무한정 지연 방지.
 _START = time.time()
-BUDGET_SEC = 210
+BUDGET_SEC = 300
 def over_budget():
     return (time.time() - _START) > BUDGET_SEC
 
@@ -28,7 +28,8 @@ def over_budget():
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
 GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 GEMINI_DIAG = []          # 진단 로그(원인 파악용) → data/gemini_debug.json 로 커밋
-GEMINI_DIAG_MAX = 6       # 앞쪽 몇 건의 상세만 기록(용량 절약)
+GEMINI_DIAG_MAX = 10      # 앞쪽 몇 건의 상세만 기록(용량 절약)
+HL_MARK = "※ 제목 기반 추정(본문 미확인)"   # 제목기반 보조요약 식별 표시
 
 # ------------------------------------------------------------------ 관심종목
 # (표시명, 코드/티커, market)  market: 'KR' | 'US' | 'PRIVATE'(비상장·뉴스만)
@@ -182,11 +183,23 @@ KR_SOURCES = ["조선일보", "중앙일보", "동아일보", "한겨레", "경�
 US_SOURCES = ["Reuters", "Bloomberg", "CNBC", "Wall Street Journal", "WSJ",
               "Financial Times", "MarketWatch", "Barron", "Forbes",
               "Yahoo Finance", "Business Insider", "Motley Fool",
-              "Investing.com", "Investor's Business Daily", "Seeking Alpha", "Nasdaq", "AP"]
+              "Investing.com", "Investor's Business Daily", "Seeking Alpha", "Nasdaq", "AP",
+              "Associated Press", "Fortune", "Axios", "Quartz", "TechCrunch", "The Verge",
+              "CNN", "The Motley Fool", "Benzinga", "TipRanks"]
+# 봇 접근·본문 공개가 잘 되는 매체(Gemini가 실제로 읽어 본문요약 성공률이 높음) → 우선 선택.
+ACCESSIBLE_US = ["Yahoo Finance", "Business Insider", "AP", "Associated Press", "CNBC",
+                 "MarketWatch", "Investing.com", "Nasdaq", "Motley Fool", "Forbes",
+                 "Fortune", "Axios", "Quartz", "TechCrunch", "The Verge", "Benzinga",
+                 "TipRanks", "CNN"]
 
 def source_ok(src, whitelist):
     s = (src or "").lower()
     return any(w.lower() in s for w in whitelist)
+
+def src_rank(src):
+    """접근 잘 되는 매체=0(우선), 그 외=1. 안정정렬로 관련도 순서 유지."""
+    s = (src or "").lower()
+    return 0 if any(w.lower() in s for w in ACCESSIBLE_US) else 1
 
 def chunk_translate(text, limit=4000):
     """긴 본문을 조각내어 한글 번역 후 결합."""
@@ -224,9 +237,45 @@ def _diag(branch, **kw):
         rec.update(kw)
         GEMINI_DIAG.append(rec)
 
-def gemini_summary_ko(title, link):
-    """Gemini가 실제 기사 URL을 읽어 한국어로 요약. 실패/키없음/예산초과 시 None.
-    실패 원인은 GEMINI_DIAG 에 남겨 data/gemini_debug.json 으로 커밋한다."""
+def gemini_headline_note(title):
+    """기사 본문을 못 열 때, 번역된 제목만으로 한국어 배경·맥락 2~3문장(보조요약).
+    앞줄에 HL_MARK 표시. 실패 시 None."""
+    if not GEMINI_KEY or os.environ.get("DASH_OFFLINE") or over_budget():
+        return None
+    prompt = ("다음은 미국 경제뉴스 기사의 한국어 번역 제목이다. 기사 본문은 접근하지 못했다. "
+              "이 제목이 다루는 사안의 배경·맥락을 '일반적으로 알려진 사실'에 근거해 한국어 2~3문장으로 설명해줘. "
+              "확인되지 않은 구체 수치·발언·인용은 절대 지어내지 말고, 모르면 일반적 맥락만 간단히. "
+              f"맨 앞 줄에 정확히 '{HL_MARK}' 라고 먼저 쓰고 줄바꿈해줘.\n제목: {title}")
+    payload = {
+        "contents": [{"parts": [{"text": prompt}]}],
+        "generationConfig": {"temperature": 0.2, "maxOutputTokens": 300},
+    }
+    try:
+        import requests
+        r = requests.post(
+            f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent",
+            params={"key": GEMINI_KEY}, json=payload, timeout=30)
+        time.sleep(2)
+        if r.status_code != 200:
+            _diag("hl_http_error", status=r.status_code)
+            return None
+        d = r.json()
+        cand = (d.get("candidates") or [{}])[0]
+        text = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
+        if not text or not has_hangul(text) or is_garbage(text):
+            _diag("hl_empty")
+            return None
+        if HL_MARK not in text:          # 표시 누락 시 앞에 강제로 붙임
+            text = HL_MARK + "\n" + text
+        _diag("hl_ok", snippet=text[:60])
+        return text
+    except Exception as e:
+        _diag("hl_exception", err=repr(e)[:200])
+        return None
+
+def gemini_summary_ko(title, link, allow_fallback=True):
+    """Gemini가 실제 기사 URL을 읽어 한국어로 요약. 못 열면 제목기반 보조요약으로 폴백.
+    실패/키없음/예산초과 시 None. 원인은 GEMINI_DIAG → data/gemini_debug.json 커밋."""
     if not GEMINI_KEY:
         _diag("no_key", key_len=len(GEMINI_KEY))
         return None
@@ -263,23 +312,23 @@ def gemini_summary_ko(title, link):
         cand = (d.get("candidates") or [{}])[0]
         parts = cand.get("content", {}).get("parts", [])
         text = "".join(p.get("text", "") for p in parts).strip()
-        time.sleep(4)  # 무료 RPM 한도(분당 15) 준수용 스로틀
+        time.sleep(3)  # 무료 RPM 한도 준수용 스로틀
         if not text:
             _diag("empty_text", status=status,
                   finish=cand.get("finishReason"),
                   urlmeta=str(cand.get("url_context_metadata", ""))[:300])
-            return None
+            return gemini_headline_note(title) if allow_fallback else None
         if "요약불가" in text:
             _diag("summary_refused", snippet=text[:150])
-            return None
+            return gemini_headline_note(title) if allow_fallback else None
         if not has_hangul(text) or is_garbage(text):
             _diag("no_hangul_or_garbage", snippet=text[:200])
-            return None
+            return gemini_headline_note(title) if allow_fallback else None
         _diag("ok", snippet=text[:60])
         return text
     except Exception as e:
         _diag("exception", err=repr(e)[:300])
-        return None
+        return gemini_headline_note(title) if allow_fallback else None
 
 # ------------------------------------------------------------------ 포맷
 def fmt_price(p, market):
@@ -318,7 +367,10 @@ for gname, items in GROUPS:
         q, lang, gl = NEWS_Q.get(name, (name, "ko", "KR"))
         pool = fetch_news(q, lang, gl, limit=25)
         wl = KR_SOURCES if gl == "KR" else US_SOURCES
-        picked = [a for a in pool if source_ok(a["src"], wl)][:3]
+        cands = [a for a in pool if source_ok(a["src"], wl)]
+        if gl == "US":  # 접근 잘 되는 매체를 앞으로(안정정렬 → 같은 등급 내 관련도 유지)
+            cands = sorted(cands, key=lambda a: src_rank(a["src"]))
+        picked = cands[:3]
         if gl == "US" and len(picked) < 3:  # 미국은 본문 번역이 목적 → 부족분 채움
             picked += [a for a in pool if a not in picked][:3 - len(picked)]
         for a in picked:
@@ -617,6 +669,9 @@ tbody td:first-child{text-align:left}
 .trx-body{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:9px;padding:12px 14px;margin-top:4px}
 .trx-body p{font-size:13px;line-height:1.65;color:var(--text);margin:0 0 8px}
 .trx-body p:last-child{margin-bottom:0}
+.trx.hl summary{color:#b45309}
+.trx.hl .trx-body{border-style:dashed;border-color:#f59e0b55}
+.trx.hl .trx-body p{color:var(--muted)}
 .trx-fail{margin:2px 16px 8px 53px;font-size:11.5px;color:var(--faint)}
 .badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
 .badge-pv{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
@@ -726,9 +781,18 @@ for gname, items in GROUPS:
                         f'<span><span class="ht">{esc(a["title"])}</span> <span class="so">· {esc(a["src"])}</span></span></a>')
                 extra = ""
                 if market == "US":
-                    if a.get("summary_ko"):
-                        paras = "".join(f"<p>{esc(x)}</p>" for x in a["summary_ko"].split("\n") if x.strip())
-                        extra = f'<details class="trx"><summary>▼ 한글 요약 (AI)</summary><div class="trx-body">{paras}</div></details>'
+                    sk = a.get("summary_ko")
+                    if sk:
+                        is_hl = HL_MARK in sk
+                        shown = sk.replace(HL_MARK, "").strip() if is_hl else sk
+                        paras = "".join(f"<p>{esc(x)}</p>" for x in shown.split("\n") if x.strip())
+                        if is_hl:
+                            label = "▼ 한글 요약 (제목 기반 추정 · 본문 미확인)"
+                            extra = (f'<details class="trx hl"><summary>{label}</summary>'
+                                     f'<div class="trx-body">{paras}</div></details>')
+                        else:
+                            extra = (f'<details class="trx"><summary>▼ 한글 요약 (AI · 본문)</summary>'
+                                     f'<div class="trx-body">{paras}</div></details>')
                     else:
                         extra = '<div class="trx-fail">AI 요약 없음 — 원문 링크 참조</div>'
                 lis.append(f'<li>{link}{extra}</li>')
