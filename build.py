@@ -20,7 +20,7 @@ NEWSLOG = os.path.join(DATA, "news_log.jsonl")
 
 # 번역·본문추출 총 시간 예산(초). 초과 시 번역 생략하고 빌드를 마쳐 무한정 지연 방지.
 _START = time.time()
-BUDGET_SEC = 480
+BUDGET_SEC = 540
 def over_budget():
     return (time.time() - _START) > BUDGET_SEC
 
@@ -33,7 +33,7 @@ HL_MARK = "※ 제목 기반 추정(본문 미확인)"   # 제목기반 보조�
 GEM_URL = f"https://generativelanguage.googleapis.com/v1beta/models/{GEMINI_MODEL}:generateContent"
 # ── 무료 한도(≈15 RPM / 1,500 RPD) 준수용 전역 속도제한 ─────────────
 GEMINI_MIN_INTERVAL = 4.5   # 호출 간 최소 간격(초) → 분당 ≈13회(15 미만 안전)
-GEMINI_MAX_CALLS = 60       # 한 실행당 총 호출 상한(RPD·시간예산 보호)
+GEMINI_MAX_CALLS = 80       # 한 실행당 총 호출 상한(RPD·시간예산 보호)
 _GEM_LAST = [0.0]           # 마지막 호출 시각
 _GEM_CALLS = [0]            # 누적 호출 수
 _GEM_DEAD = [False]         # 지속 429(할당량 소진) 감지 시 이후 호출 중단
@@ -373,8 +373,10 @@ def resolve_gnews(link):
         pass
     return link
 
+GEMINI_COUNTS = {}
 def _diag(branch, **kw):
-    """진단 기록(앞쪽 GEMINI_DIAG_MAX 건만 상세 저장)."""
+    """진단 기록: 카운트는 전건, 상세 샘플은 앞쪽 GEMINI_DIAG_MAX 건만."""
+    GEMINI_COUNTS[branch] = GEMINI_COUNTS.get(branch, 0) + 1
     if len(GEMINI_DIAG) < GEMINI_DIAG_MAX:
         rec = {"branch": branch}
         rec.update(kw)
@@ -530,29 +532,7 @@ for gname, items in GROUPS:
                 a["summary_ko"] = None
         news[name] = picked
 
-# ------------------------------------------------------------------ Gemini 진단 덤프
 os.makedirs(DATA, exist_ok=True)
-try:
-    _counts = {}
-    for _r in GEMINI_DIAG:
-        _counts[_r["branch"]] = _counts.get(_r["branch"], 0) + 1
-    _summary_calls = sum(1 for gn, its in GROUPS for n, c, m in its if m == "US") * 3
-    with open(os.path.join(DATA, "gemini_debug.json"), "w", encoding="utf-8") as f:
-        json.dump({
-            "generated": NOW.isoformat(timespec="seconds"),
-            "model": GEMINI_MODEL,
-            "key_present": bool(GEMINI_KEY),
-            "key_len": len(GEMINI_KEY),
-            "key_prefix": GEMINI_KEY[:4] if GEMINI_KEY else "",
-            "gem_calls_made": _GEM_CALLS[0],
-            "gem_call_cap": GEMINI_MAX_CALLS,
-            "gem_quota_exhausted": _GEM_DEAD[0],
-            "elapsed_sec": round(time.time() - _START, 1),
-            "branch_counts": _counts,
-            "samples": GEMINI_DIAG,
-        }, f, ensure_ascii=False, indent=2)
-except Exception:
-    pass
 
 # ------------------------------------------------------------------ 누적 저장
 # 1) history.csv append
@@ -828,6 +808,27 @@ tbody td:first-child{text-align:left}
 .trx-fail{margin:2px 16px 8px 53px;font-size:11.5px;color:var(--faint)}
 .badge-en{font-size:10px;font-weight:700;color:var(--down);background:var(--down-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
 .badge-pv{font-size:10px;font-weight:700;color:var(--accent);background:var(--accent-soft);border-radius:4px;padding:1px 6px;margin-left:2px}
+/* analyst */
+.an-mwrap{background:linear-gradient(180deg,var(--accent-soft),var(--surface));border:1px solid var(--border);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow);margin-bottom:12px}
+.an-mlabel{font-size:11.5px;font-weight:700;color:var(--accent);letter-spacing:.02em;margin-bottom:6px}
+.an-market p{font-size:13.5px;line-height:1.7;color:var(--text);margin:0 0 8px}
+.an-market p:last-child{margin-bottom:0}
+.an-market.dim{color:var(--faint);font-size:12.5px}
+.an-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+@media(max-width:720px){.an-grid{grid-template-columns:1fr}}
+.an-card{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px 15px;box-shadow:var(--shadow)}
+.an-h{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:9px}
+.an-nm{font-weight:700;font-size:15px}
+.an-nm .tick{font-size:10.5px;color:var(--faint);font-family:var(--mono);margin-left:6px;font-weight:500}
+.an-sig{font-size:10px;font-weight:700;color:#fff;background:var(--accent);border-radius:999px;padding:1px 8px}
+.an-sig.s3{background:var(--up)}.an-sig.s2{background:var(--accent)}.an-sig.s1{background:var(--muted)}
+.an-facts{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.afct{font-size:11px;color:var(--text);background:var(--surface-2);border:1px solid var(--border-soft);border-radius:7px;padding:3px 8px}
+.afct.dim{color:var(--faint)}
+.an-note{background:var(--surface-2);border:1px solid var(--border-soft);border-radius:10px;padding:11px 13px}
+.an-note p{font-size:12.5px;line-height:1.65;color:var(--text);margin:0 0 7px}
+.an-note p:last-child{margin-bottom:0}
+.an-note.dim{color:var(--faint);font-size:11.5px}
 /* signals */
 .siggrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 @media(max-width:640px){.siggrid{grid-template-columns:1fr}}
@@ -878,6 +879,212 @@ def sparkline(points, market):
             f'<polyline fill="none" stroke="{col}" stroke-width="1.6" '
             f'stroke-linejoin="round" stroke-linecap="round" points="{" ".join(pts)}"/>'
             f'<circle cx="{pts[-1].split(",")[0]}" cy="{pts[-1].split(",")[1]}" r="2.2" fill="{col}"/></svg>')
+
+# ------------------------------------------------------------------ 🎓 애널리스트 관점 (전문가급 종합)
+def yf_fundamentals(code, market):
+    """yfinance로 밸류에이션·목표주가·투자의견·실적일. 실패 시 {}."""
+    if os.environ.get("DASH_OFFLINE") or over_budget():
+        return {}
+    try:
+        import yfinance as yf
+    except Exception:
+        return {}
+    syms = [code] if market == "US" else [code + ".KS", code + ".KQ"]
+    for sym in syms:
+        try:
+            t = yf.Ticker(sym)
+            try:
+                info = t.info or {}
+            except Exception:
+                info = {}
+            if not info:
+                continue
+            out = {}
+            for k_src, k in [("targetMeanPrice", "target"), ("forwardPE", "fpe"),
+                             ("trailingPE", "tpe"), ("fiftyTwoWeekHigh", "hi52"),
+                             ("fiftyTwoWeekLow", "lo52"), ("recommendationKey", "rec"),
+                             ("numberOfAnalystOpinions", "nanal")]:
+                v = info.get(k_src)
+                if v not in (None, "", "none", "None"):
+                    out[k] = v
+            try:
+                cal = t.calendar
+                ed = cal.get("Earnings Date") if isinstance(cal, dict) else None
+                if isinstance(ed, (list, tuple)) and ed:
+                    ed = ed[0]
+                if ed is not None:
+                    out["earnings"] = str(ed)[:10]
+            except Exception:
+                pass
+            if out:
+                return out
+        except Exception:
+            continue
+    return {}
+
+def yf_levels(code, market, cur):
+    """6개월 종가로 이평·모멘텀·고저 레벨. 실패 시 {}."""
+    if os.environ.get("DASH_OFFLINE") or over_budget():
+        return {}
+    try:
+        import yfinance as yf
+    except Exception:
+        return {}
+    syms = [code] if market == "US" else [code + ".KS", code + ".KQ"]
+    for sym in syms:
+        try:
+            h = yf.Ticker(sym).history(period="6mo")["Close"].dropna()
+            c = [float(x) for x in h.values]
+            if len(c) < 20:
+                continue
+            ma20 = sum(c[-20:]) / 20
+            ma50 = sum(c[-50:]) / len(c[-50:])
+            last = cur if cur else c[-1]
+            return {"ma20": ma20, "ma50": ma50, "hi6m": max(c), "lo6m": min(c),
+                    "vs_ma20": (last - ma20) / ma20 * 100 if ma20 else None,
+                    "mom20": (c[-1] - c[-20]) / c[-20] * 100 if c[-20] else None}
+        except Exception:
+            continue
+    return {}
+
+def gemini_market_note():
+    """펀드매니저 관점 '오늘의 전략 관점' 1건."""
+    if not gem_ready():
+        return None
+    lines = []
+    for k in ["S&P 500", "나스닥", "다우", "코스피", "코스닥", "VIX"]:
+        v = idx.get(k)
+        if v and v[0] is not None:
+            lines.append(f"{k} {v[0]:.0f}" + (f"({v[1]:+.1f}%)" if v[1] is not None else ""))
+    for k in ["USD/KRW", "WTI 유가", "금(Gold)"]:
+        v = macro.get(k)
+        if v and v[0] is not None:
+            lines.append(f"{k} {v[0]:.1f}")
+    topsig = [f"{s['name']} {s['type']}({s['strength']})" for s in SIGNALS[:6]]
+    prompt = ("너는 펀드매니저다. 아래 오늘 지표와 관심 포트폴리오 신호를 근거로 '오늘의 전략 관점'을 한국어로 작성하라. "
+              "①오늘 시장의 리스크온/오프 성격과 매크로(금리·달러·유가·VIX·반도체) 해석 "
+              "②관심 포트폴리오(빅테크·AI·반도체·에너지/전력·플랫폼)에 주는 함의 "
+              "③오늘 특히 주목/경계할 종목·구간 ④향후 며칠 관전 포인트(예정 이벤트). "
+              "5~7문장, 데이터 근거로만, 과장·단정적 매매지시 금지(참고용).\n\n"
+              "지표: " + " / ".join(lines) + "\n신호: " + (", ".join(topsig) or "특이신호 없음"))
+    payload = {"contents": [{"parts": [{"text": prompt}]}],
+               "generationConfig": {"temperature": 0.35, "maxOutputTokens": 650}}
+    try:
+        status, d = gem_post(payload, timeout=40)
+        if status != 200:
+            _diag("market_http", status=status)
+            return None
+        cand = (d.get("candidates") or [{}])[0]
+        txt = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
+        if not txt or not has_hangul(txt) or is_garbage(txt):
+            _diag("market_empty")
+            return None
+        _diag("market_ok")
+        return txt
+    except Exception as e:
+        _diag("market_exc", err=repr(e)[:150])
+        return None
+
+def gemini_analyst_note(name, code, market, r, price, funda, lv, arts):
+    """바이사이드 애널리스트 관점, 혼합(단기 촉매+중기 밸류) 종목 노트."""
+    if not gem_ready():
+        return None
+    ctx = [f"종목: {name}({code}) {'미국' if market == 'US' else '한국'}"]
+    ctx.append(f"현재가/등락: {price} ({r:+.1f}%)" if (price and r is not None) else f"현재가: {price}")
+    if funda.get("target") and price:
+        try:
+            gap = (funda["target"] - price) / price * 100
+            ctx.append(f"컨센 목표주가: {funda['target']} (현재가 대비 {gap:+.0f}%)")
+        except Exception:
+            pass
+    if funda.get("fpe"):
+        ctx.append(f"선행PER: {funda['fpe']}")
+    if funda.get("rec"):
+        ctx.append(f"애널 투자의견: {funda['rec']} (n={funda.get('nanal', '?')})")
+    if funda.get("earnings"):
+        ctx.append(f"다음 실적발표(예정): {funda['earnings']}")
+    if funda.get("hi52") and funda.get("lo52"):
+        ctx.append(f"52주 범위: {funda['lo52']}~{funda['hi52']}")
+    if lv.get("ma20"):
+        ctx.append(f"20일선 대비 {lv['vs_ma20']:+.1f}%, 20일 모멘텀 {lv.get('mom20') or 0:+.1f}%, "
+                   f"6개월 고저 {lv.get('lo6m', 0):.0f}~{lv.get('hi6m', 0):.0f}")
+    sg = [f"{s['type']}({s['strength']}): {s['detail']}" for s in SIGNALS if s["name"] == name]
+    if sg:
+        ctx.append("감지 신호: " + "; ".join(sg))
+    heads = [f"- {a['title']}" + (f" [{a['impact']}]" if a.get("impact") else "") for a in arts[:3]]
+    if heads:
+        ctx.append("오늘 주요 뉴스:\n" + "\n".join(heads))
+    prompt = ("너는 바이사이드 주식 애널리스트다. 아래 한 종목 데이터를 근거로 '혼합 관점'(단기 촉매·수급·기술적 레벨 + "
+              "중기 실적·밸류에이션)에서 전문가 브리핑을 한국어로 작성하라. 반드시 포함: "
+              "①핵심 논지 한 줄 ②단기 촉매/이벤트와 주목 레벨(지지·저항·이평) "
+              "③밸류에이션 위치(목표가 갭·PER 해석) ④지금 관찰/경계 포인트와 리스크(손익비). "
+              "5~7문장, 데이터에 근거해서만, 과장·단정적 매매지시 금지(참고용). 없는 데이터는 지어내지 말 것.\n\n"
+              + "\n".join(ctx))
+    payload = {"contents": [{"parts": [{"text": prompt}]}],
+               "generationConfig": {"temperature": 0.3, "maxOutputTokens": 650}}
+    try:
+        status, d = gem_post(payload, timeout=40)
+        if status != 200:
+            _diag("analyst_http", status=status, name=name)
+            return None
+        cand = (d.get("candidates") or [{}])[0]
+        txt = "".join(p.get("text", "") for p in cand.get("content", {}).get("parts", [])).strip()
+        if not txt or not has_hangul(txt) or is_garbage(txt):
+            _diag("analyst_empty", name=name)
+            return None
+        _diag("analyst_ok", name=name)
+        return txt
+    except Exception as e:
+        _diag("analyst_exc", name=name, err=repr(e)[:150])
+        return None
+
+# 주목 종목 선별: 신호 강도 + 당일 급변 + 중요 뉴스(impact 태그) 있는 종목 상위 (최대 6, 한도 보호)
+def _notability(name):
+    (p, r), _, _ = quotes[name]
+    sc = 0.0
+    strengths = [s["strength"] for s in SIGNALS if s["name"] == name]
+    if strengths:
+        sc += 10 * max(strengths)
+    if r is not None:
+        sc += abs(r)
+    if any(a.get("impact") for a in news.get(name, [])):
+        sc += 3
+    return sc
+
+_allnames = [(nm, cd, mk) for _, its in GROUPS for (nm, cd, mk) in its if mk != "PRIVATE"]
+_notable = sorted(_allnames, key=lambda t: -_notability(t[0]))
+_notable = [t for t in _notable if _notability(t[0]) > 0][:6]
+
+MARKET_NOTE = gemini_market_note()      # 전략 관점(가장 중요) 먼저
+ANALYST = []
+for _nm, _cd, _mk in _notable:
+    (_p, _r), _, _ = quotes[_nm]
+    _funda = yf_fundamentals(_cd, _mk)
+    _lv = yf_levels(_cd, _mk, _p)
+    _note = gemini_analyst_note(_nm, _cd, _mk, _r, _p, _funda, _lv, news.get(_nm, []))
+    ANALYST.append({"name": _nm, "code": _cd, "market": _mk, "r": _r, "price": _p,
+                    "funda": _funda, "levels": _lv, "note": _note})
+
+# ------------------------------------------------------------------ Gemini 진단 덤프(모든 호출 이후)
+try:
+    with open(os.path.join(DATA, "gemini_debug.json"), "w", encoding="utf-8") as _f:
+        json.dump({
+            "generated": NOW.isoformat(timespec="seconds"),
+            "model": GEMINI_MODEL,
+            "key_present": bool(GEMINI_KEY),
+            "key_prefix": GEMINI_KEY[:4] if GEMINI_KEY else "",
+            "gem_calls_made": _GEM_CALLS[0],
+            "gem_call_cap": GEMINI_MAX_CALLS,
+            "gem_quota_exhausted": _GEM_DEAD[0],
+            "elapsed_sec": round(time.time() - _START, 1),
+            "notable": [t[0] for t in _notable],
+            "market_note": bool(MARKET_NOTE),
+            "analyst_notes_ok": sum(1 for a in ANALYST if a["note"]),
+            "branch_counts": GEMINI_COUNTS,
+            "samples": GEMINI_DIAG,
+        }, _f, ensure_ascii=False, indent=2)
+except Exception:
+    pass
 
 # ------------------------------------------------------------------ index.html 조립
 def card(label, pair):
@@ -963,6 +1170,63 @@ n_priv = sum(1 for _, its in GROUPS for (_, _, m) in its if m == "PRIVATE")
 n_trade = n_stocks - n_priv
 wl_note = f"시세 {n_trade}종" + (f" · 비상장 {n_priv}(뉴스만)" if n_priv else "")
 
+def _an_facts(a):
+    f, lv, price, market = a["funda"], a["levels"], a["price"], a["market"]
+    chips = []
+    def pc(t):
+        chips.append(f'<span class="afct">{t}</span>')
+    if f.get("target") and price:
+        try:
+            gap = (f["target"] - price) / price * 100
+            gcls = "up" if gap > 0 else ("down" if gap < 0 else "")
+            pc(f'목표가 {fmt_price(f["target"], market)} <b class="{gcls}">({gap:+.0f}%)</b>')
+        except Exception:
+            pass
+    if f.get("fpe"):
+        try:
+            pc(f'선행PER {float(f["fpe"]):.1f}')
+        except Exception:
+            pass
+    if f.get("rec"):
+        pc(f'투자의견 {esc(str(f["rec"]).upper())}')
+    if f.get("earnings"):
+        pc(f'실적발표 {esc(f["earnings"])}')
+    if lv.get("vs_ma20") is not None:
+        vcls = "up" if lv["vs_ma20"] > 0 else "down"
+        pc(f'20일선 <b class="{vcls}">{lv["vs_ma20"]:+.1f}%</b>')
+    if lv.get("hi6m") and lv.get("lo6m"):
+        pc(f'6개월 {lv["lo6m"]:.0f}~{lv["hi6m"]:.0f}')
+    return "".join(chips) or '<span class="afct dim">밸류에이션 데이터 조회 실패</span>'
+
+_an_cards = []
+for a in ANALYST:
+    _cls, _txt = fmt_pct(a["r"])
+    _facts = _an_facts(a)
+    if a["note"]:
+        _nh = "".join(f"<p>{esc(x)}</p>" for x in a["note"].split("\n") if x.strip())
+        _note_block = f'<div class="an-note">{_nh}</div>'
+    else:
+        _note_block = '<div class="an-note dim">AI 전문 노트 미생성(무료 한도·데이터 제약) — 위 지표 참고</div>'
+    _sigtags = "".join(f'<span class="an-sig s{s["strength"]}">{esc(s["type"])}</span>'
+                       for s in SIGNALS if s["name"] == a["name"])
+    _an_cards.append(
+        f'<div class="an-card"><div class="an-h"><span class="an-nm">{esc(a["name"])}'
+        f'<span class="tick">{esc(a["code"])}</span></span>'
+        f'<span class="pct {_cls} num">{_txt}</span>{_sigtags}</div>'
+        f'<div class="an-facts">{_facts}</div>{_note_block}</div>')
+analyst_cards_html = "".join(_an_cards) if _an_cards else \
+    '<div class="none" style="padding:14px 16px">오늘은 특별히 주목할 신호가 있는 종목이 없습니다 — 관망 구간.</div>'
+if MARKET_NOTE:
+    _mn = "".join(f"<p>{esc(x)}</p>" for x in MARKET_NOTE.split("\n") if x.strip())
+    market_note_html = f'<div class="an-market">{_mn}</div>'
+else:
+    market_note_html = '<div class="an-market dim">전략 관점 미생성(무료 한도·데이터 제약). 지표·신호는 아래 참고.</div>'
+analyst_section = (
+    '<section><div class="sec-head"><div class="sec-title">🎓 애널리스트 관점</div>'
+    '<div class="sec-note">혼합(단기 촉매+중기 밸류) · AI 종합 · 참고용(투자책임 본인)</div></div>'
+    f'<div class="an-mwrap"><div class="an-mlabel">오늘의 전략 관점 (PM)</div>{market_note_html}</div>'
+    f'<div class="an-grid">{analyst_cards_html}</div></section>')
+
 HEAD = ('<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>'
         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">'
         f'<style>{CSS}</style>')
@@ -974,6 +1238,7 @@ INDEX = f"""<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta nam
 <span>뉴스 · <b>오늘 발행분(KST)</b></span><span>🔄 <b>평일 07·14시 자동 갱신</b></span>
 <a class="navlink" href="trends.html">📈 추세 · 이슈 타임라인 →</a></div></header>
 <div class="headline"><span class="tag">오늘의 핵심</span><p>{esc(headline)}</p></div>
+{analyst_section}
 <section><div class="sec-head"><div class="sec-title">오늘의 관찰 포인트</div><div class="sec-note">±3% 이상 변동·신규 뉴스 자동 감지</div></div><div class="points">{points_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">주요 지수</div><div class="sec-note">상승 <span class="up">빨강</span> · 하락 <span class="down">파랑</span></div></div><div class="grid">{indices_html}</div></section>
 <section><div class="sec-head"><div class="sec-title">매크로 · 환율 · 원자재</div></div><div class="macro">{macro_html}</div></section>
