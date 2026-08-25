@@ -26,7 +26,7 @@ def over_budget():
 
 # Gemini(무료) 요약용 키·모델
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash")
+GEMINI_MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
 GEMINI_DIAG = []          # 진단 로그(원인 파악용) → data/gemini_debug.json 로 커밋
 GEMINI_DIAG_MAX = 6       # 앞쪽 몇 건의 상세만 기록(용량 절약)
 
