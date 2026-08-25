@@ -1,29 +1,13 @@
 {
- "generated": "2026-08-25T11:23:36.813897+09:00",
+ "generated": "2026-08-25T12:25:25.930990+09:00",
  "date": "2026-08-25",
  "signals": [
   {
-   "name": "SK바이오사이언스",
-   "code": "302440",
-   "market": "KR",
-   "type": "급변",
-   "detail": "-3.1% 급락",
-   "strength": 2
-  },
-  {
-   "name": "SK바이오사이언스",
-   "code": "302440",
-   "market": "KR",
-   "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -3.1% 눌림(역발상 관심)",
-   "strength": 2
-  },
-  {
    "name": "SK하이닉스",
    "code": "000660",
    "market": "KR",
    "type": "급변",
-   "detail": "-4.6% 급락",
+   "detail": "-4.2% 급락",
    "strength": 2
   },
   {
@@ -31,23 +15,7 @@
    "code": "000660",
    "market": "KR",
    "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -4.6% 눌림(역발상 관심)",
-   "strength": 2
-  },
-  {
-   "name": "네이버",
-   "code": "035420",
-   "market": "KR",
-   "type": "급변",
-   "detail": "-3.6% 급락",
-   "strength": 2
-  },
-  {
-   "name": "네이버",
-   "code": "035420",
-   "market": "KR",
-   "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -3.6% 눌림(역발상 관심)",
+   "detail": "뉴스 활발한데 주가 -4.2% 눌림(역발상 관심)",
    "strength": 2
   },
   {
@@ -55,7 +23,7 @@
    "code": "034020",
    "market": "KR",
    "type": "급변",
-   "detail": "+5.8% 급등",
+   "detail": "+5.6% 급등",
    "strength": 2
   },
   {
@@ -71,7 +39,7 @@
    "code": "GEV",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -111,7 +79,7 @@
    "code": "034020",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 9건",
+   "detail": "최근 뉴스 2일 활발·3일 10건",
    "strength": 1
   },
   {
@@ -119,7 +87,7 @@
    "code": "MSFT",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 7건",
    "strength": 1
   },
   {
@@ -151,7 +119,7 @@
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 8건",
+   "detail": "최근 뉴스 2일 활발·3일 9건",
    "strength": 1
   },
   {
@@ -167,7 +135,7 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 5건",
+   "detail": "최근 뉴스 2일 활발·3일 6건",
    "strength": 1
   },
   {
@@ -183,7 +151,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 7건",
    "strength": 1
   },
   {
@@ -199,7 +167,7 @@
    "code": "TSLA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 7건",
    "strength": 1
   },
   {
@@ -207,7 +175,7 @@
    "code": "PLTR",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 6건",
+   "detail": "최근 뉴스 2일 활발·3일 8건",
    "strength": 1
   },
   {
@@ -223,7 +191,7 @@
    "code": "005380",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 2일 활발·3일 9건",
+   "detail": "최근 뉴스 2일 활발·3일 10건",
    "strength": 1
   }
  ]
