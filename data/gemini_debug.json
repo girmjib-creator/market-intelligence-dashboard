@@ -1,43 +1,41 @@
 {
-  "generated": "2026-08-26T07:31:23+09:00",
+  "generated": "2026-08-26T14:24:38+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 3,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 177.7,
+  "elapsed_sec": 183.9,
   "notable": [
-    "두산에너빌리티",
+    "한국전력",
+    "엔알비",
     "블룸에너지",
-    "퓨쳐켐",
+    "두산에너빌리티",
     "스페이스X",
-    "메타",
-    "팔란티어"
+    "메타"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_exception": 1,
-    "http_error": 1,
-    "offline_or_budget": 160
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 173
   },
   "samples": [
     {
-      "branch": "triage_exception",
+      "branch": "triage_nojson",
       "name": "애플",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
+      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\"목표주"
     },
     {
-      "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
-      "key_prefix": "AQ.A"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 429
     },
     {
       "branch": "offline_or_budget"
