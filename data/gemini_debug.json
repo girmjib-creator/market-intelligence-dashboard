@@ -1,44 +1,49 @@
 {
-  "generated": "2026-08-27T12:00:40+09:00",
+  "generated": "2026-08-28T00:59:55+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 27,
+  "gem_calls_made": 24,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 352.3,
+  "elapsed_sec": 439.9,
   "notable": [
+    "엔비디아",
     "엔알비",
     "SK하이닉스",
-    "GE베르노바",
     "팔란티어",
-    "삼성전자",
-    "현대차"
+    "삼성전기",
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "ok": 3,
-    "summary_refused": 8,
-    "hl_ok": 5,
-    "hl_empty": 3,
-    "http_error": 1,
-    "offline_or_budget": 186
+    "triage_http_error": 1,
+    "http_error": 7,
+    "hl_ok": 8,
+    "summary_refused": 2,
+    "triage_ok": 2,
+    "triage_nojson": 2,
+    "ok": 1,
+    "offline_or_budget": 165
   },
   "samples": [
     {
-      "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":3,\""
+      "branch": "triage_http_error",
+      "status": 503,
+      "name": "알파벳"
     },
     {
-      "branch": "ok",
-      "snippet": "애플이 오는 9월 9일 신제품 공개 행사를 개최하고 최신 아이폰 라인업을 선보일"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "ok",
-      "snippet": "애플(Apple)은 고위 임원 그레그 조스위악(Greg Joswiak)의 발표"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n미국 의원들의 주식 거래 내역 공개 및"
     },
     {
       "branch": "summary_refused",
@@ -49,33 +54,43 @@
       "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": ". EXCLUDE.\n\n2. Microsoft's 2"
+      "branch": "triage_ok",
+      "name": "아마존",
+      "kept": 0
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "triage_ok",
+      "name": "메타",
+      "kept": 1
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
-    },
-    {
-      "branch": "ok",
-      "snippet": "마이크로소프트(MS)의 사티아 나델라 CEO 연봉은 성과 연동 주식 보상("
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
       "branch": "triage_nojson",
-      "name": "알파벳",
-      "snippet": "```json\n{\"keep\":[{\"i\":1"
+      "name": "엔비디아",
+      "snippet": "279 Billion Bet On AI (Forbes)`"
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
     }
   ]
 }
