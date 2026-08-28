@@ -1,96 +1,70 @@
 {
-  "generated": "2026-08-28T00:59:55+09:00",
+  "generated": "2026-08-28T15:01:03+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 24,
+  "gem_calls_made": 7,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 439.9,
+  "elapsed_sec": 212.5,
   "notable": [
     "엔비디아",
-    "엔알비",
-    "SK하이닉스",
     "팔란티어",
-    "삼성전기",
-    "스페이스X"
+    "한국전력",
+    "삼성전자",
+    "테슬라",
+    "삼성전기"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 1,
-    "http_error": 7,
-    "hl_ok": 8,
+    "triage_nojson": 1,
     "summary_refused": 2,
-    "triage_ok": 2,
-    "triage_nojson": 2,
-    "ok": 1,
-    "offline_or_budget": 165
+    "hl_empty": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 224
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "알파벳"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n미국 의원들의 주식 거래 내역 공개 및"
+      "branch": "triage_nojson",
+      "name": "애플",
+      "snippet": "{\"keep\":[{\"i\":0,\"tag"
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "branch": "hl_empty"
     },
     {
-      "branch": "triage_ok",
-      "name": "아마존",
-      "kept": 0
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "triage_ok",
-      "name": "메타",
-      "kept": 1
+      "branch": "hl_http_error",
+      "status": 429
     },
     {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_nojson",
-      "name": "엔비디아",
-      "snippet": "279 Billion Bet On AI (Forbes)`"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
