@@ -1,62 +1,70 @@
 {
-  "generated": "2026-08-31T09:17:32+09:00",
+  "generated": "2026-08-31T20:14:49+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 21,
+  "gem_calls_made": 23,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 434.4,
+  "elapsed_sec": 430.0,
   "notable": [
-    "엔비디아",
-    "블룸에너지",
-    "애플",
     "LG전자",
-    "GE베르노바",
-    "두산에너빌리티"
+    "엔비디아",
+    "아마존",
+    "두산에너빌리티",
+    "블룸에너지",
+    "삼성전기"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 3,
-    "ok": 2,
-    "triage_ok": 2,
-    "summary_refused": 5,
-    "hl_empty": 2,
-    "hl_ok": 3,
-    "triage_exception": 1,
-    "http_error": 1,
-    "hl_http_error": 1,
-    "offline_or_budget": 213
+    "triage_nojson": 4,
+    "summary_refused": 4,
+    "hl_http_error": 2,
+    "hl_empty": 3,
+    "ok": 4,
+    "triage_http_error": 1,
+    "http_error": 3,
+    "hl_ok": 1,
+    "offline_or_budget": 235
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "**:\n    *   `0. 1 Top Warren"
-    },
-    {
-      "branch": "ok",
-      "snippet": "애플(AAPL)은 워렌 버핏의 버크셔 해서웨이가 가장 많이 보유한 종목"
-    },
-    {
-      "branch": "triage_ok",
-      "name": "마이크로소프트",
-      "kept": 0
-    },
-    {
-      "branch": "triage_ok",
-      "name": "알파벳",
-      "kept": 0
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "메타",
-      "snippet": ", guidance, analyst rating change, M&A, regulation"
+      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"경"
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": null
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "ok",
+      "snippet": "·수치·전망 위주? Yes (0.3%, 12%, 13%, 820"
+    },
+    {
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "마이크로소프트"
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_empty"
@@ -67,19 +75,11 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
     },
     {
-      "branch": "triage_exception",
-      "name": "엔비디아",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
+      "branch": "ok",
+      "snippet": "엘리자베스 워렌 미국 상원의원은 주요 대기업 6곳이 지난해 총 830억 달러 규모"
     }
   ]
 }
