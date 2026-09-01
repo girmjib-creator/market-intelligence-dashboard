@@ -1,68 +1,96 @@
 {
-  "generated": "2026-09-01T10:05:55+09:00",
+  "generated": "2026-09-01T18:40:05+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 4,
+  "gem_calls_made": 24,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 100.3,
+  "elapsed_sec": 493.0,
   "notable": [
     "테슬라",
+    "LG전자",
     "아마존",
+    "블룸에너지",
     "알파벳",
-    "스페이스X",
-    "엔비디아",
-    "GE베르노바"
+    "엔알비"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "summary_refused": 1,
+    "triage_http_error": 1,
+    "http_error": 8,
+    "hl_empty": 4,
+    "triage_nojson": 3,
+    "hl_ok": 3,
+    "ok": 2,
     "hl_http_error": 1,
-    "offline_or_budget": 285
+    "summary_refused": 1,
+    "offline_or_budget": 288
   },
   "samples": [
     {
+      "branch": "triage_http_error",
+      "status": 503,
+      "name": "애플"
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
       "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"경"
+      "name": "마이크로소프트",
+      "snippet": "\"parabolic surge hits $517.73"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_http_error",
-      "status": 429
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "ok",
+      "snippet": "마이크로소프트는 16년 연속 매년 9월 배당금 인상을 발표해 왔으며,"
     },
     {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
+      "branch": "ok",
+      "snippet": "마이크로소프트(MSFT) 주가는 5시간 차트 기준 508.0"
     }
   ]
 }
