@@ -1,32 +1,27 @@
 {
-  "generated": "2026-08-31T20:14:49+09:00",
+  "generated": "2026-09-01T10:05:55+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 23,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 430.0,
+  "elapsed_sec": 100.3,
   "notable": [
-    "LG전자",
-    "엔비디아",
+    "테슬라",
     "아마존",
-    "두산에너빌리티",
-    "블룸에너지",
-    "삼성전기"
+    "알파벳",
+    "스페이스X",
+    "엔비디아",
+    "GE베르노바"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "summary_refused": 4,
-    "hl_http_error": 2,
-    "hl_empty": 3,
-    "ok": 4,
-    "triage_http_error": 1,
-    "http_error": 3,
-    "hl_ok": 1,
-    "offline_or_budget": 235
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 285
   },
   "samples": [
     {
@@ -40,46 +35,34 @@
     },
     {
       "branch": "hl_http_error",
-      "status": null
+      "status": 429
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "ok",
-      "snippet": "·수치·전망 위주? Yes (0.3%, 12%, 13%, 820"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_http_error",
-      "status": null,
-      "name": "마이크로소프트"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "ok",
-      "snippet": "엘리자베스 워렌 미국 상원의원은 주요 대기업 6곳이 지난해 총 830억 달러 규모"
+      "branch": "offline_or_budget"
     }
   ]
 }
