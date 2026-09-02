@@ -1,34 +1,50 @@
 {
-  "generated": "2026-09-02T08:53:11+09:00",
+  "generated": "2026-09-02T18:11:42+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 6,
+  "gem_calls_made": 21,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 125.8,
+  "elapsed_sec": 364.4,
   "notable": [
-    "팔란티어",
+    "SK하이닉스",
     "테슬라",
-    "애플",
-    "엔알비",
-    "삼성전기",
-    "아마존"
+    "LG전자",
+    "두산에너빌리티",
+    "현대차",
+    "애플"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
+    "triage_nojson": 2,
+    "http_error": 6,
+    "hl_ok": 5,
+    "summary_refused": 2,
+    "hl_empty": 2,
     "triage_exception": 1,
-    "summary_refused": 1,
-    "hl_empty": 1,
-    "http_error": 1,
-    "offline_or_budget": 317
+    "ok": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 320
   },
   "samples": [
     {
-      "branch": "triage_exception",
+      "branch": "triage_nojson",
       "name": "애플",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
+      "snippet": "Step Up (Barron's)` -> **Major"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
       "branch": "summary_refused",
@@ -39,35 +55,43 @@
     },
     {
       "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\""
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n성장\").\n        3. Wall"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     }
   ]
 }
