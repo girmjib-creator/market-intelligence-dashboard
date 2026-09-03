@@ -1,100 +1,68 @@
 {
-  "generated": "2026-09-03T18:18:28+09:00",
+  "generated": "2026-09-04T08:52:02+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 25,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 390.7,
+  "elapsed_sec": 128.5,
   "notable": [
+    "블룸에너지",
     "팔란티어",
-    "삼성전기",
-    "엔비디아",
-    "GE베르노바",
+    "스페이스X",
+    "테슬라",
     "메타",
-    "블룸에너지"
+    "마이크로소프트"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 4,
-    "http_error": 9,
-    "hl_http_error": 6,
-    "hl_ok": 2,
-    "hl_empty": 1,
-    "offline_or_budget": 363
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 404
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "애플"
+      "branch": "triage_nojson",
+      "name": "애플",
+      "snippet": "-> Congressional trading ($15k). Exclude."
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
       "branch": "hl_http_error",
-      "status": 503
+      "status": 429
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "마이크로소프트"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": null
+      "branch": "offline_or_budget"
     }
   ]
 }
