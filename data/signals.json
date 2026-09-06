@@ -1,21 +1,13 @@
 {
- "generated": "2026-09-04T18:12:10.082826+09:00",
- "date": "2026-09-04",
+ "generated": "2026-09-07T08:37:14.457827+09:00",
+ "date": "2026-09-07",
  "signals": [
   {
    "name": "블룸에너지",
    "code": "BE",
    "market": "US",
    "type": "급변",
-   "detail": "+8.4% 급등",
-   "strength": 3
-  },
-  {
-   "name": "팔란티어",
-   "code": "PLTR",
-   "market": "US",
-   "type": "급변",
-   "detail": "+7.7% 급등",
+   "detail": "+7.4% 급등",
    "strength": 3
   },
   {
@@ -23,7 +15,7 @@
    "code": "GEV",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 10건",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
    "strength": 2
   },
   {
@@ -39,15 +31,7 @@
    "code": "000660",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 4건",
-   "strength": 2
-  },
-  {
-   "name": "두산에너빌리티",
-   "code": "034020",
-   "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 2건",
+   "detail": "최근 뉴스 4일 활발·3일 1건",
    "strength": 2
   },
   {
@@ -55,7 +39,7 @@
    "code": "MSFT",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 13건",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
    "strength": 2
   },
   {
@@ -63,15 +47,7 @@
    "code": "META",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 16건",
-   "strength": 2
-  },
-  {
-   "name": "메타",
-   "code": "META",
-   "market": "US",
-   "type": "괴리",
-   "detail": "뉴스+주가 +11.1% 동반(과열 경계)",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
    "strength": 2
   },
   {
@@ -87,15 +63,7 @@
    "code": "BE",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 5건",
-   "strength": 2
-  },
-  {
-   "name": "블룸에너지",
-   "code": "BE",
-   "market": "US",
-   "type": "괴리",
-   "detail": "뉴스+주가 +16.9% 동반(과열 경계)",
+   "detail": "최근 뉴스 5일 활발·3일 2건",
    "strength": 2
   },
   {
@@ -119,7 +87,7 @@
    "code": "009150",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 6건",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
    "strength": 2
   },
   {
@@ -127,15 +95,7 @@
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 8건",
-   "strength": 2
-  },
-  {
-   "name": "스페이스X",
-   "code": "SPCX",
-   "market": "US",
-   "type": "급변",
-   "detail": "+6.4% 급등",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -143,7 +103,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -151,15 +111,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +9.3% 동반(과열 경계)",
-   "strength": 2
-  },
-  {
-   "name": "스페이스X",
-   "code": "SPCX",
-   "market": "US",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "detail": "뉴스+주가 +8.0% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -167,7 +119,7 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 9건",
+   "detail": "최근 뉴스 5일 활발·3일 2건",
    "strength": 2
   },
   {
@@ -175,7 +127,7 @@
    "code": "GOOGL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -183,15 +135,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 15건",
-   "strength": 2
-  },
-  {
-   "name": "애플",
-   "code": "AAPL",
-   "market": "US",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -199,7 +143,7 @@
    "code": "NVDA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 16건",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -215,7 +159,7 @@
    "code": "TSLA",
    "market": "US",
    "type": "급변",
-   "detail": "+5.4% 급등",
+   "detail": "-5.9% 급락",
    "strength": 2
   },
   {
@@ -223,15 +167,7 @@
    "code": "TSLA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 6일 활발·3일 10건",
-   "strength": 2
-  },
-  {
-   "name": "테슬라",
-   "code": "TSLA",
-   "market": "US",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "detail": "최근 뉴스 5일 활발·3일 3건",
    "strength": 2
   },
   {
@@ -239,7 +175,7 @@
    "code": "PLTR",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 11건",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
    "strength": 2
   },
   {
@@ -251,43 +187,51 @@
    "strength": 2
   },
   {
+   "name": "현대차",
+   "code": "005380",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 4일 활발·3일 0건",
+   "strength": 2
+  },
+  {
+   "name": "두산에너빌리티",
+   "code": "034020",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 3일 활발·3일 0건",
+   "strength": 1
+  },
+  {
+   "name": "아마존",
+   "code": "AMZN",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "팔란티어",
+   "code": "PLTR",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "퓨쳐켐",
+   "code": "220100",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "strength": 1
+  },
+  {
    "name": "한국전력",
    "code": "015760",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 5건",
-   "strength": 2
-  },
-  {
-   "name": "현대차",
-   "code": "005380",
-   "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 5건",
-   "strength": 2
-  },
-  {
-   "name": "현대차",
-   "code": "005380",
-   "market": "KR",
-   "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -7.4% 눌림(역발상 관심)",
-   "strength": 2
-  },
-  {
-   "name": "LG전자",
-   "code": "066570",
-   "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 3일 활발·3일 2건",
-   "strength": 1
-  },
-  {
-   "name": "알파벳",
-   "code": "GOOGL",
-   "market": "US",
-   "type": "모멘텀",
-   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "detail": "최근 뉴스 3일 활발·3일 0건",
    "strength": 1
   }
  ]

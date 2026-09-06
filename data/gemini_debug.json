@@ -1,97 +1,84 @@
 {
-  "generated": "2026-09-04T18:12:10+09:00",
+  "generated": "2026-09-07T08:37:14+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 20,
+  "gem_calls_made": 25,
   "gem_call_cap": 80,
-  "gem_quota_exhausted": false,
-  "elapsed_sec": 550.4,
+  "gem_quota_exhausted": true,
+  "elapsed_sec": 380.8,
   "notable": [
     "블룸에너지",
-    "팔란티어",
-    "스페이스X",
     "테슬라",
-    "메타",
-    "마이크로소프트"
+    "SK하이닉스",
+    "애플",
+    "삼성전자",
+    "팔란티어"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 3,
-    "http_error": 7,
-    "hl_http_error": 3,
-    "hl_ok": 5,
-    "summary_refused": 1,
-    "no_hangul_or_garbage": 1,
-    "offline_or_budget": 409
+    "triage_nojson": 2,
+    "summary_refused": 7,
+    "hl_empty": 3,
+    "ok": 3,
+    "hl_ok": 3,
+    "triage_ok": 2,
+    "triage_exception": 1,
+    "triage_http_error": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 408
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "(일반론/블로그성).\n5."
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_http_error",
-      "status": 503
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n일반적으로 알려진 사실):**"
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"경영\""
+      "snippet": "{\"keep\":[{\"i\":1,\""
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
     },
     {
-      "branch": "hl_http_error",
-      "status": null
+      "branch": "hl_empty"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "ok",
+      "snippet": "키뱅크 캐피털 마켓(KeyBanc Capital Markets)은 오는 9월 9일 예정된 애플의 신"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n/gift\"): In an economic context, \"이란"
+    },
+    {
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "알파벳",
+      "snippet": ", major regulatory ruling).\n\nWait, let's double"
+    },
+    {
+      "branch": "ok",
+      "snippet": "버크셔 해서웨이는 알파벳 보유 지분을 2025년 말 약 56억 달"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
       "branch": "hl_ok",
       "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+    },
+    {
+      "branch": "ok",
+      "snippet": "알파벳(Alphabet Inc.)의 이사인 R. 마틴 차베스(R. Martin Chavez)"
     }
   ]
 }
