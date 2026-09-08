@@ -1,44 +1,34 @@
 {
-  "generated": "2026-09-08T18:15:05+09:00",
+  "generated": "2026-09-09T08:56:34+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 24,
+  "gem_calls_made": 7,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 355.4,
+  "elapsed_sec": 167.6,
   "notable": [
     "블룸에너지",
     "테슬라",
-    "팔란티어",
     "삼성전기",
-    "애플",
-    "마이크로소프트"
+    "팔란티어",
+    "엔비디아",
+    "엔알비"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "summary_refused": 8,
-    "hl_empty": 4,
-    "hl_ok": 4,
-    "ok": 1,
-    "triage_ok": 1,
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_ok": 1,
     "http_error": 1,
-    "offline_or_budget": 464
+    "offline_or_budget": 494
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\""
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
+      "snippet": "Headline 1: \"Dow Jones Futures: Dow Breaks Support"
     },
     {
       "branch": "summary_refused",
@@ -46,35 +36,39 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본"
     },
     {
-      "branch": "ok",
-      "snippet": "애플이 2026년 9월 신제품 발표에서 기본형 라인업 출시를"
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": ").\n\n3.  **Evaluate Headlines**:\n    *"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
