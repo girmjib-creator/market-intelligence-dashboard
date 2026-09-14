@@ -1,88 +1,86 @@
 {
-  "generated": "2026-09-11T18:16:13+09:00",
+  "generated": "2026-09-14T08:57:25+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 28,
+  "gem_calls_made": 27,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 442.8,
+  "elapsed_sec": 328.0,
   "notable": [
     "엔알비",
     "블룸에너지",
+    "GE베르노바",
     "애플",
     "삼성전자",
-    "엔비디아",
-    "팔란티어"
+    "LG전자"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 5,
-    "http_error": 3,
-    "hl_ok": 5,
-    "ok": 6,
-    "summary_refused": 4,
-    "hl_empty": 1,
-    "offline_or_budget": 591
+    "triage_ok": 4,
+    "ok": 5,
+    "triage_nojson": 3,
+    "summary_refused": 5,
+    "hl_ok": 3,
+    "hl_empty": 2,
+    "triage_http_error": 1,
+    "offline_or_budget": 584
   },
   "samples": [
     {
-      "branch": "triage_nojson",
+      "branch": "triage_ok",
       "name": "애플",
-      "snippet": "Bank/Analyst price target change). (Tag:"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "kept": 1
     },
     {
       "branch": "ok",
-      "snippet": "애플(Apple Inc.)의 제니퍼 뉴스테드 수석부사장 겸 총괄고문이 20"
+      "snippet": "애플의 첫 폴더블 스마트폰인 '아이폰 듀오(iPhone Duo)'가 기존 폴더블폰 시장"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\nstart EXACTLY with `※ 제목"
+      "branch": "triage_ok",
+      "name": "알파벳",
+      "kept": 0
     },
     {
       "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "{\"keep\":[{\"i\":5,\""
+      "name": "아마존",
+      "snippet": "실적, 가이던스, 목표주가,"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "branch": "ok",
+      "snippet": "20배로 하락하여 5년 평균 중앙값(50배) 및 S&P 500 평균("
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
     },
     {
-      "branch": "hl_empty"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
       "branch": "ok",
-      "snippet": "마이크로소프트(MSFT)의 주가는 최근 거래일 기준 전일 대비 0.53% 상승한"
+      "snippet": "글로벌 물류 기업 UPS는 수익성이 낮았던 아마존의 배송 물량을 의도적으로 절반 이상 축"
+    },
+    {
+      "branch": "triage_ok",
+      "name": "메타",
+      "kept": 0
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "엔비디아",
+      "snippet": "Piper's Forecasts -> 목표주가 or 가이"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     }
   ]
 }
