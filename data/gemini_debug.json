@@ -1,73 +1,81 @@
 {
-  "generated": "2026-09-15T09:23:51+09:00",
+  "generated": "2026-09-15T18:41:57+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 6,
+  "gem_calls_made": 26,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 426.1,
+  "elapsed_sec": 531.9,
   "notable": [
-    "블룸에너지",
     "GE베르노바",
-    "스페이스X",
-    "아마존",
+    "블룸에너지",
+    "엔비디아",
     "알파벳",
-    "애플"
+    "메타",
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "ok": 2,
+    "triage_nojson": 4,
+    "ok": 5,
+    "summary_refused": 6,
+    "hl_ok": 5,
+    "hl_empty": 1,
     "http_error": 1,
-    "offline_or_budget": 645
+    "offline_or_budget": 643
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "settlement (Legal/Regulatory impact). Duplicate of"
+      "snippet": "or 제품 or 목표주가)."
     },
     {
       "branch": "ok",
-      "snippet": "일론 머스크의 인공지능(AI) 기업 xAI와 X Corp.가 애플을 상"
+      "snippet": "투자증권사 에버코어 ISI(Evercore ISI)는 아이폰 18 프로 및 프로 맥스 모델의 초기"
     },
     {
       "branch": "ok",
-      "snippet": "일론 머스크의 AI 기업 xAI와 엑스(X Corp.)가 애플을 상대로 제기했던 반"
+      "snippet": "애플이 시작가 1,999달러의 프리미엄 폴더블폰 '아이폰 듀오"
     },
     {
-      "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
-      "key_prefix": "AQ.A"
+      "branch": "ok",
+      "snippet": "애플(AAPL) 주가는 52주 최고가인 344.57달러에 가까운 333달러 선에서 거래되며 시가총액 약 4조"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\""
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_nojson",
+      "name": "알파벳",
+      "snippet": "소송/경영/제품/주가"
     }
   ]
 }
