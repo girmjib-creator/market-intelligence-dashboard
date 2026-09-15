@@ -1,82 +1,73 @@
 {
-  "generated": "2026-09-14T19:12:39+09:00",
+  "generated": "2026-09-15T09:23:51+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 30,
+  "gem_calls_made": 6,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 430.8,
+  "elapsed_sec": 426.1,
   "notable": [
-    "SK하이닉스",
     "블룸에너지",
-    "삼성전기",
-    "삼성전자",
-    "현대차",
-    "GE베르노바"
+    "GE베르노바",
+    "스페이스X",
+    "아마존",
+    "알파벳",
+    "애플"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 5,
-    "ok": 7,
-    "summary_refused": 6,
-    "hl_ok": 3,
-    "hl_empty": 3,
-    "triage_ok": 1,
+    "triage_nojson": 1,
+    "ok": 2,
     "http_error": 1,
-    "offline_or_budget": 595
+    "offline_or_budget": 645
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "\"iPhone 18\". Regardless, JPM"
+      "snippet": "settlement (Legal/Regulatory impact). Duplicate of"
     },
     {
       "branch": "ok",
-      "snippet": "팀 쿡 애플 전 CEO는 15년간의 재임 기간 중 2012년부터 자사주 매"
+      "snippet": "일론 머스크의 인공지능(AI) 기업 xAI와 X Corp.가 애플을 상"
     },
     {
       "branch": "ok",
-      "snippet": "JP모건에 따르면 애플 아이폰 18 프로와 프로맥스의 사전예약 첫 주 글로벌 평균 배송 대기 기간"
+      "snippet": "일론 머스크의 AI 기업 xAI와 엑스(X Corp.)가 애플을 상대로 제기했던 반"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "Impact: Very low / non-"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "ok",
-      "snippet": "(FCF)를 유지하는 한편 주가수익비율(P/E)이 17배"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_nojson",
-      "name": "알파벳",
-      "snippet": "기타\" or \"경영\". Wait,"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "ok",
-      "snippet": "알파벳은 올해 약 2,000억 달러 규모의 설비투자(CapEx)와 장기 구매"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     }
   ]
 }
