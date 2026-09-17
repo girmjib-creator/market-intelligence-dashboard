@@ -1,89 +1,76 @@
 {
-  "generated": "2026-09-16T18:35:54+09:00",
+  "generated": "2026-09-17T09:12:59+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 26,
+  "gem_calls_made": 8,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 542.5,
+  "elapsed_sec": 541.2,
   "notable": [
+    "퓨쳐켐",
     "스페이스X",
-    "SK하이닉스",
     "아마존",
     "마이크로소프트",
     "알파벳",
-    "삼성전자"
+    "GE베르노바"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 2,
-    "summary_refused": 4,
-    "hl_empty": 4,
-    "hl_ok": 3,
-    "http_error": 5,
-    "triage_nojson": 2,
-    "ok": 2,
-    "hl_http_error": 2,
-    "offline_or_budget": 689
+    "triage_nojson": 1,
+    "ok": 1,
+    "summary_refused": 1,
+    "hl_ok": 1,
+    "http_error": 1,
+    "offline_or_budget": 728
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": null,
-      "name": "애플"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
-    },
-    {
       "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "Buying Back Stock. Here's What That"
+      "name": "애플",
+      "snippet": "6 as well).\n3. BlinkLab Showcases FDA"
     },
     {
       "branch": "ok",
-      "snippet": "마이크로소프트(MSFT) 이사회가 분기 배당금을 주당 0.98달러로 결정"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_empty"
+      "snippet": "외판 빅테크/big tech peers spend heavily on AI infrastructure cap"
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+    },
+    {
+      "branch": "http_error",
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
