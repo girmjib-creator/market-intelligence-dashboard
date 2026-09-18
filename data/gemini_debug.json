@@ -1,19 +1,19 @@
 {
-  "generated": "2026-09-18T08:59:44+09:00",
+  "generated": "2026-09-18T18:17:58+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 18,
+  "gem_calls_made": 22,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.0,
+  "elapsed_sec": 542.5,
   "notable": [
     "블룸에너지",
     "스페이스X",
     "엔비디아",
     "테슬라",
-    "퓨쳐켐",
-    "아마존"
+    "아마존",
+    "SK하이닉스"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
@@ -21,20 +21,22 @@
     "triage_nojson": 3,
     "ok": 1,
     "summary_refused": 5,
-    "hl_empty": 3,
-    "hl_ok": 2,
-    "http_error": 1,
-    "offline_or_budget": 762
+    "hl_empty": 1,
+    "hl_ok": 6,
+    "http_error": 2,
+    "empty_text": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 777
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "Apple's iPhone 18 lineup keeps Bank of America"
+      "snippet": "change is a direct stock-moving catalyst (목표주"
     },
     {
       "branch": "ok",
-      "snippet": "뱅크오브아메리카(BofA)는 미국 이동통신사들의 공격적인 보상판매 프로모"
+      "snippet": "최근 금융 시장 분석가들이 아이폰 18 프로의 완판(매진) 소요 시간이 예년보다 길어진"
     },
     {
       "branch": "summary_refused",
@@ -48,12 +50,25 @@
       "snippet": "요약불가"
     },
     {
-      "branch": "hl_empty"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
       "branch": "triage_nojson",
       "name": "마이크로소프트",
       "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"수주"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
       "branch": "summary_refused",
@@ -64,15 +79,12 @@
       "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     }
   ]
 }
