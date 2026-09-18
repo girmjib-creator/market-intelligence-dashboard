@@ -1,47 +1,59 @@
 {
-  "generated": "2026-09-17T18:44:26+09:00",
+  "generated": "2026-09-18T08:59:44+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 8,
+  "gem_calls_made": 18,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.7,
+  "elapsed_sec": 540.0,
   "notable": [
+    "블룸에너지",
     "스페이스X",
-    "GE베르노바",
+    "엔비디아",
+    "테슬라",
     "퓨쳐켐",
-    "엔알비",
-    "마이크로소프트",
-    "블룸에너지"
+    "아마존"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "summary_refused": 2,
-    "hl_ok": 2,
+    "triage_nojson": 3,
     "ok": 1,
-    "triage_http_error": 1,
-    "offline_or_budget": 742
+    "summary_refused": 5,
+    "hl_empty": 3,
+    "hl_ok": 2,
+    "http_error": 1,
+    "offline_or_budget": 762
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "15 Years. Here's"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "snippet": "Apple's iPhone 18 lineup keeps Bank of America"
     },
     {
       "branch": "ok",
-      "snippet": "애플이 자사 M8 울트라 칩과 엔비디아의 고속 NVLink 네트워크 기술을 결"
+      "snippet": "뱅크오브아메리카(BofA)는 미국 이동통신사들의 공격적인 보상판매 프로모"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"수주"
     },
     {
       "branch": "summary_refused",
@@ -49,27 +61,18 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n대한/이례적인 거래량), Long-dated"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
     },
     {
-      "branch": "triage_http_error",
-      "status": 429,
-      "name": "마이크로소프트"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     },
     {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     }
   ]
 }
