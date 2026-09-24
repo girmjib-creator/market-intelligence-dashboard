@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-24T09:18:42.344107+09:00",
+ "generated": "2026-09-24T18:38:15.151881+09:00",
  "date": "2026-09-24",
  "signals": [
   {
@@ -7,7 +7,7 @@
    "code": "GEV",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 6건",
+   "detail": "최근 뉴스 5일 활발·3일 8건",
    "strength": 2
   },
   {
@@ -55,14 +55,6 @@
    "code": "MSFT",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 11건",
-   "strength": 2
-  },
-  {
-   "name": "메타",
-   "code": "META",
-   "market": "US",
-   "type": "이슈가열",
    "detail": "최근 뉴스 5일 활발·3일 12건",
    "strength": 2
   },
@@ -70,8 +62,24 @@
    "name": "메타",
    "code": "META",
    "market": "US",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 5일 활발·3일 15건",
+   "strength": 2
+  },
+  {
+   "name": "메타",
+   "code": "META",
+   "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +34.0% 동반(과열 경계)",
+   "detail": "뉴스+주가 +35.3% 동반(과열 경계)",
+   "strength": 2
+  },
+  {
+   "name": "메타",
+   "code": "META",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "누적구간 신고가 경신",
    "strength": 2
   },
   {
@@ -87,7 +95,7 @@
    "code": "BE",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +37.3% 동반(과열 경계)",
+   "detail": "뉴스+주가 +36.6% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -119,7 +127,7 @@
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 14건",
    "strength": 2
   },
   {
@@ -143,7 +151,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 14건",
    "strength": 2
   },
   {
@@ -151,7 +159,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +13.0% 동반(과열 경계)",
+   "detail": "뉴스+주가 +8.3% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -159,7 +167,15 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 14건",
+   "detail": "최근 뉴스 5일 활발·3일 16건",
+   "strength": 2
+  },
+  {
+   "name": "아마존",
+   "code": "AMZN",
+   "market": "US",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -3.6% 눌림(역발상 관심)",
    "strength": 2
   },
   {
@@ -175,7 +191,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 15건",
    "strength": 2
   },
   {
@@ -183,15 +199,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +9.8% 동반(과열 경계)",
-   "strength": 2
-  },
-  {
-   "name": "애플",
-   "code": "AAPL",
-   "market": "US",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "detail": "뉴스+주가 +8.9% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -199,7 +207,7 @@
    "code": "NVDA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 11건",
+   "detail": "최근 뉴스 5일 활발·3일 12건",
    "strength": 2
   },
   {
@@ -207,7 +215,7 @@
    "code": "TSLA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 11건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -224,6 +232,14 @@
    "market": "US",
    "type": "이슈가열",
    "detail": "최근 뉴스 5일 활발·3일 11건",
+   "strength": 2
+  },
+  {
+   "name": "팔란티어",
+   "code": "PLTR",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "누적구간 신고가 경신",
    "strength": 2
   },
   {
@@ -259,11 +275,27 @@
    "strength": 1
   },
   {
-   "name": "퓨쳐켐",
-   "code": "220100",
-   "market": "KR",
+   "name": "스페이스X",
+   "code": "SPCX",
+   "market": "US",
    "type": "모멘텀",
-   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "아마존",
+   "code": "AMZN",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "알파벳",
+   "code": "GOOGL",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
    "strength": 1
   },
   {
