@@ -1,80 +1,33 @@
 {
-  "generated": "2026-09-23T18:38:39+09:00",
+  "generated": "2026-09-24T09:18:42+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 26,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.5,
+  "elapsed_sec": 542.3,
   "notable": [
-    "메타",
+    "스페이스X",
     "두산에너빌리티",
-    "테슬라",
-    "삼성전자",
-    "엔비디아",
-    "아마존"
+    "한국전력",
+    "아마존",
+    "블룸에너지",
+    "알파벳"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_exception": 1,
-    "http_error": 5,
-    "hl_empty": 3,
-    "summary_refused": 5,
-    "hl_ok": 6,
-    "triage_nojson": 2,
-    "triage_http_error": 1,
-    "offline_or_budget": 877
+    "triage_nojson": 1,
+    "http_error": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 919
   },
   "samples": [
     {
-      "branch": "triage_exception",
-      "name": "애플",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n애플이 채용 공고를 통해"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
       "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"목표주"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "name": "애플",
+      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\"목표주"
     },
     {
       "branch": "http_error",
@@ -85,8 +38,35 @@
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "hl_http_error",
+      "status": 429
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
