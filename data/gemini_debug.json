@@ -1,34 +1,63 @@
 {
-  "generated": "2026-09-25T09:21:08+09:00",
+  "generated": "2026-09-25T18:55:22+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 6,
+  "gem_calls_made": 28,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 542.2,
+  "elapsed_sec": 541.3,
   "notable": [
-    "스페이스X",
-    "알파벳",
-    "팔란티어",
+    "메타",
     "삼성전자",
-    "아마존",
-    "두산에너빌리티"
+    "블룸에너지",
+    "두산에너빌리티",
+    "알파벳",
+    "퓨쳐켐"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_exception": 1,
-    "summary_refused": 1,
-    "hl_empty": 1,
+    "triage_nojson": 4,
+    "summary_refused": 9,
+    "hl_ok": 6,
+    "triage_ok": 1,
+    "hl_empty": 2,
+    "hl_http_error": 1,
     "http_error": 1,
     "offline_or_budget": 962
   },
   "samples": [
     {
-      "branch": "triage_exception",
+      "branch": "triage_nojson",
       "name": "애플",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
+      "snippet": "{\"keep\":[{\"i\":0,\"tag"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n/Market reaction):* 대형 고객사인 애플과의 계약"
+    },
+    {
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "알파벳",
+      "snippet": "). Anthropic stake is investment/M&A/"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
       "branch": "summary_refused",
@@ -38,36 +67,17 @@
       "branch": "hl_empty"
     },
     {
-      "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
-      "key_prefix": "AQ.A"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n공 및 열 관리 문제가 지상에서 심각"
     },
     {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
+      "branch": "triage_nojson",
+      "name": "아마존",
+      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\"주"
     }
   ]
 }

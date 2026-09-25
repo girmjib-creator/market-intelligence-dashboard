@@ -1,5 +1,5 @@
 {
- "generated": "2026-09-25T09:21:08.346974+09:00",
+ "generated": "2026-09-25T18:55:22.067053+09:00",
  "date": "2026-09-25",
  "signals": [
   {
@@ -55,7 +55,7 @@
    "code": "META",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 14건",
+   "detail": "최근 뉴스 5일 활발·3일 17건",
    "strength": 2
   },
   {
@@ -63,7 +63,7 @@
    "code": "META",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +35.3% 동반(과열 경계)",
+   "detail": "뉴스+주가 +41.4% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -79,7 +79,7 @@
    "code": "BE",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 5건",
+   "detail": "최근 뉴스 5일 활발·3일 7건",
    "strength": 2
   },
   {
@@ -87,7 +87,7 @@
    "code": "BE",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +36.6% 동반(과열 경계)",
+   "detail": "뉴스+주가 +32.4% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -111,7 +111,7 @@
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 10건",
+   "detail": "최근 뉴스 5일 활발·3일 11건",
    "strength": 2
   },
   {
@@ -135,7 +135,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 15건",
    "strength": 2
   },
   {
@@ -143,7 +143,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +8.3% 동반(과열 경계)",
+   "detail": "뉴스+주가 +8.1% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -151,7 +151,7 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 13건",
+   "detail": "최근 뉴스 5일 활발·3일 15건",
    "strength": 2
   },
   {
@@ -183,7 +183,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "괴리",
-   "detail": "뉴스+주가 +8.9% 동반(과열 경계)",
+   "detail": "뉴스+주가 +8.6% 동반(과열 경계)",
    "strength": 2
   },
   {
@@ -191,14 +191,6 @@
    "code": "NVDA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 10건",
-   "strength": 2
-  },
-  {
-   "name": "테슬라",
-   "code": "TSLA",
-   "market": "US",
-   "type": "이슈가열",
    "detail": "최근 뉴스 5일 활발·3일 12건",
    "strength": 2
   },
@@ -206,8 +198,8 @@
    "name": "테슬라",
    "code": "TSLA",
    "market": "US",
-   "type": "모멘텀",
-   "detail": "누적구간 신고가 경신",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -215,7 +207,7 @@
    "code": "PLTR",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -243,6 +235,14 @@
    "strength": 2
   },
   {
+   "name": "현대차",
+   "code": "005380",
+   "market": "KR",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -13.8% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
    "name": "삼성전기",
    "code": "009150",
    "market": "KR",
@@ -251,8 +251,16 @@
    "strength": 1
   },
   {
-   "name": "아마존",
-   "code": "AMZN",
+   "name": "애플",
+   "code": "AAPL",
+   "market": "US",
+   "type": "모멘텀",
+   "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "엔비디아",
+   "code": "NVDA",
    "market": "US",
    "type": "모멘텀",
    "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
@@ -263,7 +271,7 @@
    "code": "005380",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 3일 활발·3일 2건",
+   "detail": "최근 뉴스 3일 활발·3일 3건",
    "strength": 1
   }
  ]
