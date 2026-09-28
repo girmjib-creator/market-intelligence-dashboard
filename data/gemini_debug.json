@@ -1,63 +1,37 @@
 {
-  "generated": "2026-09-25T18:55:22+09:00",
+  "generated": "2026-09-28T09:25:17+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 28,
+  "gem_calls_made": 26,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.3,
+  "elapsed_sec": 540.9,
   "notable": [
-    "메타",
-    "삼성전자",
+    "퓨쳐켐",
     "블룸에너지",
-    "두산에너빌리티",
-    "알파벳",
-    "퓨쳐켐"
+    "LG전자",
+    "메타",
+    "테슬라",
+    "팔란티어"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "summary_refused": 9,
-    "hl_ok": 6,
-    "triage_ok": 1,
-    "hl_empty": 2,
-    "hl_http_error": 1,
+    "triage_nojson": 3,
+    "summary_refused": 8,
+    "hl_empty": 3,
+    "hl_ok": 5,
+    "triage_ok": 2,
+    "triage_http_error": 1,
     "http_error": 1,
-    "offline_or_budget": 962
+    "offline_or_budget": 964
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":0,\"tag"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n/Market reaction):* 대형 고객사인 애플과의 계약"
-    },
-    {
-      "branch": "triage_ok",
-      "name": "마이크로소프트",
-      "kept": 0
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "알파벳",
-      "snippet": "). Anthropic stake is investment/M&A/"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "snippet": "사는 법', 여러 종목 나열"
     },
     {
       "branch": "summary_refused",
@@ -72,12 +46,38 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n공 및 열 관리 문제가 지상에서 심각"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
+    },
+    {
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
+    },
+    {
+      "branch": "triage_ok",
+      "name": "아마존",
+      "kept": 0
     },
     {
       "branch": "triage_nojson",
-      "name": "아마존",
-      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\"주"
+      "name": "메타",
+      "snippet": "{\"keep\":[{\"i\":2,\"tag\":\""
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n기적인 성장 동력이 될 것으로 기대하는"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     }
   ]
 }
