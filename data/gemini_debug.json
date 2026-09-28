@@ -1,19 +1,19 @@
 {
-  "generated": "2026-09-28T09:25:17+09:00",
+  "generated": "2026-09-28T20:20:22+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
   "gem_calls_made": 26,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.9,
+  "elapsed_sec": 541.8,
   "notable": [
     "퓨쳐켐",
     "블룸에너지",
-    "LG전자",
-    "메타",
-    "테슬라",
-    "팔란티어"
+    "삼성전자",
+    "SK하이닉스",
+    "마이크로소프트",
+    "메타"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
@@ -22,16 +22,15 @@
     "summary_refused": 8,
     "hl_empty": 3,
     "hl_ok": 5,
-    "triage_ok": 2,
-    "triage_http_error": 1,
+    "triage_ok": 1,
     "http_error": 1,
-    "offline_or_budget": 964
+    "offline_or_budget": 989
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "사는 법', 여러 종목 나열"
+      "snippet": "\"제품\". Impact: Medium/Low"
     },
     {
       "branch": "summary_refused",
@@ -46,22 +45,27 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
     },
     {
-      "branch": "triage_ok",
-      "name": "마이크로소프트",
-      "kept": 0
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "triage_ok",
-      "name": "아마존",
-      "kept": 0
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본"
     },
     {
       "branch": "triage_nojson",
-      "name": "메타",
-      "snippet": "{\"keep\":[{\"i\":2,\"tag\":\""
+      "name": "마이크로소프트",
+      "snippet": "{\"keep\":[{\"i\":0,\"tag\":\"목표"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_empty"
     },
     {
       "branch": "summary_refused",
@@ -69,15 +73,7 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n기적인 성장 동력이 될 것으로 기대하는"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n증명한다).\n    *   *"
     }
   ]
 }
