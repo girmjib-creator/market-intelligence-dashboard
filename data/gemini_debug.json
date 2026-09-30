@@ -1,98 +1,68 @@
 {
-  "generated": "2026-09-29T19:58:57+09:00",
+  "generated": "2026-09-30T10:09:43+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 30,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.7,
+  "elapsed_sec": 541.8,
   "notable": [
     "블룸에너지",
     "메타",
-    "삼성전기",
-    "테슬라",
     "스페이스X",
-    "삼성전자"
+    "엔비디아",
+    "삼성전기",
+    "팔란티어"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 5,
-    "http_error": 10,
-    "hl_http_error": 10,
-    "offline_or_budget": 1039
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 1081
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "애플"
+      "branch": "triage_nojson",
+      "name": "애플",
+      "snippet": "```json\n{\"keep\":[{\"i\":3,\""
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
       "branch": "hl_http_error",
-      "status": 503
+      "status": 429
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "마이크로소프트"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "offline_or_budget"
     }
   ]
 }
