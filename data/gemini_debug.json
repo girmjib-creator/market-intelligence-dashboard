@@ -1,78 +1,33 @@
 {
-  "generated": "2026-10-06T20:36:25+09:00",
+  "generated": "2026-10-07T10:16:13+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 22,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.3,
+  "elapsed_sec": 540.7,
   "notable": [
-    "LG전자",
     "스페이스X",
-    "삼성전기",
-    "SK바이오사이언스",
-    "테슬라",
-    "엔비디아"
+    "현대차",
+    "아마존",
+    "메타",
+    "SK하이닉스",
+    "블룸에너지"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 2,
-    "http_error": 6,
-    "hl_http_error": 4,
-    "hl_ok": 2,
-    "summary_refused": 3,
-    "hl_empty": 2,
-    "triage_http_error": 1,
-    "offline_or_budget": 1242
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 1290
   },
   "samples": [
     {
       "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": ""
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_http_error",
-      "status": null
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_http_error",
-      "status": null
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "알파벳",
-      "snippet": "Earnings preview / speculative (\"Will it beat?"
+      "name": "애플",
+      "snippet": "{\"keep\":[{\"i\":5,\"tag\":\"목표주"
     },
     {
       "branch": "summary_refused",
@@ -80,14 +35,34 @@
     },
     {
       "branch": "hl_http_error",
-      "status": 503
+      "status": 429
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
