@@ -1,33 +1,38 @@
 {
-  "generated": "2026-10-07T10:16:13+09:00",
+  "generated": "2026-10-07T20:25:57+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 4,
+  "gem_calls_made": 25,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.7,
+  "elapsed_sec": 542.6,
   "notable": [
-    "스페이스X",
-    "현대차",
-    "아마존",
-    "메타",
+    "LG전자",
+    "삼성전기",
+    "GE베르노바",
     "SK하이닉스",
+    "현대차",
     "블룸에너지"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "summary_refused": 1,
-    "hl_http_error": 1,
-    "offline_or_budget": 1290
+    "triage_nojson": 2,
+    "summary_refused": 5,
+    "hl_http_error": 4,
+    "empty_text": 2,
+    "hl_empty": 2,
+    "hl_ok": 3,
+    "triage_http_error": 2,
+    "http_error": 2,
+    "offline_or_budget": 1300
   },
   "samples": [
     {
       "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":5,\"tag\":\"목표주"
+      "name": "마이크로소프트",
+      "snippet": "(CNBC)\"\n- Topic: List / Cramer"
     },
     {
       "branch": "summary_refused",
@@ -35,34 +40,46 @@
     },
     {
       "branch": "hl_http_error",
-      "status": 429
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_nojson",
+      "name": "알파벳",
+      "snippet": "3.59-Gigawatt Deal Locks AI Power"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     }
   ]
 }
