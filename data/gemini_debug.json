@@ -1,90 +1,64 @@
 {
-  "generated": "2026-10-12T21:36:48+09:00",
+  "generated": "2026-10-13T11:54:56+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 30,
+  "gem_calls_made": 2,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.7,
+  "elapsed_sec": 540.9,
   "notable": [
-    "LG전자",
-    "두산에너빌리티",
-    "팔란티어",
-    "삼성전자",
     "삼성전기",
-    "아마존"
+    "SK하이닉스",
+    "삼성전자",
+    "LG전자",
+    "퓨쳐켐",
+    "블룸에너지"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "empty_text": 5,
-    "hl_empty": 5,
-    "http_error": 4,
-    "hl_ok": 4,
-    "no_hangul_or_garbage": 1,
-    "summary_refused": 1,
-    "hl_http_error": 1,
-    "offline_or_budget": 1417
+    "triage_http_error": 1,
+    "offline_or_budget": 1458
   },
   "samples": [
     {
-      "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "Evaluate the Input Items (0 to 3):"
+      "branch": "triage_http_error",
+      "status": 429,
+      "name": "애플"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "no_hangul_or_garbage",
-      "snippet": "*   Let's use `google:browse` to fetch the content."
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "{\"keep\":[{\"i\":2,\"tag\":\"실적\""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "branch": "offline_or_budget"
     }
   ]
 }
