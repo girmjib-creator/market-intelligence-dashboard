@@ -1,27 +1,31 @@
 {
-  "generated": "2026-10-14T18:50:47+09:00",
+  "generated": "2026-10-15T09:20:41+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 9,
+  "gem_calls_made": 18,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
   "elapsed_sec": 542.2,
   "notable": [
+    "삼성전기",
+    "SK하이닉스",
+    "삼성전자",
+    "현대차",
     "스페이스X",
-    "메타",
-    "두산에너빌리티",
-    "엔비디아",
-    "테슬라",
-    "엔알비"
+    "두산에너빌리티"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 2,
-    "http_error": 3,
-    "hl_http_error": 3,
-    "offline_or_budget": 1519
+    "triage_http_error": 3,
+    "http_error": 5,
+    "hl_ok": 3,
+    "hl_empty": 1,
+    "empty_text": 1,
+    "summary_refused": 1,
+    "hl_http_error": 2,
+    "offline_or_budget": 1545
   },
   "samples": [
     {
@@ -38,8 +42,8 @@
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
       "branch": "http_error",
@@ -50,37 +54,42 @@
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "hl_empty"
     },
     {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
     },
     {
-      "branch": "hl_http_error",
-      "status": 503
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
       "branch": "triage_http_error",
-      "status": 429,
+      "status": 503,
       "name": "마이크로소프트"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     }
   ]
 }
