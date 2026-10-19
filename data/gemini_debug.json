@@ -1,65 +1,67 @@
 {
-  "generated": "2026-10-19T09:00:14+09:00",
+  "generated": "2026-10-19T19:23:56+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
   "gem_calls_made": 8,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.5,
+  "elapsed_sec": 542.0,
   "notable": [
     "팔란티어",
-    "메타",
     "블룸에너지",
-    "알파벳",
-    "테슬라",
-    "마이크로소프트"
+    "메타",
+    "현대차",
+    "퓨쳐켐",
+    "알파벳"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 2,
-    "empty_text": 2,
+    "triage_nojson": 1,
+    "http_error": 2,
     "hl_empty": 2,
-    "http_error": 1,
-    "offline_or_budget": 1619
+    "empty_text": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 1644
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "/제품/주가/기타`. \""
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "The Motley Fool)`\n        *"
+      "snippet": "- Category: Regulation / Legal / Business environment."
     },
     {
       "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
       "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 429
     },
     {
       "branch": "offline_or_budget"
