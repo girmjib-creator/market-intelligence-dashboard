@@ -1,38 +1,37 @@
 {
-  "generated": "2026-10-30T20:06:22+09:00",
+  "generated": "2026-11-02T10:21:27+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 26,
+  "gem_calls_made": 24,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.5,
+  "elapsed_sec": 542.1,
   "notable": [
-    "알파벳",
-    "삼성전기",
+    "블룸에너지",
+    "스페이스X",
+    "팔란티어",
     "SK하이닉스",
-    "퓨쳐켐",
-    "엔알비",
-    "두산에너빌리티"
+    "엔비디아",
+    "퓨쳐켐"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
     "triage_nojson": 3,
-    "empty_text": 5,
+    "empty_text": 4,
     "hl_ok": 7,
-    "summary_refused": 3,
-    "triage_exception": 1,
-    "no_hangul_or_garbage": 1,
-    "hl_empty": 2,
-    "http_error": 1,
-    "offline_or_budget": 2047
+    "summary_refused": 4,
+    "triage_ok": 1,
+    "hl_empty": 1,
+    "triage_http_error": 1,
+    "offline_or_budget": 2050
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":2,\"tag\":\"목표주"
+      "snippet": "4 earnings Monday, with iPhone 18 sales in"
     },
     {
       "branch": "empty_text",
@@ -42,48 +41,51 @@
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n애플), Q4 Earnings (4분기 실적"
     },
     {
       "branch": "empty_text",
       "status": 200,
       "finish": "MAX_TOKENS",
       "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확인"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n전략적 포트폴리오 조정 (portfolio re"
-    },
-    {
-      "branch": "triage_exception",
-      "name": "마이크로소프트",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
     },
     {
       "branch": "hl_ok",
       "snippet": "※ 제목 기반 추정(본문 미확인)"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+    },
+    {
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "알파벳",
+      "snippet": ")`\n        *   Opinion piece / general commentary (\""
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
+    },
+    {
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
     }
   ]
 }
