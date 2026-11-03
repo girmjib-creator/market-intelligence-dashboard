@@ -1,89 +1,74 @@
 {
-  "generated": "2026-11-02T21:58:21+09:00",
+  "generated": "2026-11-03T12:22:19+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 24,
+  "gem_calls_made": 6,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.0,
+  "elapsed_sec": 540.5,
   "notable": [
-    "블룸에너지",
+    "삼성전기",
     "SK하이닉스",
-    "스페이스X",
-    "팔란티어",
-    "엔비디아",
-    "LG전자"
+    "LG전자",
+    "삼성전자",
+    "현대차",
+    "블룸에너지"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 2,
-    "empty_text": 6,
-    "hl_empty": 8,
-    "http_error": 1,
+    "triage_nojson": 1,
+    "summary_refused": 1,
     "hl_ok": 1,
-    "triage_http_error": 2,
-    "summary_refused": 2,
-    "offline_or_budget": 2084
+    "http_error": 1,
+    "offline_or_budget": 2125
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\"실적"
+      "snippet": "The Motley Fool)\n   -"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_empty"
+      "branch": "hl_ok",
+      "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
       "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
+      "status": 429,
+      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.",
+      "code": 429,
+      "estatus": "RESOURCE_EXHAUSTED",
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "{\"keep\":[{\"i\":6,\"tag\":\"목표"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
