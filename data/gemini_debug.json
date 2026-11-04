@@ -1,34 +1,46 @@
 {
-  "generated": "2026-11-04T11:00:19+09:00",
+  "generated": "2026-11-04T21:40:55+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 7,
+  "gem_calls_made": 22,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.2,
+  "elapsed_sec": 540.1,
   "notable": [
-    "SK하이닉스",
-    "삼성전기",
     "블룸에너지",
-    "팔란티어",
-    "삼성전자",
-    "마이크로소프트"
+    "GE베르노바",
+    "스페이스X",
+    "마이크로소프트",
+    "메타",
+    "한국전력"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "empty_text": 2,
+    "triage_nojson": 2,
+    "summary_refused": 2,
+    "hl_http_error": 3,
+    "empty_text": 4,
+    "hl_empty": 5,
+    "http_error": 3,
     "hl_ok": 1,
-    "hl_http_error": 1,
-    "offline_or_budget": 2172
+    "triage_exception": 1,
+    "offline_or_budget": 2183
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "or 실적 or 기타. Very specific"
+      "snippet": "{\"keep\":[{\"i\":1,\"tag\":\""
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": null
     },
     {
       "branch": "empty_text",
@@ -37,8 +49,24 @@
       "urlmeta": ""
     },
     {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n월가 분석가들의 전망 및 해석)\n\n3."
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": "competing/targeting GitHub or acquiring a competitor? \""
     },
     {
       "branch": "empty_text",
@@ -48,28 +76,16 @@
     },
     {
       "branch": "hl_http_error",
-      "status": 429
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
     },
     {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
-    },
-    {
-      "branch": "offline_or_budget"
+      "branch": "hl_empty"
     }
   ]
 }
