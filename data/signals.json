@@ -1,13 +1,45 @@
 {
- "generated": "2026-11-04T21:40:55.691665+09:00",
- "date": "2026-11-04",
+ "generated": "2026-11-05T11:02:54.466255+09:00",
+ "date": "2026-11-05",
  "signals": [
+  {
+   "name": "SK바이오사이언스",
+   "code": "302440",
+   "market": "KR",
+   "type": "급변",
+   "detail": "+7.2% 급등",
+   "strength": 3
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-9.2% 급락",
+   "strength": 3
+  },
   {
    "name": "블룸에너지",
    "code": "BE",
    "market": "US",
    "type": "급변",
    "detail": "+9.0% 급등",
+   "strength": 3
+  },
+  {
+   "name": "삼성전기",
+   "code": "009150",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-11.5% 급락",
+   "strength": 3
+  },
+  {
+   "name": "삼성전자",
+   "code": "005930",
+   "market": "KR",
+   "type": "급변",
+   "detail": "-7.7% 급락",
    "strength": 3
   },
   {
@@ -23,7 +55,7 @@
    "code": "GEV",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -38,32 +70,48 @@
    "name": "LG전자",
    "code": "066570",
    "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 2건",
+   "type": "급변",
+   "detail": "-4.2% 급락",
    "strength": 2
   },
   {
-   "name": "SK바이오사이언스",
-   "code": "302440",
+   "name": "LG전자",
+   "code": "066570",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "누적구간 신저가",
+   "strength": 2
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 5일 활발·3일 10건",
+   "strength": 2
+  },
+  {
+   "name": "SK하이닉스",
+   "code": "000660",
+   "market": "KR",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -22.8% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
+   "name": "네이버",
+   "code": "035420",
    "market": "KR",
    "type": "급변",
-   "detail": "+3.9% 급등",
+   "detail": "+5.5% 급등",
    "strength": 2
   },
   {
-   "name": "SK하이닉스",
-   "code": "000660",
+   "name": "두산에너빌리티",
+   "code": "034020",
    "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
-   "strength": 2
-  },
-  {
-   "name": "SK하이닉스",
-   "code": "000660",
-   "market": "KR",
-   "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -15.0% 눌림(역발상 관심)",
+   "type": "급변",
+   "detail": "-6.1% 급락",
    "strength": 2
   },
   {
@@ -71,7 +119,7 @@
    "code": "034020",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 4일 활발·3일 4건",
+   "detail": "최근 뉴스 4일 활발·3일 5건",
    "strength": 2
   },
   {
@@ -79,7 +127,15 @@
    "code": "034020",
    "market": "KR",
    "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -27.3% 눌림(역발상 관심)",
+   "detail": "뉴스 활발한데 주가 -31.7% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
+   "name": "두산에너빌리티",
+   "code": "034020",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "누적구간 신저가",
    "strength": 2
   },
   {
@@ -95,7 +151,7 @@
    "code": "META",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 17건",
+   "detail": "최근 뉴스 5일 활발·3일 14건",
    "strength": 2
   },
   {
@@ -111,6 +167,14 @@
    "code": "BE",
    "market": "US",
    "type": "이슈가열",
+   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "strength": 2
+  },
+  {
+   "name": "삼성전기",
+   "code": "009150",
+   "market": "KR",
+   "type": "이슈가열",
    "detail": "최근 뉴스 5일 활발·3일 10건",
    "strength": 2
   },
@@ -118,16 +182,16 @@
    "name": "삼성전기",
    "code": "009150",
    "market": "KR",
-   "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 9건",
+   "type": "괴리",
+   "detail": "뉴스 활발한데 주가 -24.9% 눌림(역발상 관심)",
    "strength": 2
   },
   {
    "name": "삼성전기",
    "code": "009150",
    "market": "KR",
-   "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -15.1% 눌림(역발상 관심)",
+   "type": "모멘텀",
+   "detail": "누적구간 신저가",
    "strength": 2
   },
   {
@@ -135,7 +199,7 @@
    "code": "005930",
    "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 13건",
+   "detail": "최근 뉴스 5일 활발·3일 12건",
    "strength": 2
   },
   {
@@ -143,7 +207,15 @@
    "code": "005930",
    "market": "KR",
    "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -13.8% 눌림(역발상 관심)",
+   "detail": "뉴스 활발한데 주가 -20.4% 눌림(역발상 관심)",
+   "strength": 2
+  },
+  {
+   "name": "삼성전자",
+   "code": "005930",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "누적구간 신저가",
    "strength": 2
   },
   {
@@ -151,7 +223,7 @@
    "code": "SPCX",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 11건",
+   "detail": "최근 뉴스 5일 활발·3일 9건",
    "strength": 2
   },
   {
@@ -159,7 +231,7 @@
    "code": "AMZN",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 15건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -175,7 +247,7 @@
    "code": "GOOGL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 13건",
+   "detail": "최근 뉴스 5일 활발·3일 10건",
    "strength": 2
   },
   {
@@ -191,7 +263,7 @@
    "code": "AAPL",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 16건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -199,7 +271,7 @@
    "code": "NVDA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 14건",
+   "detail": "최근 뉴스 5일 활발·3일 11건",
    "strength": 2
   },
   {
@@ -215,7 +287,7 @@
    "code": "TSLA",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 14건",
+   "detail": "최근 뉴스 5일 활발·3일 13건",
    "strength": 2
   },
   {
@@ -231,7 +303,7 @@
    "code": "PLTR",
    "market": "US",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 12건",
+   "detail": "최근 뉴스 5일 활발·3일 10건",
    "strength": 2
   },
   {
@@ -239,7 +311,7 @@
    "code": "015760",
    "market": "KR",
    "type": "급변",
-   "detail": "+5.3% 급등",
+   "detail": "+3.4% 급등",
    "strength": 2
   },
   {
@@ -254,16 +326,8 @@
    "name": "현대차",
    "code": "005380",
    "market": "KR",
-   "type": "급변",
-   "detail": "+3.0% 급등",
-   "strength": 2
-  },
-  {
-   "name": "현대차",
-   "code": "005380",
-   "market": "KR",
    "type": "이슈가열",
-   "detail": "최근 뉴스 5일 활발·3일 10건",
+   "detail": "최근 뉴스 5일 활발·3일 8건",
    "strength": 2
   },
   {
@@ -271,20 +335,36 @@
    "code": "005380",
    "market": "KR",
    "type": "괴리",
-   "detail": "뉴스 활발한데 주가 -30.6% 눌림(역발상 관심)",
+   "detail": "뉴스 활발한데 주가 -28.9% 눌림(역발상 관심)",
    "strength": 2
   },
   {
-   "name": "GE베르노바",
-   "code": "GEV",
+   "name": "LG전자",
+   "code": "066570",
+   "market": "KR",
+   "type": "이슈가열",
+   "detail": "최근 뉴스 3일 활발·3일 1건",
+   "strength": 1
+  },
+  {
+   "name": "네이버",
+   "code": "035420",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "메타",
+   "code": "META",
    "market": "US",
    "type": "모멘텀",
    "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
    "strength": 1
   },
   {
-   "name": "아마존",
-   "code": "AMZN",
+   "name": "스페이스X",
+   "code": "SPCX",
    "market": "US",
    "type": "모멘텀",
    "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
@@ -296,6 +376,14 @@
    "market": "US",
    "type": "모멘텀",
    "detail": "단기 이평 하향 이탈(하락 전환 조짐)",
+   "strength": 1
+  },
+  {
+   "name": "현대차",
+   "code": "005380",
+   "market": "KR",
+   "type": "모멘텀",
+   "detail": "단기 이평 상향 돌파(상승 전환 조짐)",
    "strength": 1
   }
  ]
