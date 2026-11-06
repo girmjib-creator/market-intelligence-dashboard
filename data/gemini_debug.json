@@ -1,97 +1,68 @@
 {
-  "generated": "2026-11-05T21:51:24+09:00",
+  "generated": "2026-11-06T11:05:18+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 24,
+  "gem_calls_made": 4,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.2,
+  "elapsed_sec": 542.6,
   "notable": [
+    "GE베르노바",
     "삼성전기",
     "SK하이닉스",
-    "GE베르노바",
-    "삼성전자",
+    "엔알비",
     "두산에너빌리티",
     "마이크로소프트"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 2,
-    "http_error": 3,
-    "hl_ok": 4,
-    "hl_http_error": 3,
-    "empty_text": 4,
-    "triage_nojson": 2,
-    "summary_refused": 2,
-    "hl_empty": 2,
-    "offline_or_budget": 2231
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 2269
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": 503,
-      "name": "애플"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_http_error",
-      "status": 503
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_http_error",
-      "status": 503
-    },
-    {
       "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "rejection. This relates to infrastructure spending/strategy/contracts."
+      "name": "애플",
+      "snippet": "{\"keep\":[{\"i\":4,\"tag\":\"실"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
       "branch": "hl_http_error",
-      "status": 503
+      "status": 429
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
