@@ -1,73 +1,37 @@
 {
-  "generated": "2026-11-09T10:30:51+09:00",
+  "generated": "2026-11-09T22:29:17+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 28,
+  "gem_calls_made": 19,
   "gem_call_cap": 80,
-  "gem_quota_exhausted": true,
-  "elapsed_sec": 541.9,
+  "gem_quota_exhausted": false,
+  "elapsed_sec": 549.6,
   "notable": [
-    "SK바이오사이언스",
-    "스페이스X",
     "삼성전기",
-    "테슬라",
+    "스페이스X",
     "두산에너빌리티",
-    "팔란티어"
+    "SK하이닉스",
+    "현대차",
+    "테슬라"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_ok": 2,
-    "triage_nojson": 3,
+    "triage_http_error": 1,
     "empty_text": 4,
-    "hl_empty": 5,
-    "no_hangul_or_garbage": 1,
-    "summary_refused": 3,
-    "hl_ok": 2,
-    "triage_exception": 1,
-    "http_error": 1,
+    "hl_ok": 1,
+    "http_error": 4,
     "hl_http_error": 2,
-    "offline_or_budget": 2289
+    "hl_empty": 5,
+    "triage_nojson": 2,
+    "offline_or_budget": 2320
   },
   "samples": [
     {
-      "branch": "triage_ok",
-      "name": "애플",
-      "kept": 0
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "Yahoo Finance)`\n        *   Content"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "no_hangul_or_garbage",
-      "snippet": "3.  **Execute Tool Call**:"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "알파벳",
-      "snippet": "주가`, `M&A`, `수"
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "애플"
     },
     {
       "branch": "empty_text",
@@ -80,9 +44,51 @@
       "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
-      "branch": "triage_ok",
-      "name": "아마존",
-      "kept": 0
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 503
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": "0 is actionable. AI Data Center deals strategy is quite significant"
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
+    },
+    {
+      "branch": "hl_http_error",
+      "status": null
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
+    },
+    {
+      "branch": "hl_empty"
     }
   ]
 }
