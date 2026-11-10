@@ -1,94 +1,73 @@
 {
-  "generated": "2026-11-09T22:29:17+09:00",
+  "generated": "2026-11-10T12:59:30+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 19,
+  "gem_calls_made": 7,
   "gem_call_cap": 80,
-  "gem_quota_exhausted": false,
-  "elapsed_sec": 549.6,
+  "gem_quota_exhausted": true,
+  "elapsed_sec": 541.0,
   "notable": [
-    "삼성전기",
-    "스페이스X",
-    "두산에너빌리티",
+    "블룸에너지",
     "SK하이닉스",
-    "현대차",
-    "테슬라"
+    "GE베르노바",
+    "두산에너빌리티",
+    "삼성전기",
+    "삼성전자"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 1,
-    "empty_text": 4,
-    "hl_ok": 1,
-    "http_error": 4,
+    "triage_nojson": 1,
+    "empty_text": 1,
     "hl_http_error": 2,
-    "hl_empty": 5,
-    "triage_nojson": 2,
-    "offline_or_budget": 2320
+    "summary_refused": 1,
+    "offline_or_budget": 2353
   },
   "samples": [
     {
-      "branch": "triage_http_error",
-      "status": null,
-      "name": "애플"
+      "branch": "triage_nojson",
+      "name": "마이크로소프트",
+      "snippet": ":MSFT) Gains Despite New, Overzealous Outlook"
     },
     {
       "branch": "empty_text",
       "status": 200,
       "finish": "MAX_TOKENS",
       "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_http_error",
       "status": 503
     },
     {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "0 is actionable. AI Data Center deals strategy is quite significant"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "summary_refused",
+      "snippet": "요약불가"
     },
     {
       "branch": "hl_http_error",
-      "status": null
+      "status": 429
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
+    },
+    {
+      "branch": "offline_or_budget"
     }
   ]
 }
