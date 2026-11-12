@@ -1,90 +1,68 @@
 {
-  "generated": "2026-11-11T21:17:52+09:00",
+  "generated": "2026-11-12T11:45:38+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 25,
+  "gem_calls_made": 5,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.9,
+  "elapsed_sec": 540.4,
   "notable": [
-    "삼성전기",
-    "SK하이닉스",
-    "엔비디아",
-    "삼성전자",
     "블룸에너지",
-    "GE베르노바"
+    "네이버",
+    "퓨쳐켐",
+    "테슬라",
+    "엔비디아",
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 2,
-    "summary_refused": 3,
-    "hl_ok": 8,
-    "empty_text": 5,
-    "triage_exception": 1,
-    "hl_empty": 1,
-    "http_error": 1,
-    "triage_http_error": 1,
-    "offline_or_budget": 2408
+    "triage_nojson": 1,
+    "summary_refused": 1,
+    "hl_http_error": 1,
+    "offline_or_budget": 2442
   },
   "samples": [
     {
       "branch": "triage_nojson",
       "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":0,\""
+      "snippet": "{\"keep\":[{\"i\":4,\"tag\":\""
     },
     {
       "branch": "summary_refused",
       "snippet": "요약불가"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "branch": "hl_http_error",
+      "status": 429
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "triage_exception",
-      "name": "마이크로소프트",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_empty"
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "offline_or_budget"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n(엔스로픽):** AI startup,"
+      "branch": "offline_or_budget"
     }
   ]
 }
