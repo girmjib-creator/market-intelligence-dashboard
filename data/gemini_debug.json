@@ -1,47 +1,71 @@
 {
-  "generated": "2026-11-16T10:39:34+09:00",
+  "generated": "2026-11-16T22:14:48+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 24,
+  "gem_calls_made": 23,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.2,
+  "elapsed_sec": 546.5,
   "notable": [
-    "삼성전기",
     "SK하이닉스",
+    "삼성전기",
+    "삼성전자",
     "한국전력",
-    "메타",
-    "팔란티어",
-    "LG전자"
+    "두산에너빌리티",
+    "퓨쳐켐"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_ok": 2,
-    "triage_nojson": 3,
-    "empty_text": 7,
-    "hl_ok": 4,
+    "triage_nojson": 1,
+    "empty_text": 5,
+    "hl_empty": 4,
+    "http_error": 3,
     "summary_refused": 1,
-    "hl_empty": 2,
+    "triage_exception": 1,
+    "hl_ok": 3,
     "hl_http_error": 2,
-    "offline_or_budget": 2493
+    "triage_http_error": 2,
+    "offline_or_budget": 2520
   },
   "samples": [
     {
-      "branch": "triage_ok",
-      "name": "마이크로소프트",
-      "kept": 0
-    },
-    {
-      "branch": "triage_ok",
-      "name": "알파벳",
-      "kept": 0
-    },
-    {
       "branch": "triage_nojson",
-      "name": "아마존",
-      "snippet": "어/이슈: Asics sues a *"
+      "name": "애플",
+      "snippet": "Million. Jensen Huang May Be Next (Yahoo Finance"
+    },
+    {
+      "branch": "empty_text",
+      "status": 200,
+      "finish": "MAX_TOKENS",
+      "urlmeta": ""
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "summary_refused",
+      "snippet": "- Use tool `google:browse` to fetch content. If access fails, reply strictly `요약불가`."
+    },
+    {
+      "branch": "hl_empty"
+    },
+    {
+      "branch": "triage_exception",
+      "name": "마이크로소프트",
+      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
     },
     {
       "branch": "empty_text",
@@ -54,36 +78,16 @@
       "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
-    },
-    {
-      "branch": "hl_empty"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_http_error",
-      "status": null
-    },
-    {
-      "branch": "triage_nojson",
-      "name": "메타",
-      "snippet": "클릭베이트, 무관하거나 일반론적 기"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
     }
   ]
 }
