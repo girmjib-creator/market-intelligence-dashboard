@@ -1,5 +1,5 @@
 {
-  "generated": "2026-11-13T21:43:22+09:00",
+  "generated": "2026-11-16T10:39:34+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
@@ -8,52 +8,40 @@
   "gem_quota_exhausted": true,
   "elapsed_sec": 540.2,
   "notable": [
+    "삼성전기",
+    "SK하이닉스",
     "한국전력",
-    "엔비디아",
-    "네이버",
-    "블룸에너지",
-    "SK바이오사이언스",
-    "알파벳"
+    "메타",
+    "팔란티어",
+    "LG전자"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "http_error": 2,
-    "hl_ok": 5,
+    "triage_ok": 2,
+    "triage_nojson": 3,
     "empty_text": 7,
-    "hl_http_error": 1,
-    "hl_empty": 3,
+    "hl_ok": 4,
     "summary_refused": 1,
-    "offline_or_budget": 2500
+    "hl_empty": 2,
+    "hl_http_error": 2,
+    "offline_or_budget": 2493
   },
   "samples": [
     {
+      "branch": "triage_ok",
+      "name": "마이크로소프트",
+      "kept": 0
+    },
+    {
+      "branch": "triage_ok",
+      "name": "알파벳",
+      "kept": 0
+    },
+    {
       "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": ").\n    *   `1. Apple: Des"
-    },
-    {
-      "branch": "http_error",
-      "status": null,
-      "msg": "",
-      "code": null,
-      "estatus": null,
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미확"
+      "name": "아마존",
+      "snippet": "어/이슈: Asics sues a *"
     },
     {
       "branch": "empty_text",
@@ -66,9 +54,11 @@
       "snippet": "※ 제목 기반 추정(본문 미확인)"
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": "MSFT? Deals/contracts (\"수주\""
+      "branch": "summary_refused",
+      "snippet": "요약불가"
+    },
+    {
+      "branch": "hl_empty"
     },
     {
       "branch": "empty_text",
@@ -79,6 +69,11 @@
     {
       "branch": "hl_http_error",
       "status": null
+    },
+    {
+      "branch": "triage_nojson",
+      "name": "메타",
+      "snippet": "클릭베이트, 무관하거나 일반론적 기"
     },
     {
       "branch": "empty_text",
