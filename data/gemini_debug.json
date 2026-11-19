@@ -1,33 +1,33 @@
 {
-  "generated": "2026-11-19T11:59:33+09:00",
+  "generated": "2026-11-19T23:00:48+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 6,
+  "gem_calls_made": 9,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 542.0,
+  "elapsed_sec": 541.1,
   "notable": [
-    "LG전자",
+    "삼성전기",
+    "아마존",
     "엔비디아",
-    "삼성전자",
-    "현대차",
-    "스페이스X",
-    "아마존"
+    "엔알비",
+    "블룸에너지",
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_http_error": 1,
-    "http_error": 2,
-    "hl_http_error": 1,
-    "offline_or_budget": 2637
+    "triage_http_error": 2,
+    "http_error": 3,
+    "hl_http_error": 3,
+    "offline_or_budget": 2668
   },
   "samples": [
     {
       "branch": "triage_http_error",
       "status": 503,
-      "name": "애플"
+      "name": "마이크로소프트"
     },
     {
       "branch": "http_error",
@@ -43,23 +43,32 @@
     },
     {
       "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/g",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_http_error",
+      "status": 429,
+      "name": "알파벳"
     },
     {
       "branch": "offline_or_budget"
