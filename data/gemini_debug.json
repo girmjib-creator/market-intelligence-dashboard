@@ -1,61 +1,67 @@
 {
-  "generated": "2026-11-20T11:53:14+09:00",
+  "generated": "2026-11-20T22:43:47+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 14,
+  "gem_calls_made": 16,
   "gem_call_cap": 80,
-  "gem_quota_exhausted": true,
-  "elapsed_sec": 542.7,
+  "gem_quota_exhausted": false,
+  "elapsed_sec": 575.7,
   "notable": [
     "삼성전기",
     "SK하이닉스",
     "삼성전자",
+    "두산에너빌리티",
     "아마존",
-    "알파벳",
-    "두산에너빌리티"
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_exception": 1,
-    "empty_text": 5,
-    "hl_empty": 3,
-    "hl_http_error": 1,
-    "triage_http_error": 1,
-    "hl_ok": 1,
-    "http_error": 1,
-    "offline_or_budget": 2692
+    "triage_http_error": 3,
+    "http_error": 4,
+    "hl_http_error": 5,
+    "empty_text": 3,
+    "hl_empty": 1,
+    "offline_or_budget": 2716
   },
   "samples": [
     {
-      "branch": "triage_exception",
-      "name": "애플",
-      "err": "JSONDecodeError(\"Expecting ',' delimiter: line 1 column 28 (char 27)\")"
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "애플"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_empty"
+      "branch": "hl_http_error",
+      "status": null
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_empty"
+      "branch": "hl_http_error",
+      "status": null
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_http_error",
@@ -67,6 +73,18 @@
       "name": "마이크로소프트"
     },
     {
+      "branch": "http_error",
+      "status": null,
+      "msg": "",
+      "code": null,
+      "estatus": null,
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": null
+    },
+    {
       "branch": "empty_text",
       "status": 200,
       "finish": "MAX_TOKENS",
@@ -74,16 +92,6 @@
     },
     {
       "branch": "hl_empty"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
     }
   ]
 }
