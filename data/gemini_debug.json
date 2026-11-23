@@ -1,87 +1,99 @@
 {
-  "generated": "2026-11-23T11:23:26+09:00",
+  "generated": "2026-11-24T00:31:35+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 34,
+  "gem_calls_made": 23,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.2,
+  "elapsed_sec": 542.1,
   "notable": [
     "엔비디아",
     "블룸에너지",
-    "스페이스X",
     "테슬라",
-    "네이버",
-    "GE베르노바"
+    "팔란티어",
+    "GE베르노바",
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 4,
-    "empty_text": 7,
-    "hl_empty": 2,
-    "hl_ok": 8,
-    "summary_refused": 4,
-    "triage_ok": 2,
-    "hl_http_error": 1,
-    "offline_or_budget": 2706
+    "triage_http_error": 5,
+    "http_error": 8,
+    "hl_http_error": 8,
+    "offline_or_budget": 2710
   },
   "samples": [
     {
-      "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "제품/기술). However, is it"
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "엔비디아"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_empty"
+      "branch": "hl_http_error",
+      "status": null
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "hl_http_error",
+      "status": null
     },
     {
-      "branch": "triage_nojson",
-      "name": "마이크로소프트",
-      "snippet": ")*\n        *   Analysis: Shutting down an app"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "테슬라"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "summary_refused",
-      "snippet": "요약불가"
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "팔란티어"
     },
     {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     }
   ]
 }
