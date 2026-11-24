@@ -1,76 +1,98 @@
 {
-  "generated": "2026-11-24T14:46:55+09:00",
+  "generated": "2026-11-25T00:25:53+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 6,
+  "gem_calls_made": 20,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 541.6,
+  "elapsed_sec": 540.2,
   "notable": [
     "엔비디아",
-    "블룸에너지",
     "LG전자",
+    "블룸에너지",
+    "GE베르노바",
     "현대차",
-    "테슬라",
-    "팔란티어"
+    "스페이스X"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
-    "triage_nojson": 1,
-    "empty_text": 1,
-    "hl_ok": 1,
-    "http_error": 1,
-    "offline_or_budget": 2772
+    "triage_http_error": 2,
+    "http_error": 9,
+    "hl_http_error": 8,
+    "offline_or_budget": 2738
   },
   "samples": [
     {
-      "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "UK)\n3. Apple Hit an All-"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문"
+      "branch": "triage_http_error",
+      "status": 503,
+      "name": "엔비디아"
     },
     {
       "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/g",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
       "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "triage_http_error",
+      "status": 503,
+      "name": "GE베르노바"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": 503
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
-      "branch": "offline_or_budget"
+      "branch": "hl_http_error",
+      "status": null
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 503
     }
   ]
 }
