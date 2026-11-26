@@ -1,42 +1,87 @@
 {
-  "generated": "2026-11-26T13:01:24+09:00",
+  "generated": "2026-11-26T23:36:07+09:00",
   "model": "gemini-3.6-flash",
   "key_present": true,
   "key_prefix": "AQ.A",
-  "gem_calls_made": 12,
+  "gem_calls_made": 26,
   "gem_call_cap": 80,
   "gem_quota_exhausted": true,
-  "elapsed_sec": 540.3,
+  "elapsed_sec": 540.7,
   "notable": [
     "삼성전기",
-    "두산에너빌리티",
-    "SK하이닉스",
     "엔비디아",
-    "삼성전자",
-    "메타"
+    "메타",
+    "블룸에너지",
+    "퓨쳐켐",
+    "알파벳"
   ],
   "market_note": false,
   "analyst_notes_ok": 0,
   "branch_counts": {
+    "triage_http_error": 2,
+    "http_error": 9,
+    "hl_http_error": 5,
+    "hl_empty": 1,
     "triage_nojson": 1,
-    "empty_text": 2,
-    "hl_http_error": 3,
-    "http_error": 3,
-    "hl_ok": 1,
-    "triage_http_error": 1,
-    "offline_or_budget": 2831
+    "hl_ok": 3,
+    "summary_refused": 1,
+    "triage_exception": 1,
+    "offline_or_budget": 2843
   },
   "samples": [
     {
-      "branch": "triage_nojson",
-      "name": "애플",
-      "snippet": "{\"keep\":[{\"i\":5,\"tag\":\"주가"
+      "branch": "triage_http_error",
+      "status": 503,
+      "name": "애플"
     },
     {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 503
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 503
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
+    },
+    {
+      "branch": "hl_http_error",
+      "status": 503
+    },
+    {
+      "branch": "triage_http_error",
+      "status": null,
+      "name": "마이크로소프트"
+    },
+    {
+      "branch": "http_error",
+      "status": 503,
+      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
+      "code": 503,
+      "estatus": "UNAVAILABLE",
+      "key_prefix": "AQ.A"
     },
     {
       "branch": "hl_http_error",
@@ -53,44 +98,6 @@
     {
       "branch": "hl_http_error",
       "status": null
-    },
-    {
-      "branch": "http_error",
-      "status": 503,
-      "msg": "This model is currently experiencing high demand. Spikes in demand are usually temporary. Please try again later.",
-      "code": 503,
-      "estatus": "UNAVAILABLE",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "hl_ok",
-      "snippet": "※ 제목 기반 추정(본문 미확인)\n※ 제목 기반 추정(본문 미"
-    },
-    {
-      "branch": "triage_http_error",
-      "status": null,
-      "name": "마이크로소프트"
-    },
-    {
-      "branch": "empty_text",
-      "status": 200,
-      "finish": "MAX_TOKENS",
-      "urlmeta": ""
-    },
-    {
-      "branch": "hl_http_error",
-      "status": null
-    },
-    {
-      "branch": "http_error",
-      "status": 429,
-      "msg": "You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://aistudio.google.com/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \n* Quota exceeded for metric: generativelanguage.googleapis.com/g",
-      "code": 429,
-      "estatus": "RESOURCE_EXHAUSTED",
-      "key_prefix": "AQ.A"
-    },
-    {
-      "branch": "offline_or_budget"
     }
   ]
 }
